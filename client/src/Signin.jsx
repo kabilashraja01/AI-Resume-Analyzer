@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const LOGIN_URL = "http://localhost:5000/api/login";
+const LOGIN_URL = "https://ai-resume-analyzer-u2b6.onrender.com/api/login";
 
 function Signin({ onLoginSuccess, onGoToSignup }) {
   const [email, setEmail] = useState("");
