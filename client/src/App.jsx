@@ -4,9 +4,9 @@ import Signup from "./Signup";
 import Signin from "./Signin";
 import "./App.css";
 
-const UPLOAD_URL = "http://localhost:5000/api/upload";
-const ANALYZE_URL = "http://localhost:5000/api/analyze";
-const HISTORY_URL = "http://localhost:5000/api/resumes";
+const UPLOAD_URL = "https://ai-resume-analyzer-u2b6.onrender.com/api/upload";
+const ANALYZE_URL = "https://ai-resume-analyzer-u2b6.onrender.com/api/analyze";
+const HISTORY_URL = "https://ai-resume-analyzer-u2b6.onrender.com/api/resumes";
 
 function App() {
   // =====================================================
