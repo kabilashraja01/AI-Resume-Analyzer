@@ -1,251 +1,418 @@
 import React, { useState } from "react";
 
-const questionBank = {
-  Python: [
-    {
-      question: "Which keyword is used to define a function in Python?",
-      options: ["function", "def", "fun", "define"],
-      answer: "def",
-    },
-    {
-      question: "Which data type is immutable in Python?",
-      options: ["List", "Dictionary", "Set", "Tuple"],
-      answer: "Tuple",
-    },
-    {
-      question: "What is the output of len([10, 20, 30])?",
-      options: ["2", "3", "4", "10"],
-      answer: "3",
-    },
-    {
-      question: "Which symbol is used for comments in Python?",
-      options: ["//", "#", "/*", "--"],
-      answer: "#",
-    },
-    {
-      question: "Which function is used to get input from the user?",
-      options: ["get()", "scan()", "input()", "read()"],
-      answer: "input()",
-    },
-  ],
+const questions = [
+  {
+    question: "Which keyword is used to define a function in Python?",
+    options: ["function", "def", "fun", "define"],
+    answer: "def",
+  },
+  {
+    question: "Which of these is a Python list?",
+    options: ["(1, 2, 3)", "[1, 2, 3]", "{1, 2, 3}", "<1, 2, 3>"],
+    answer: "[1, 2, 3]",
+  },
+  {
+    question: "What is the output of len('Python')?",
+    options: ["5", "6", "7", "Error"],
+    answer: "6",
+  },
+  {
+    question: "Which symbol is used for comments in Python?",
+    options: ["//", "/*", "#", "--"],
+    answer: "#",
+  },
+  {
+    question: "Which data type stores True or False?",
+    options: ["String", "Integer", "Boolean", "Float"],
+    answer: "Boolean",
+  },
+  {
+    question: "Which keyword is used for a loop over a sequence?",
+    options: ["loop", "for", "repeat", "foreach"],
+    answer: "for",
+  },
+  {
+    question: "Which function is used to display output?",
+    options: ["echo()", "print()", "display()", "output()"],
+    answer: "print()",
+  },
+  {
+    question: "Which operator is used for exponentiation?",
+    options: ["^", "**", "//", "%%"],
+    answer: "**",
+  },
+  {
+    question: "Which keyword is used to create a class?",
+    options: ["object", "class", "struct", "define"],
+    answer: "class",
+  },
+  {
+    question: "Which statement is used to handle exceptions?",
+    options: ["try-except", "if-error", "catch-error", "error-handle"],
+    answer: "try-except",
+  },
+];
 
-  Java: [
-    {
-      question: "Which keyword is used to create a class in Java?",
-      options: ["class", "struct", "object", "define"],
-      answer: "class",
-    },
-    {
-      question: "Which method is the entry point of a Java program?",
-      options: ["start()", "main()", "run()", "execute()"],
-      answer: "main()",
-    },
-    {
-      question: "Which type of language is Java?",
-      options: [
-        "Object-oriented",
-        "Markup",
-        "Query",
-        "Assembly",
-      ],
-      answer: "Object-oriented",
-    },
-    {
-      question: "Which keyword is used for inheritance in Java?",
-      options: ["inherits", "extends", "implements", "super"],
-      answer: "extends",
-    },
-    {
-      question: "Which symbol ends a Java statement?",
-      options: [".", ":", ";", ","],
-      answer: ";",
-    },
-  ],
-
-  React: [
-    {
-      question: "React is mainly used for building what?",
-      options: [
-        "Databases",
-        "User interfaces",
-        "Operating systems",
-        "Networks",
-      ],
-      answer: "User interfaces",
-    },
-    {
-      question: "Which hook is used to manage state in a functional component?",
-      options: ["useEffect", "useState", "useRef", "useMemo"],
-      answer: "useState",
-    },
-    {
-      question: "Which syntax is commonly used to write HTML-like elements in React?",
-      options: ["JDBC", "JSX", "XML", "SQL"],
-      answer: "JSX",
-    },
-    {
-      question: "What is used to pass data from parent to child?",
-      options: ["Props", "State", "Hooks", "Events"],
-      answer: "Props",
-    },
-    {
-      question: "Which hook is commonly used for side effects?",
-      options: ["useState", "useEffect", "useContext", "useId"],
-      answer: "useEffect",
-    },
-  ],
-
-  SQL: [
-    {
-      question: "Which command is used to retrieve data from a database?",
-      options: ["GET", "SELECT", "FETCH", "READ"],
-      answer: "SELECT",
-    },
-    {
-      question: "Which command is used to add new records?",
-      options: ["ADD", "INSERT", "CREATE", "PUSH"],
-      answer: "INSERT",
-    },
-    {
-      question: "Which clause is used to filter rows?",
-      options: ["ORDER BY", "GROUP BY", "WHERE", "FILTER"],
-      answer: "WHERE",
-    },
-    {
-      question: "Which command is used to remove records?",
-      options: ["REMOVE", "DELETE", "DROP", "CLEAR"],
-      answer: "DELETE",
-    },
-    {
-      question: "Which keyword is used to sort query results?",
-      options: ["SORT", "ORDER BY", "ARRANGE", "GROUP"],
-      answer: "ORDER BY",
-    },
-  ],
-};
-
-function SkillTest({ skill = "Python", onComplete }) {
-  const availableQuestions =
-    questionBank[skill] || questionBank.Python;
-
-  const [currentQuestion, setCurrentQuestion] =
-    useState(0);
-
+function SkillTest({ skill = "Python", onBack }) {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState("");
   const [answers, setAnswers] = useState({});
-
-  const [finished, setFinished] = useState(false);
-
+  const [completed, setCompleted] = useState(false);
   const [score, setScore] = useState(0);
 
-  const [level, setLevel] = useState("");
+  const question = questions[currentQuestion];
 
-  const handleAnswer = (answer) => {
-    setAnswers((previous) => ({
-      ...previous,
-      [currentQuestion]: answer,
-    }));
+  const getLevel = (value) => {
+    if (value >= 80) return "Advanced";
+    if (value >= 60) return "Intermediate";
+    return "Beginner";
   };
 
-  const calculateResult = () => {
-    let correctAnswers = 0;
+  const handleNext = () => {
+    if (!selectedAnswer) return;
 
-    availableQuestions.forEach(
-      (question, index) => {
-        if (
-          answers[index] === question.answer
-        ) {
-          correctAnswers++;
-        }
+    const updatedAnswers = {
+      ...answers,
+      [currentQuestion]: selectedAnswer,
+    };
+
+    setAnswers(updatedAnswers);
+
+    if (currentQuestion < questions.length - 1) {
+      const nextQuestion = currentQuestion + 1;
+
+      setCurrentQuestion(nextQuestion);
+
+      setSelectedAnswer(
+        updatedAnswers[nextQuestion] || ""
+      );
+
+      return;
+    }
+
+    let correct = 0;
+
+    questions.forEach((item, index) => {
+      if (updatedAnswers[index] === item.answer) {
+        correct++;
       }
+    });
+
+    const finalScore = Math.round(
+      (correct / questions.length) * 100
     );
 
-    const percentage = Math.round(
-      (correctAnswers /
-        availableQuestions.length) *
-        100
-    );
+    setScore(finalScore);
+    setCompleted(true);
 
-    let calculatedLevel = "Beginner";
-
-    if (percentage >= 91) {
-      calculatedLevel = "Expert";
-    } else if (percentage >= 71) {
-      calculatedLevel = "Advanced";
-    } else if (percentage >= 41) {
-      calculatedLevel = "Intermediate";
-    }
-
-    setScore(percentage);
-    setLevel(calculatedLevel);
-    setFinished(true);
-
-    if (onComplete) {
-      onComplete({
+    localStorage.setItem(
+      "skillTestResult",
+      JSON.stringify({
         skill,
-        score: percentage,
-        level: calculatedLevel,
-      });
-    }
+        score: finalScore,
+        level: getLevel(finalScore),
+        verified: true,
+        completedAt: new Date().toISOString(),
+      })
+    );
   };
 
-  const nextQuestion = () => {
-    if (
-      currentQuestion <
-      availableQuestions.length - 1
-    ) {
-      setCurrentQuestion(
-        currentQuestion + 1
+  const handleRetake = () => {
+    setCurrentQuestion(0);
+    setSelectedAnswer("");
+    setAnswers({});
+    setCompleted(false);
+    setScore(0);
+  };
+
+  // =========================================================
+  // DOWNLOAD CERTIFICATE
+  // =========================================================
+
+  const downloadCertificate = () => {
+    const level = getLevel(score);
+
+    const completedDate =
+      new Date().toLocaleDateString();
+
+    const certificateHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<title>${skill} Skill Certificate</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 30px;
+  background: #f1f5f9;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.certificate {
+  width: 900px;
+  min-height: 650px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 12px solid #2563eb;
+  padding: 35px;
+}
+
+.inner {
+  min-height: 560px;
+  border: 2px solid #dbeafe;
+  padding: 50px;
+  text-align: center;
+  position: relative;
+}
+
+.logo {
+  color: #2563eb;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.title {
+  margin-top: 45px;
+  font-size: 42px;
+  font-weight: 900;
+  color: #111827;
+}
+
+.subtitle {
+  margin-top: 18px;
+  font-size: 17px;
+  color: #64748b;
+}
+
+.skill {
+  margin: 30px 0;
+  font-size: 34px;
+  font-weight: 900;
+  color: #2563eb;
+}
+
+.assessment {
+  font-size: 18px;
+  color: #475569;
+}
+
+.score {
+  margin-top: 25px;
+  font-size: 27px;
+  font-weight: 900;
+  color: #111827;
+}
+
+.level {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 11px 30px;
+  border-radius: 30px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.verified {
+  margin-top: 28px;
+  padding: 13px;
+  border-radius: 10px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.date {
+  margin-top: 35px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.footer {
+  margin-top: 18px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+@media print {
+
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  .certificate {
+    margin: 0;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="certificate">
+
+  <div class="inner">
+
+    <div class="logo">
+      AI RESUME ANALYZER
+    </div>
+
+    <div class="title">
+      CERTIFICATE OF SKILL
+    </div>
+
+    <div class="subtitle">
+      This certificate verifies successful completion of the
+    </div>
+
+    <div class="skill">
+      ${skill} Skill Assessment
+    </div>
+
+    <div class="assessment">
+      The candidate has successfully completed the skill assessment.
+    </div>
+
+    <div class="score">
+      Skill Score: ${score} / 100
+    </div>
+
+    <div class="level">
+      ${level}
+    </div>
+
+    <div class="verified">
+      ✓ VERIFIED SKILL
+    </div>
+
+    <div class="date">
+      Assessment completed on ${completedDate}
+    </div>
+
+    <div class="footer">
+      AI Resume Analyzer • Skill Proof Certificate
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
+`;
+
+    try {
+      const blob = new Blob(
+        [certificateHTML],
+        {
+          type: "text/html;charset=utf-8",
+        }
+      );
+
+      const url =
+        window.URL.createObjectURL(blob);
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+
+      link.download =
+        `${skill}-Skill-Certificate-${score}.html`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 1000);
+
+    } catch (error) {
+      console.error(
+        "Certificate download error:",
+        error
+      );
+
+      alert(
+        "Certificate download failed. Please try again."
       );
     }
   };
 
-  const previousQuestion = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(
-        currentQuestion - 1
-      );
-    }
-  };
+  // =========================================================
+  // COMPLETED SCREEN
+  // =========================================================
 
-  if (finished) {
+  if (completed) {
+    const level = getLevel(score);
+
     return (
       <div
         style={{
           minHeight: "100vh",
           background:
             "linear-gradient(135deg, #eef2ff, #f8fafc)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "25px",
+          padding: "40px 20px",
           fontFamily: "Arial, sans-serif",
         }}
       >
+
         <div
           style={{
-            width: "100%",
-            maxWidth: "550px",
+            maxWidth: "700px",
+            margin: "0 auto",
             background: "#ffffff",
-            borderRadius: "22px",
-            padding: "40px",
+            padding: "45px",
+            borderRadius: "24px",
             textAlign: "center",
             boxShadow:
               "0 20px 60px rgba(15,23,42,0.12)",
           }}
         >
+
+          {/* SUCCESS ICON */}
+
           <div
             style={{
-              fontSize: "55px",
-              marginBottom: "10px",
+              width: "80px",
+              height: "80px",
+              margin: "0 auto 20px",
+              borderRadius: "50%",
+              background: "#dcfce7",
+              color: "#16a34a",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "38px",
+              fontWeight: "900",
             }}
           >
-            🏆
+            ✓
           </div>
+
+          {/* TITLE */}
 
           <h1
             style={{
-              marginBottom: "8px",
               color: "#111827",
+              margin: "0 0 10px",
             }}
           >
             Skill Test Completed
@@ -260,108 +427,183 @@ function SkillTest({ skill = "Python", onComplete }) {
             Your {skill} assessment result
           </p>
 
-          <div
-            style={{
-              fontSize: "58px",
-              fontWeight: "900",
-              color: "#2563eb",
-              marginBottom: "5px",
-            }}
-          >
-            {score}%
-          </div>
-
-          <p
-            style={{
-              color: "#64748b",
-              marginBottom: "25px",
-            }}
-          >
-            Skill Score
-          </p>
+          {/* SCORE */}
 
           <div
             style={{
-              display: "inline-block",
-              padding: "10px 22px",
-              borderRadius: "30px",
-              background: "#eef2ff",
-              color: "#4338ca",
-              fontWeight: "800",
-              fontSize: "18px",
-              marginBottom: "25px",
+              background: "#eff6ff",
+              padding: "30px",
+              borderRadius: "18px",
+              marginBottom: "22px",
             }}
           >
-            {level}
-          </div>
 
-          <div
-            style={{
-              background: "#f8fafc",
-              borderRadius: "14px",
-              padding: "18px",
-              marginBottom: "25px",
-            }}
-          >
             <div
               style={{
-                fontWeight: "800",
-                color: "#16a34a",
-                fontSize: "18px",
-                marginBottom: "6px",
+                fontSize: "58px",
+                fontWeight: "900",
+                color: "#2563eb",
               }}
             >
-              ✓ Skill Assessment Completed
+              {score}%
             </div>
 
             <div
               style={{
                 color: "#64748b",
-                fontSize: "14px",
+                marginTop: "5px",
               }}
             >
-              Your verified assessment result
-              can be used for your profile.
+              Skill Score
             </div>
+
           </div>
 
-          <button
-            onClick={() => {
-              setCurrentQuestion(0);
-              setAnswers({});
-              setFinished(false);
-              setScore(0);
-              setLevel("");
-            }}
+          {/* LEVEL */}
+
+          <div
             style={{
-              width: "100%",
-              padding: "14px",
-              border: "none",
-              borderRadius: "12px",
+              display: "inline-block",
+              padding: "10px 24px",
+              borderRadius: "30px",
               background:
-                "linear-gradient(135deg, #2563eb, #4f46e5)",
-              color: "#ffffff",
-              fontSize: "16px",
+                level === "Advanced"
+                  ? "#dcfce7"
+                  : level === "Intermediate"
+                  ? "#fef3c7"
+                  : "#fee2e2",
+              color:
+                level === "Advanced"
+                  ? "#15803d"
+                  : level === "Intermediate"
+                  ? "#b45309"
+                  : "#dc2626",
               fontWeight: "800",
-              cursor: "pointer",
+              marginBottom: "20px",
             }}
           >
-            Retake Test
-          </button>
+            {level}
+          </div>
+
+          {/* VERIFIED */}
+
+          <div
+            style={{
+              background: "#f0fdf4",
+              border: "1px solid #bbf7d0",
+              color: "#15803d",
+              padding: "16px",
+              borderRadius: "12px",
+              fontWeight: "800",
+              marginBottom: "22px",
+            }}
+          >
+            ✓ Skill Assessment Verified
+          </div>
+
+          <p
+            style={{
+              color: "#64748b",
+              fontSize: "14px",
+              lineHeight: "1.6",
+              marginBottom: "25px",
+            }}
+          >
+            Your verified {skill} skill result can be
+            used as skill proof in your career profile.
+          </p>
+
+          {/* =================================================
+              BUTTONS
+          ================================================= */}
+
+          <div
+            style={{
+              display: "flex",
+              gap: "12px",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+
+            {/* DOWNLOAD BUTTON */}
+
+            <button
+              type="button"
+              onClick={downloadCertificate}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                padding: "15px 24px",
+                border: "none",
+                borderRadius: "12px",
+                background:
+                  "linear-gradient(135deg, #2563eb, #4f46e5)",
+                color: "#ffffff",
+                fontWeight: "800",
+                cursor: "pointer",
+                fontSize: "15px",
+                boxShadow:
+                  "0 8px 20px rgba(37,99,235,0.25)",
+              }}
+            >
+              📜 Download Certificate
+            </button>
+
+            {/* RETAKE */}
+
+            <button
+              type="button"
+              onClick={handleRetake}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "15px 24px",
+                border: "1px solid #d1d5db",
+                borderRadius: "12px",
+                background: "#ffffff",
+                color: "#374151",
+                fontWeight: "700",
+                cursor: "pointer",
+                fontSize: "15px",
+              }}
+            >
+              Retake Test
+            </button>
+
+          </div>
+
+          {/* BACK */}
+
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              style={{
+                marginTop: "22px",
+                border: "none",
+                background: "transparent",
+                color: "#2563eb",
+                fontWeight: "700",
+                cursor: "pointer",
+              }}
+            >
+              ← Back to Resume Analysis
+            </button>
+          )}
+
         </div>
+
       </div>
     );
   }
 
-  const question =
-    availableQuestions[currentQuestion];
-
-  const selectedAnswer =
-    answers[currentQuestion];
-
-  const isLastQuestion =
-    currentQuestion ===
-    availableQuestions.length - 1;
+  // =========================================================
+  // TEST SCREEN
+  // =========================================================
 
   return (
     <div
@@ -373,213 +615,215 @@ function SkillTest({ skill = "Python", onComplete }) {
         fontFamily: "Arial, sans-serif",
       }}
     >
+
       <div
         style={{
-          maxWidth: "750px",
+          maxWidth: "700px",
           margin: "0 auto",
+          background: "#ffffff",
+          padding: "40px",
+          borderRadius: "24px",
+          boxShadow:
+            "0 20px 60px rgba(15,23,42,0.12)",
         }}
       >
+
+        {/* HEADER */}
+
         <div
           style={{
-            background: "#ffffff",
-            borderRadius: "20px",
-            padding: "30px",
-            boxShadow:
-              "0 20px 60px rgba(15,23,42,0.10)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "30px",
+            gap: "20px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "25px",
-            }}
-          >
-            <div>
-              <h1
-                style={{
-                  margin: 0,
-                  color: "#111827",
-                }}
-              >
-                {skill} Skill Test
-              </h1>
-
-              <p
-                style={{
-                  color: "#64748b",
-                  marginBottom: 0,
-                }}
-              >
-                Test your {skill} knowledge
-              </p>
-            </div>
-
-            <div
-              style={{
-                background: "#eef2ff",
-                color: "#4338ca",
-                padding: "9px 14px",
-                borderRadius: "10px",
-                fontWeight: "800",
-              }}
-            >
-              {currentQuestion + 1} /{" "}
-              {availableQuestions.length}
-            </div>
-          </div>
-
-          <div
-            style={{
-              height: "8px",
-              background: "#e5e7eb",
-              borderRadius: "10px",
-              overflow: "hidden",
-              marginBottom: "30px",
-            }}
-          >
-            <div
-              style={{
-                height: "100%",
-                width: `${
-                  ((currentQuestion + 1) /
-                    availableQuestions.length) *
-                  100
-                }%`,
-                background:
-                  "linear-gradient(90deg, #2563eb, #4f46e5)",
-                transition: "width 0.3s ease",
-              }}
-            />
-          </div>
-
-          <h2
-            style={{
-              color: "#111827",
-              fontSize: "21px",
-              lineHeight: "1.5",
-              marginBottom: "22px",
-            }}
-          >
-            {question.question}
-          </h2>
 
           <div>
-            {question.options.map(
-              (option) => {
-                const selected =
-                  selectedAnswer === option;
 
-                return (
-                  <button
-                    key={option}
-                    onClick={() =>
-                      handleAnswer(option)
-                    }
-                    style={{
-                      width: "100%",
-                      textAlign: "left",
-                      padding: "16px",
-                      marginBottom: "12px",
-                      borderRadius: "12px",
-                      border: selected
-                        ? "2px solid #2563eb"
-                        : "1px solid #d1d5db",
-                      background: selected
-                        ? "#eef2ff"
-                        : "#ffffff",
-                      color: "#111827",
-                      cursor: "pointer",
-                      fontSize: "15px",
-                      fontWeight: selected
-                        ? "700"
-                        : "500",
-                    }}
-                  >
-                    {selected ? "● " : "○ "}
-                    {option}
-                  </button>
-                );
-              }
-            )}
+            <span
+              style={{
+                color: "#2563eb",
+                fontSize: "12px",
+                fontWeight: "800",
+                letterSpacing: "1px",
+              }}
+            >
+              SKILL PROOF
+            </span>
+
+            <h1
+              style={{
+                margin: "8px 0 5px",
+                color: "#111827",
+              }}
+            >
+              {skill} Skill Test
+            </h1>
+
+            <p
+              style={{
+                margin: 0,
+                color: "#64748b",
+              }}
+            >
+              Prove your {skill} knowledge
+            </p>
+
           </div>
 
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: "12px",
-              marginTop: "25px",
+              padding: "10px 14px",
+              background: "#eff6ff",
+              color: "#2563eb",
+              borderRadius: "10px",
+              fontWeight: "800",
             }}
           >
+            {currentQuestion + 1}/{questions.length}
+          </div>
+
+        </div>
+
+        {/* PROGRESS */}
+
+        <div
+          style={{
+            height: "8px",
+            background: "#e5e7eb",
+            borderRadius: "20px",
+            marginBottom: "35px",
+            overflow: "hidden",
+          }}
+        >
+
+          <div
+            style={{
+              width:
+                `${
+                  ((currentQuestion + 1) /
+                    questions.length) *
+                  100
+                }%`,
+              height: "100%",
+              background:
+                "linear-gradient(90deg, #2563eb, #4f46e5)",
+              transition: "width 0.3s ease",
+            }}
+          />
+
+        </div>
+
+        {/* QUESTION */}
+
+        <h2
+          style={{
+            color: "#111827",
+            fontSize: "22px",
+            lineHeight: "1.5",
+          }}
+        >
+          {question.question}
+        </h2>
+
+        {/* OPTIONS */}
+
+        <div
+          style={{
+            display: "grid",
+            gap: "12px",
+            marginTop: "25px",
+          }}
+        >
+
+          {question.options.map((option) => (
+
             <button
-              onClick={previousQuestion}
-              disabled={currentQuestion === 0}
+              type="button"
+              key={option}
+              onClick={() =>
+                setSelectedAnswer(option)
+              }
               style={{
-                padding: "13px 22px",
-                border: "1px solid #d1d5db",
-                borderRadius: "11px",
-                background: "#ffffff",
-                color: "#374151",
-                cursor:
-                  currentQuestion === 0
-                    ? "not-allowed"
-                    : "pointer",
-                opacity:
-                  currentQuestion === 0
-                    ? 0.5
-                    : 1,
-                fontWeight: "700",
+                textAlign: "left",
+                padding: "16px",
+                borderRadius: "12px",
+                border:
+                  selectedAnswer === option
+                    ? "2px solid #2563eb"
+                    : "1px solid #dbe1ea",
+                background:
+                  selectedAnswer === option
+                    ? "#eff6ff"
+                    : "#ffffff",
+                color: "#111827",
+                fontWeight:
+                  selectedAnswer === option
+                    ? "700"
+                    : "500",
+                cursor: "pointer",
               }}
             >
-              ← Previous
+              {option}
             </button>
 
-            {!isLastQuestion ? (
-              <button
-                onClick={nextQuestion}
-                disabled={!selectedAnswer}
-                style={{
-                  padding: "13px 24px",
-                  border: "none",
-                  borderRadius: "11px",
-                  background: !selectedAnswer
-                    ? "#94a3b8"
-                    : "linear-gradient(135deg, #2563eb, #4f46e5)",
-                  color: "#ffffff",
-                  cursor: !selectedAnswer
-                    ? "not-allowed"
-                    : "pointer",
-                  fontWeight: "800",
-                }}
-              >
-                Next →
-              </button>
-            ) : (
-              <button
-                onClick={calculateResult}
-                disabled={!selectedAnswer}
-                style={{
-                  padding: "13px 24px",
-                  border: "none",
-                  borderRadius: "11px",
-                  background: !selectedAnswer
-                    ? "#94a3b8"
-                    : "#16a34a",
-                  color: "#ffffff",
-                  cursor: !selectedAnswer
-                    ? "not-allowed"
-                    : "pointer",
-                  fontWeight: "800",
-                }}
-              >
-                Submit Test ✓
-              </button>
-            )}
-          </div>
+          ))}
+
         </div>
+
+        {/* NEXT */}
+
+        <button
+          type="button"
+          onClick={handleNext}
+          disabled={!selectedAnswer}
+          style={{
+            width: "100%",
+            marginTop: "30px",
+            padding: "15px",
+            border: "none",
+            borderRadius: "12px",
+            background: selectedAnswer
+              ? "linear-gradient(135deg, #2563eb, #4f46e5)"
+              : "#cbd5e1",
+            color: "#ffffff",
+            fontWeight: "800",
+            fontSize: "16px",
+            cursor: selectedAnswer
+              ? "pointer"
+              : "not-allowed",
+          }}
+        >
+          {currentQuestion === questions.length - 1
+            ? "Finish Test"
+            : "Next Question →"}
+        </button>
+
+        {/* BACK */}
+
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            style={{
+              width: "100%",
+              marginTop: "15px",
+              padding: "12px",
+              border: "none",
+              background: "transparent",
+              color: "#2563eb",
+              fontWeight: "700",
+              cursor: "pointer",
+            }}
+          >
+            ← Back
+          </button>
+        )}
+
       </div>
+
     </div>
   );
 }
