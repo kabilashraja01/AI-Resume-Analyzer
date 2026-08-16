@@ -4,7 +4,7 @@ import React, { useState } from "react";
    QUESTION BANK
 ========================================================= */
 
-const questionBank = {
+const skillQuestions = {
   Python: [
     {
       question: "Which keyword is used to define a function in Python?",
@@ -64,7 +64,7 @@ const questionBank = {
       options: [
         "Hyper Text Markup Language",
         "High Text Machine Language",
-        "Hyperlink Text Management Language",
+        "Hyperlink Text Mark Language",
         "Home Tool Markup Language",
       ],
       answer: "Hyper Text Markup Language",
@@ -75,19 +75,14 @@ const questionBank = {
       answer: "<h1>",
     },
     {
+      question: "Which tag is used to create a paragraph?",
+      options: ["<p>", "<para>", "<text>", "<paragraph>"],
+      answer: "<p>",
+    },
+    {
       question: "Which tag is used to create a hyperlink?",
       options: ["<link>", "<a>", "<href>", "<url>"],
       answer: "<a>",
-    },
-    {
-      question: "Which tag is used to display an image?",
-      options: ["<image>", "<img>", "<picture>", "<src>"],
-      answer: "<img>",
-    },
-    {
-      question: "Which tag creates a paragraph?",
-      options: ["<p>", "<para>", "<text>", "<paragraph>"],
-      answer: "<p>",
     },
     {
       question: "Which attribute specifies an image source?",
@@ -95,24 +90,29 @@ const questionBank = {
       answer: "src",
     },
     {
+      question: "Which tag is used to display an image?",
+      options: ["<image>", "<img>", "<pic>", "<src>"],
+      answer: "<img>",
+    },
+    {
       question: "Which tag creates an unordered list?",
-      options: ["<ol>", "<ul>", "<list>", "<li>"],
+      options: ["<ol>", "<list>", "<ul>", "<li>"],
       answer: "<ul>",
     },
     {
-      question: "Which tag is used to create a table row?",
-      options: ["<td>", "<tr>", "<th>", "<row>"],
+      question: "Which tag creates a table row?",
+      options: ["<td>", "<th>", "<tr>", "<row>"],
       answer: "<tr>",
     },
     {
-      question: "Which HTML element is used for a form?",
-      options: ["<input>", "<form>", "<field>", "<data>"],
-      answer: "<form>",
+      question: "Which tag is used for a line break?",
+      options: ["<break>", "<lb>", "<br>", "<line>"],
+      answer: "<br>",
     },
     {
-      question: "Which declaration defines an HTML5 document?",
-      options: ["<html5>", "<doctype>", "<!DOCTYPE html>", "<html version='5'>"],
-      answer: "<!DOCTYPE html>",
+      question: "Which language is HTML mainly used to structure?",
+      options: ["Web pages", "Databases", "Operating systems", "Networks"],
+      answer: "Web pages",
     },
   ],
 
@@ -134,50 +134,50 @@ const questionBank = {
     },
     {
       question: "Which property changes the background color?",
-      options: ["background-color", "bgcolor", "background", "color"],
+      options: ["bgcolor", "background-color", "background", "color-bg"],
       answer: "background-color",
     },
     {
-      question: "Which symbol selects a class in CSS?",
+      question: "Which symbol represents a class selector?",
       options: ["#", ".", "*", "&"],
       answer: ".",
     },
     {
-      question: "Which symbol selects an ID in CSS?",
-      options: [".", "#", "@", "*"],
+      question: "Which symbol represents an ID selector?",
+      options: [".", "#", "*", "@"],
       answer: "#",
+    },
+    {
+      question: "Which property controls text size?",
+      options: ["text-size", "font-size", "size", "font-height"],
+      answer: "font-size",
+    },
+    {
+      question: "Which property creates space inside an element?",
+      options: ["margin", "padding", "spacing", "inside-space"],
+      answer: "padding",
+    },
+    {
+      question: "Which property creates space outside an element?",
+      options: ["padding", "margin", "spacing", "outside"],
+      answer: "margin",
+    },
+    {
+      question: "Which CSS layout system is useful for one-dimensional layouts?",
+      options: ["Grid", "Flexbox", "Float", "Table"],
+      answer: "Flexbox",
     },
     {
       question: "Which property makes text bold?",
       options: ["font-style", "font-weight", "text-bold", "bold"],
       answer: "font-weight",
     },
-    {
-      question: "Which CSS property controls spacing inside an element?",
-      options: ["margin", "padding", "spacing", "border"],
-      answer: "padding",
-    },
-    {
-      question: "Which property controls spacing outside an element?",
-      options: ["padding", "margin", "space", "outside"],
-      answer: "margin",
-    },
-    {
-      question: "Which CSS layout system is useful for one-dimensional layouts?",
-      options: ["Flexbox", "Table", "Float", "Position"],
-      answer: "Flexbox",
-    },
-    {
-      question: "Which property is used to change font size?",
-      options: ["font-size", "text-size", "size", "font"],
-      answer: "font-size",
-    },
   ],
 
   JavaScript: [
     {
-      question: "Which keyword declares a block-scoped variable?",
-      options: ["var", "let", "define", "variable"],
+      question: "Which keyword declares a variable that can be reassigned?",
+      options: ["const", "let", "fixed", "varonly"],
       answer: "let",
     },
     {
@@ -186,8 +186,8 @@ const questionBank = {
       answer: "const",
     },
     {
-      question: "Which method prints output to the console?",
-      options: ["print()", "console.log()", "output()", "display()"],
+      question: "Which method prints output to the browser console?",
+      options: ["print()", "console.log()", "echo()", "display()"],
       answer: "console.log()",
     },
     {
@@ -196,109 +196,99 @@ const questionBank = {
       answer: "===",
     },
     {
+      question: "Which data type represents true or false?",
+      options: ["String", "Boolean", "Number", "Object"],
+      answer: "Boolean",
+    },
+    {
       question: "Which method adds an item to the end of an array?",
-      options: ["push()", "add()", "append()", "insert()"],
+      options: ["add()", "push()", "append()", "insert()"],
       answer: "push()",
     },
     {
-      question: "Which keyword is used to define a function?",
-      options: ["function", "def", "fun", "method"],
-      answer: "function",
-    },
-    {
-      question: "Which method converts JSON text into an object?",
-      options: [
-        "JSON.parse()",
-        "JSON.convert()",
-        "JSON.object()",
-        "JSON.decode()",
-      ],
+      question: "Which function converts JSON text into a JavaScript object?",
+      options: ["JSON.parse()", "JSON.convert()", "JSON.object()", "JSON.read()"],
       answer: "JSON.parse()",
     },
     {
-      question: "Which event occurs when a user clicks an element?",
-      options: ["onhover", "onclick", "onpress", "onselect"],
-      answer: "onclick",
+      question: "Which keyword is used to define a function?",
+      options: ["function", "def", "func", "method"],
+      answer: "function",
     },
     {
-      question: "Which value represents absence of a value?",
-      options: ["empty", "null", "void", "none"],
-      answer: "null",
+      question: "Which operator is used for addition?",
+      options: ["+", "&", ".", "add"],
+      answer: "+",
     },
     {
-      question: "Which method removes the last item from an array?",
-      options: ["remove()", "delete()", "pop()", "last()"],
-      answer: "pop()",
+      question: "JavaScript is mainly used to add what to web pages?",
+      options: ["Interactivity", "Database tables", "Operating systems", "Hardware"],
+      answer: "Interactivity",
     },
   ],
 
   SQL: [
     {
-      question: "Which command is used to retrieve data?",
+      question: "Which SQL command is used to retrieve data?",
       options: ["GET", "SELECT", "FETCH", "READ"],
       answer: "SELECT",
     },
     {
-      question: "Which command adds new data to a table?",
-      options: ["ADD", "INSERT", "CREATE", "APPEND"],
+      question: "Which command adds new data?",
+      options: ["ADD", "INSERT", "CREATE", "PUT"],
       answer: "INSERT",
     },
     {
       question: "Which command modifies existing data?",
-      options: ["CHANGE", "UPDATE", "MODIFY", "ALTER"],
+      options: ["CHANGE", "UPDATE", "MODIFY", "EDIT"],
       answer: "UPDATE",
     },
     {
-      question: "Which command removes rows from a table?",
+      question: "Which command removes rows?",
       options: ["REMOVE", "DELETE", "DROP", "CLEAR"],
       answer: "DELETE",
     },
     {
       question: "Which clause filters records?",
-      options: ["FILTER", "WHERE", "HAVING", "SEARCH"],
+      options: ["FILTER", "WHERE", "WHEN", "IF"],
       answer: "WHERE",
     },
     {
-      question: "Which keyword sorts query results?",
+      question: "Which clause sorts query results?",
       options: ["SORT BY", "ORDER BY", "GROUP BY", "ARRANGE"],
       answer: "ORDER BY",
     },
     {
       question: "Which function counts rows?",
-      options: ["COUNT()", "TOTAL()", "NUMBER()", "ROWS()"],
+      options: ["COUNT()", "TOTAL()", "ROWS()", "NUMBER()"],
       answer: "COUNT()",
     },
     {
-      question: "Which command creates a table?",
-      options: ["MAKE TABLE", "CREATE TABLE", "NEW TABLE", "BUILD TABLE"],
-      answer: "CREATE TABLE",
-    },
-    {
-      question: "Which key uniquely identifies a row?",
-      options: ["Foreign Key", "Primary Key", "Unique Row", "Main Key"],
-      answer: "Primary Key",
+      question: "Which keyword removes duplicate results?",
+      options: ["UNIQUE", "DISTINCT", "ONLY", "DIFFERENT"],
+      answer: "DISTINCT",
     },
     {
       question: "Which clause groups rows?",
-      options: ["GROUP BY", "ORDER BY", "COLLECT BY", "MERGE BY"],
+      options: ["GROUP BY", "ORDER BY", "COLLECT BY", "SORT BY"],
       answer: "GROUP BY",
+    },
+    {
+      question: "Which command creates a database table?",
+      options: ["MAKE TABLE", "CREATE TABLE", "NEW TABLE", "BUILD TABLE"],
+      answer: "CREATE TABLE",
     },
   ],
 
   Bootstrap: [
     {
-      question: "Bootstrap is primarily used for what?",
-      options: [
-        "Database management",
-        "Web interface design",
-        "Server hosting",
-        "Programming logic",
-      ],
-      answer: "Web interface design",
+      question: "Bootstrap is mainly used for what?",
+      options: ["Web UI", "Database", "Operating System", "Compiler"],
+      answer: "Web UI",
     },
     {
-      question: "Which Bootstrap class creates a responsive container?",
-      options: [".container", ".box", ".wrapper", ".responsive"],
+      question: "Which Bootstrap class creates a container?",
+      options: [".box", ".container", ".wrapper", ".main"],
       answer: ".container",
     },
     {
@@ -307,137 +297,137 @@ const questionBank = {
       answer: ".btn-primary",
     },
     {
-      question: "Which class creates a Bootstrap row?",
-      options: [".line", ".row", ".grid-row", ".horizontal"],
-      answer: ".row",
-    },
-    {
-      question: "Which class creates columns?",
-      options: [".column", ".col", ".grid", ".cell"],
-      answer: ".col",
-    },
-    {
-      question: "Bootstrap is based on which layout system?",
-      options: ["12-column grid", "10-column grid", "8-column grid", "5-column grid"],
+      question: "Bootstrap provides which type of grid?",
+      options: ["12-column grid", "10-column grid", "8-column grid", "16-column grid"],
       answer: "12-column grid",
     },
     {
       question: "Which class makes an image responsive?",
-      options: [".responsive-img", ".img-responsive", ".img-fluid", ".fluid-image"],
+      options: [".responsive", ".img-responsive", ".img-fluid", ".image-fluid"],
       answer: ".img-fluid",
     },
     {
-      question: "Which class adds margin?",
-      options: [".m-3", ".margin-3", ".space-3", ".mg-3"],
-      answer: ".m-3",
+      question: "Bootstrap is based heavily on which CSS technology?",
+      options: ["Flexbox", "SVG", "Canvas", "WebGL"],
+      answer: "Flexbox",
     },
     {
-      question: "Bootstrap provides ready-made what?",
-      options: ["Components", "Databases", "Servers", "Compilers"],
-      answer: "Components",
+      question: "Which class creates a card?",
+      options: [".box", ".card", ".panel", ".container-card"],
+      answer: ".card",
     },
     {
-      question: "Which Bootstrap class creates a navigation bar?",
-      options: [".navigation", ".navbar", ".nav-bar", ".menu"],
-      answer: ".navbar",
+      question: "Which class creates a success button?",
+      options: [".btn-success", ".success-button", ".button-green", ".btn-green"],
+      answer: ".btn-success",
+    },
+    {
+      question: "Bootstrap helps make websites what?",
+      options: ["Responsive", "Offline", "Encrypted", "Executable"],
+      answer: "Responsive",
+    },
+    {
+      question: "Which prefix is commonly used for Bootstrap buttons?",
+      options: [".button", ".btn", ".b-", ".boot-"],
+      answer: ".btn",
     },
   ],
 };
 
 /* =========================================================
-   FALLBACK QUESTIONS
+   GENERIC FALLBACK
 ========================================================= */
 
 const createFallbackQuestions = (skill) => [
   {
-    question: `Which statement best describes ${skill}?`,
+    question: `What is ${skill} mainly used for?`,
     options: [
-      `${skill} is a technology or professional skill`,
-      `${skill} is only a database`,
-      `${skill} is only an operating system`,
-      `${skill} is a hardware component`,
+      "Building software solutions",
+      "Only playing games",
+      "Only editing images",
+      "Only sending emails",
     ],
-    answer: `${skill} is a technology or professional skill`,
+    answer: "Building software solutions",
   },
   {
-    question: `Why is ${skill} useful in a professional environment?`,
+    question: `Which is important when learning ${skill}?`,
     options: [
-      "It can be used to solve practical problems",
-      "It is only used for gaming",
-      "It cannot be used in projects",
-      "It is unrelated to technology",
+      "Problem solving",
+      "Ignoring errors",
+      "Avoiding practice",
+      "Never testing",
     ],
-    answer: "It can be used to solve practical problems",
+    answer: "Problem solving",
   },
   {
-    question: `What is a good way to improve ${skill}?`,
+    question: `How can ${skill} knowledge be improved?`,
     options: [
-      "Practice projects and real-world tasks",
-      "Never practice",
-      "Only memorize the name",
-      "Avoid using documentation",
+      "Practice and projects",
+      "Avoiding projects",
+      "Only memorizing",
+      "Never using it",
     ],
-    answer: "Practice projects and real-world tasks",
+    answer: "Practice and projects",
   },
   {
-    question: `How can ${skill} be demonstrated to an employer?`,
+    question: `What should a developer do when finding an error in ${skill}?`,
     options: [
-      "Projects and practical work",
-      "Only by mentioning it",
-      "By avoiding projects",
-      "By deleting it from the resume",
+      "Debug it",
+      "Ignore it",
+      "Delete everything",
+      "Stop learning",
     ],
-    answer: "Projects and practical work",
+    answer: "Debug it",
   },
   {
-    question: `What should a beginner do when learning ${skill}?`,
+    question: `What is a good way to demonstrate ${skill}?`,
     options: [
-      "Learn fundamentals and practice",
-      "Skip fundamentals",
-      "Avoid examples",
-      "Only read the skill name",
+      "Projects",
+      "Only mentioning it",
+      "Avoiding implementation",
+      "No evidence",
     ],
-    answer: "Learn fundamentals and practice",
+    answer: "Projects",
   },
   {
-    question: `Which approach is useful for becoming better at ${skill}?`,
+    question: `What helps improve technical knowledge?`,
     options: [
-      "Build practical projects",
-      "Never use it",
-      "Avoid feedback",
-      "Only watch unrelated videos",
+      "Hands-on practice",
+      "Avoiding examples",
+      "Ignoring documentation",
+      "Never experimenting",
     ],
-    answer: "Build practical projects",
+    answer: "Hands-on practice",
+  },
+  {
+    question: `Why is testing important?`,
+    options: [
+      "To find problems",
+      "To remove all code",
+      "To avoid users",
+      "To stop development",
+    ],
+    answer: "To find problems",
+  },
+  {
+    question: `Which approach is best for ${skill}?`,
+    options: [
+      "Practice, projects and testing",
+      "Avoiding practice",
+      "Never building anything",
+      "Ignoring errors",
+    ],
+    answer: "Practice, projects and testing",
   },
   {
     question: `How should ${skill} be used in a project?`,
     options: [
-      "According to the project's requirements",
-      "Without understanding the requirement",
+      "According to project requirements",
+      "Without requirements",
       "Only for decoration",
       "Never with other technologies",
     ],
-    answer: "According to the project's requirements",
-  },
-  {
-    question: `What is important when working with ${skill}?`,
-    options: [
-      "Understanding concepts and applying them",
-      "Only memorizing definitions",
-      "Ignoring errors",
-      "Avoiding practice",
-    ],
-    answer: "Understanding concepts and applying them",
-  },
-  {
-    question: `How can ${skill} knowledge become stronger?`,
-    options: [
-      "Regular practice and projects",
-      "Avoiding practical work",
-      "Never reviewing mistakes",
-      "Only reading the resume",
-    ],
-    answer: "Regular practice and projects",
+    answer: "According to project requirements",
   },
   {
     question: `What is the best proof of ${skill} knowledge?`,
@@ -445,30 +435,65 @@ const createFallbackQuestions = (skill) => [
       "Practical assessment and projects",
       "Only claiming the skill",
       "Only writing the skill name",
-      "No evidence is needed",
+      "No evidence",
     ],
     answer: "Practical assessment and projects",
   },
 ];
 
 /* =========================================================
+   NORMALIZE SKILL NAME
+========================================================= */
+
+const normalizeSkillName = (skill) => {
+  const value = String(skill || "").trim();
+
+  const found = Object.keys(skillQuestions).find(
+    (item) => item.toLowerCase() === value.toLowerCase()
+  );
+
+  return found || value;
+};
+
+/* =========================================================
    COMPONENT
 ========================================================= */
 
-function SkillTest({ skill, onBack }) {
-  const selectedSkill = skill || "Skill";
-
-  const normalizedSkill =
-    Object.keys(questionBank).find(
-      (item) =>
-        item.toLowerCase() === selectedSkill.toLowerCase()
-    ) || selectedSkill;
+function SkillTest({ skill, user, onBack }) {
+  const actualSkill = normalizeSkillName(skill || "Python");
 
   const questions =
-    questionBank[normalizedSkill] ||
-    createFallbackQuestions(selectedSkill);
+    skillQuestions[actualSkill] ||
+    createFallbackQuestions(actualSkill);
 
-  const storageKey = `skillTestResult_${selectedSkill}`;
+  /*
+   * USER ID
+   *
+   * Every user gets a separate storage area.
+   */
+  const userId =
+    user?.id ||
+    user?._id ||
+    user?.email ||
+    localStorage.getItem("currentUserId") ||
+    localStorage.getItem("currentUserEmail") ||
+    "guest";
+
+  /*
+   * IMPORTANT
+   *
+   * Score is stored as:
+   *
+   * skillTestResult_USERID_SKILL
+   *
+   * Example:
+   * skillTestResult_123_HTML
+   *
+   * Therefore another user cannot automatically
+   * receive the previous user's HTML score.
+   */
+  const resultStorageKey =
+    `skillTestResult_${String(userId)}_${actualSkill}`;
 
   const [currentQuestion, setCurrentQuestion] =
     useState(0);
@@ -476,68 +501,20 @@ function SkillTest({ skill, onBack }) {
   const [selectedAnswer, setSelectedAnswer] =
     useState("");
 
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] =
+    useState({});
 
   const [completed, setCompleted] =
     useState(false);
 
-  const [score, setScore] = useState(0);
+  const [score, setScore] =
+    useState(0);
 
   const getLevel = (value) => {
     if (value >= 80) return "Advanced";
     if (value >= 60) return "Intermediate";
     return "Beginner";
   };
-
-  /* =====================================================
-     FINISH TEST
-  ===================================================== */
-
-  const finishTest = (updatedAnswers) => {
-    let correct = 0;
-
-    questions.forEach((item, index) => {
-      if (
-        updatedAnswers[index] ===
-        item.answer
-      ) {
-        correct++;
-      }
-    });
-
-    const finalScore = Math.round(
-      (correct / questions.length) * 100
-    );
-
-    const result = {
-      skill: selectedSkill,
-      score: finalScore,
-      level: getLevel(finalScore),
-      verified: true,
-      completedAt:
-        new Date().toISOString(),
-    };
-
-    setScore(finalScore);
-    setCompleted(true);
-
-    /*
-      Each skill gets its own result.
-      Example:
-      skillTestResult_Python
-      skillTestResult_HTML
-      skillTestResult_SQL
-    */
-
-    localStorage.setItem(
-      storageKey,
-      JSON.stringify(result)
-    );
-  };
-
-  /* =====================================================
-     NEXT QUESTION
-  ===================================================== */
 
   const handleNext = () => {
     if (!selectedAnswer) return;
@@ -549,6 +526,9 @@ function SkillTest({ skill, onBack }) {
 
     setAnswers(updatedAnswers);
 
+    /*
+     * NEXT QUESTION
+     */
     if (
       currentQuestion <
       questions.length - 1
@@ -556,38 +536,80 @@ function SkillTest({ skill, onBack }) {
       const nextQuestion =
         currentQuestion + 1;
 
-      setCurrentQuestion(
-        nextQuestion
-      );
+      setCurrentQuestion(nextQuestion);
 
       setSelectedAnswer(
         updatedAnswers[nextQuestion] || ""
       );
-    } else {
-      finishTest(updatedAnswers);
+
+      return;
     }
+
+    /*
+     * FINISH TEST
+     */
+    let correct = 0;
+
+    questions.forEach(
+      (item, index) => {
+        if (
+          updatedAnswers[index] ===
+          item.answer
+        ) {
+          correct++;
+        }
+      }
+    );
+
+    const finalScore = Math.round(
+      (correct / questions.length) * 100
+    );
+
+    const finalLevel =
+      getLevel(finalScore);
+
+    const result = {
+      skill: actualSkill,
+      score: finalScore,
+      level: finalLevel,
+      verified: true,
+      completedAt:
+        new Date().toISOString(),
+    };
+
+    /*
+     * ONLY NOW save result.
+     *
+     * Before completing test there is NO
+     * verified result.
+     */
+    localStorage.setItem(
+      resultStorageKey,
+      JSON.stringify(result)
+    );
+
+    setScore(finalScore);
+    setCompleted(true);
   };
 
-  /* =====================================================
-     RETAKE
-  ===================================================== */
-
+  /*
+   * RETAKE
+   */
   const handleRetake = () => {
+    localStorage.removeItem(
+      resultStorageKey
+    );
+
     setCurrentQuestion(0);
     setSelectedAnswer("");
     setAnswers({});
     setCompleted(false);
     setScore(0);
-
-    localStorage.removeItem(
-      storageKey
-    );
   };
 
-  /* =====================================================
-     CERTIFICATE DOWNLOAD
-  ===================================================== */
-
+  /*
+   * CERTIFICATE
+   */
   const downloadCertificate = () => {
     const level = getLevel(score);
 
@@ -596,7 +618,7 @@ function SkillTest({ skill, onBack }) {
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${selectedSkill} Skill Certificate</title>
+<title>${actualSkill} Skill Certificate</title>
 
 <style>
 body {
@@ -684,55 +706,61 @@ body {
 <body>
 
 <div class="certificate">
-<div class="inner">
+  <div class="inner">
 
-<div class="logo">
-AI RESUME ANALYZER
+    <div class="logo">
+      AI RESUME ANALYZER
+    </div>
+
+    <div class="title">
+      CERTIFICATE OF SKILL
+    </div>
+
+    <div class="subtitle">
+      This certificate verifies successful completion of the
+    </div>
+
+    <div class="skill">
+      ${actualSkill} Skill Assessment
+    </div>
+
+    <div class="score">
+      Skill Score: ${score} / 100
+    </div>
+
+    <div class="level">
+      ${level}
+    </div>
+
+    <div class="verified">
+      ✓ VERIFIED SKILL
+    </div>
+
+    <div class="footer">
+      Assessment completed on
+      ${new Date().toLocaleDateString()}
+      <br/>
+      AI Resume Analyzer • Skill Proof Certificate
+    </div>
+
+  </div>
 </div>
 
-<div class="title">
-CERTIFICATE OF SKILL
-</div>
-
-<div class="subtitle">
-This certificate verifies successful completion of the
-</div>
-
-<div class="skill">
-${selectedSkill} Skill Assessment
-</div>
-
-<div class="score">
-Skill Score: ${score} / 100
-</div>
-
-<div class="level">
-${level}
-</div>
-
-<div class="verified">
-✓ VERIFIED SKILL
-</div>
-
-<div class="footer">
-Assessment completed on ${new Date().toLocaleDateString()}
-<br/>
-AI Resume Analyzer • Skill Proof Certificate
-</div>
-
-</div>
-</div>
+<script>
+window.onload = function() {
+  window.print();
+};
+</script>
 
 </body>
 </html>
 `;
 
-    const blob = new Blob(
-      [certificateHTML],
-      {
-        type: "text/html",
-      }
-    );
+    const blob =
+      new Blob(
+        [certificateHTML],
+        { type: "text/html" }
+      );
 
     const url =
       URL.createObjectURL(blob);
@@ -743,7 +771,7 @@ AI Resume Analyzer • Skill Proof Certificate
     link.href = url;
 
     link.download =
-      `${selectedSkill}-Skill-Certificate-${score}.html`;
+      `${actualSkill}-Skill-Certificate-${score}.html`;
 
     document.body.appendChild(link);
 
@@ -756,9 +784,9 @@ AI Resume Analyzer • Skill Proof Certificate
     }, 1000);
   };
 
-  /* =====================================================
-     COMPLETED PAGE
-  ===================================================== */
+  /* =========================================================
+     COMPLETED
+  ========================================================= */
 
   if (completed) {
     const level = getLevel(score);
@@ -768,23 +796,24 @@ AI Resume Analyzer • Skill Proof Certificate
         style={{
           minHeight: "100vh",
           background:
-            "linear-gradient(135deg, #eef2ff, #f8fafc)",
+            "linear-gradient(135deg,#eef2ff,#f8fafc)",
           padding: "40px 20px",
-          fontFamily: "Arial, sans-serif",
+          fontFamily: "Arial,sans-serif",
         }}
       >
         <div
           style={{
             maxWidth: "650px",
             margin: "0 auto",
-            background: "#ffffff",
+            background: "#fff",
             padding: "45px",
             borderRadius: "24px",
             textAlign: "center",
             boxShadow:
-              "0 20px 60px rgba(15,23,42,0.12)",
+              "0 20px 60px rgba(15,23,42,.12)",
           }}
         >
+
           <div
             style={{
               width: "75px",
@@ -803,22 +832,16 @@ AI Resume Analyzer • Skill Proof Certificate
             ✓
           </div>
 
-          <h1
-            style={{
-              color: "#111827",
-              marginBottom: "10px",
-            }}
-          >
+          <h1>
             Skill Test Completed
           </h1>
 
           <p
             style={{
               color: "#64748b",
-              marginBottom: "30px",
             }}
           >
-            Your {selectedSkill} assessment result
+            Your {actualSkill} assessment result
           </p>
 
           <div
@@ -826,18 +849,18 @@ AI Resume Analyzer • Skill Proof Certificate
               background: "#eff6ff",
               padding: "30px",
               borderRadius: "18px",
-              marginBottom: "20px",
+              marginTop: "25px",
             }}
           >
+
             <div
               style={{
                 fontSize: "28px",
                 fontWeight: "900",
                 color: "#111827",
-                marginBottom: "12px",
               }}
             >
-              {selectedSkill}
+              {actualSkill}
             </div>
 
             <div
@@ -853,16 +876,17 @@ AI Resume Analyzer • Skill Proof Certificate
             <div
               style={{
                 color: "#64748b",
-                marginTop: "5px",
               }}
             >
               Skill Score
             </div>
+
           </div>
 
           <div
             style={{
               display: "inline-block",
+              marginTop: "20px",
               padding: "10px 22px",
               borderRadius: "30px",
               background:
@@ -878,7 +902,6 @@ AI Resume Analyzer • Skill Proof Certificate
                   ? "#b45309"
                   : "#dc2626",
               fontWeight: "800",
-              marginBottom: "20px",
             }}
           >
             {level}
@@ -892,23 +915,11 @@ AI Resume Analyzer • Skill Proof Certificate
               padding: "15px",
               borderRadius: "12px",
               fontWeight: "700",
-              marginBottom: "25px",
+              marginTop: "20px",
             }}
           >
-            ✓ {selectedSkill} Skill Assessment Verified
+            ✓ {actualSkill} Skill Assessment Verified
           </div>
-
-          <p
-            style={{
-              color: "#64748b",
-              fontSize: "14px",
-              lineHeight: "1.6",
-            }}
-          >
-            Your verified {selectedSkill} skill result
-            can be used as skill proof in your career
-            profile.
-          </p>
 
           <div
             style={{
@@ -919,6 +930,7 @@ AI Resume Analyzer • Skill Proof Certificate
               marginTop: "25px",
             }}
           >
+
             <button
               onClick={downloadCertificate}
               style={{
@@ -926,11 +938,10 @@ AI Resume Analyzer • Skill Proof Certificate
                 border: "none",
                 borderRadius: "12px",
                 background:
-                  "linear-gradient(135deg, #2563eb, #4f46e5)",
-                color: "#ffffff",
+                  "linear-gradient(135deg,#2563eb,#4f46e5)",
+                color: "#fff",
                 fontWeight: "800",
                 cursor: "pointer",
-                fontSize: "15px",
               }}
             >
               📜 Download Certificate
@@ -942,15 +953,15 @@ AI Resume Analyzer • Skill Proof Certificate
                 padding: "14px 22px",
                 border: "1px solid #d1d5db",
                 borderRadius: "12px",
-                background: "#ffffff",
+                background: "#fff",
                 color: "#374151",
                 fontWeight: "700",
                 cursor: "pointer",
-                fontSize: "15px",
               }}
             >
               Retake Test
             </button>
+
           </div>
 
           {onBack && (
@@ -965,17 +976,18 @@ AI Resume Analyzer • Skill Proof Certificate
                 cursor: "pointer",
               }}
             >
-              ← Back to Skill Proof
+              ← Back
             </button>
           )}
+
         </div>
       </div>
     );
   }
 
-  /* =====================================================
+  /* =========================================================
      TEST PAGE
-  ===================================================== */
+  ========================================================= */
 
   const progress =
     ((currentQuestion + 1) /
@@ -987,32 +999,34 @@ AI Resume Analyzer • Skill Proof Certificate
       style={{
         minHeight: "100vh",
         background:
-          "linear-gradient(135deg, #eef2ff, #f8fafc)",
+          "linear-gradient(135deg,#eef2ff,#f8fafc)",
         padding: "40px 20px",
-        fontFamily: "Arial, sans-serif",
+        fontFamily: "Arial,sans-serif",
       }}
     >
       <div
         style={{
           maxWidth: "700px",
           margin: "0 auto",
-          background: "#ffffff",
+          background: "#fff",
           padding: "40px",
           borderRadius: "24px",
           boxShadow:
-            "0 20px 60px rgba(15,23,42,0.12)",
+            "0 20px 60px rgba(15,23,42,.12)",
         }}
       >
+
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "30px",
-            gap: "15px",
           }}
         >
+
           <div>
+
             <span
               style={{
                 color: "#2563eb",
@@ -1030,7 +1044,7 @@ AI Resume Analyzer • Skill Proof Certificate
                 color: "#111827",
               }}
             >
-              {selectedSkill} Skill Test
+              {actualSkill} Skill Test
             </h1>
 
             <p
@@ -1039,8 +1053,9 @@ AI Resume Analyzer • Skill Proof Certificate
                 color: "#64748b",
               }}
             >
-              Prove your {selectedSkill} knowledge
+              Prove your {actualSkill} knowledge
             </p>
+
           </div>
 
           <div
@@ -1050,11 +1065,12 @@ AI Resume Analyzer • Skill Proof Certificate
               color: "#2563eb",
               borderRadius: "10px",
               fontWeight: "800",
-              whiteSpace: "nowrap",
             }}
           >
-            {currentQuestion + 1}/{questions.length}
+            {currentQuestion + 1}/
+            {questions.length}
           </div>
+
         </div>
 
         <div
@@ -1071,7 +1087,7 @@ AI Resume Analyzer • Skill Proof Certificate
               width: `${progress}%`,
               height: "100%",
               background:
-                "linear-gradient(90deg, #2563eb, #4f46e5)",
+                "linear-gradient(90deg,#2563eb,#4f46e5)",
             }}
           />
         </div>
@@ -1083,9 +1099,7 @@ AI Resume Analyzer • Skill Proof Certificate
             lineHeight: "1.5",
           }}
         >
-          {questionBank[normalizedSkill]
-            ? questions[currentQuestion].question
-            : questions[currentQuestion].question}
+          {question.question}
         </h2>
 
         <div
@@ -1095,37 +1109,39 @@ AI Resume Analyzer • Skill Proof Certificate
             marginTop: "25px",
           }}
         >
-          {questions[
-            currentQuestion
-          ].options.map((option) => (
-            <button
-              key={option}
-              onClick={() =>
-                setSelectedAnswer(option)
-              }
-              style={{
-                textAlign: "left",
-                padding: "16px",
-                borderRadius: "12px",
-                border:
-                  selectedAnswer === option
-                    ? "2px solid #2563eb"
-                    : "1px solid #dbe1ea",
-                background:
-                  selectedAnswer === option
-                    ? "#eff6ff"
-                    : "#ffffff",
-                color: "#111827",
-                fontWeight:
-                  selectedAnswer === option
-                    ? "700"
-                    : "500",
-                cursor: "pointer",
-              }}
-            >
-              {option}
-            </button>
-          ))}
+
+          {question.options.map(
+            (option) => (
+              <button
+                key={option}
+                onClick={() =>
+                  setSelectedAnswer(option)
+                }
+                style={{
+                  textAlign: "left",
+                  padding: "16px",
+                  borderRadius: "12px",
+                  border:
+                    selectedAnswer === option
+                      ? "2px solid #2563eb"
+                      : "1px solid #dbe1ea",
+                  background:
+                    selectedAnswer === option
+                      ? "#eff6ff"
+                      : "#fff",
+                  color: "#111827",
+                  fontWeight:
+                    selectedAnswer === option
+                      ? "700"
+                      : "500",
+                  cursor: "pointer",
+                }}
+              >
+                {option}
+              </button>
+            )
+          )}
+
         </div>
 
         <button
@@ -1138,9 +1154,9 @@ AI Resume Analyzer • Skill Proof Certificate
             border: "none",
             borderRadius: "12px",
             background: selectedAnswer
-              ? "linear-gradient(135deg, #2563eb, #4f46e5)"
+              ? "linear-gradient(135deg,#2563eb,#4f46e5)"
               : "#cbd5e1",
-            color: "#ffffff",
+            color: "#fff",
             fontWeight: "800",
             fontSize: "16px",
             cursor: selectedAnswer
@@ -1158,8 +1174,9 @@ AI Resume Analyzer • Skill Proof Certificate
           <button
             onClick={onBack}
             style={{
-              display: "block",
-              margin: "20px auto 0",
+              width: "100%",
+              marginTop: "15px",
+              padding: "12px",
               border: "none",
               background: "transparent",
               color: "#2563eb",
@@ -1167,9 +1184,10 @@ AI Resume Analyzer • Skill Proof Certificate
               cursor: "pointer",
             }}
           >
-            ← Back
+            ← Back to Resume
           </button>
         )}
+
       </div>
     </div>
   );
