@@ -117,9 +117,11 @@ function Signin({ onLoginSuccess, onGoToSignup }) {
 
         <div className="auth-brand">
 
-          <div className="brand-logo">
-            ✦
-          </div>
+          <img
+  src="/shastix-logo.png"
+  alt="Shastix Tech"
+  className="auth-logo"
+/>
 
           <div className="brand-badge">
             AI POWERED
