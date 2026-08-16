@@ -64,7 +64,7 @@ const skillQuestions = {
       options: [
         "Hyper Text Markup Language",
         "High Text Machine Language",
-        "Hyperlink Text Mark Language",
+        "Hyperlink Text Management Language",
         "Home Tool Markup Language",
       ],
       answer: "Hyper Text Markup Language",
@@ -207,7 +207,12 @@ const skillQuestions = {
     },
     {
       question: "Which function converts JSON text into a JavaScript object?",
-      options: ["JSON.parse()", "JSON.convert()", "JSON.object()", "JSON.read()"],
+      options: [
+        "JSON.parse()",
+        "JSON.convert()",
+        "JSON.object()",
+        "JSON.read()",
+      ],
       answer: "JSON.parse()",
     },
     {
@@ -335,12 +340,12 @@ const skillQuestions = {
 };
 
 /* =========================================================
-   GENERIC FALLBACK
+   FALLBACK QUESTIONS
 ========================================================= */
 
 const createFallbackQuestions = (skill) => [
   {
-    question: `What is ${skill} mainly used for?`,
+    question: `What is the main purpose of ${skill}?`,
     options: [
       "Building software solutions",
       "Only playing games",
@@ -350,27 +355,17 @@ const createFallbackQuestions = (skill) => [
     answer: "Building software solutions",
   },
   {
-    question: `Which is important when learning ${skill}?`,
+    question: `Which is an important skill when learning ${skill}?`,
     options: [
       "Problem solving",
       "Ignoring errors",
       "Avoiding practice",
-      "Never testing",
+      "Never testing code",
     ],
     answer: "Problem solving",
   },
   {
-    question: `How can ${skill} knowledge be improved?`,
-    options: [
-      "Practice and projects",
-      "Avoiding projects",
-      "Only memorizing",
-      "Never using it",
-    ],
-    answer: "Practice and projects",
-  },
-  {
-    question: `What should a developer do when finding an error in ${skill}?`,
+    question: `What should developers do when they find an error in ${skill}?`,
     options: [
       "Debug it",
       "Ignore it",
@@ -380,27 +375,47 @@ const createFallbackQuestions = (skill) => [
     answer: "Debug it",
   },
   {
-    question: `What is a good way to demonstrate ${skill}?`,
+    question: `Which activity improves ${skill}?`,
+    options: [
+      "Practice and projects",
+      "Avoiding projects",
+      "Memorizing without practice",
+      "Never using the technology",
+    ],
+    answer: "Practice and projects",
+  },
+  {
+    question: `What is a good software development practice while using ${skill}?`,
+    options: [
+      "Testing",
+      "Ignoring bugs",
+      "Skipping validation",
+      "Never reviewing code",
+    ],
+    answer: "Testing",
+  },
+  {
+    question: `Which skill helps developers understand ${skill} problems?`,
+    options: [
+      "Logical thinking",
+      "Guessing",
+      "Ignoring requirements",
+      "Avoiding documentation",
+    ],
+    answer: "Logical thinking",
+  },
+  {
+    question: `What helps demonstrate ${skill} to an employer?`,
     options: [
       "Projects",
-      "Only mentioning it",
+      "No practice",
+      "Only watching videos",
       "Avoiding implementation",
-      "No evidence",
     ],
     answer: "Projects",
   },
   {
-    question: `What helps improve technical knowledge?`,
-    options: [
-      "Hands-on practice",
-      "Avoiding examples",
-      "Ignoring documentation",
-      "Never experimenting",
-    ],
-    answer: "Hands-on practice",
-  },
-  {
-    question: `Why is testing important?`,
+    question: `Why is testing important when working with ${skill}?`,
     options: [
       "To find problems",
       "To remove all code",
@@ -410,7 +425,17 @@ const createFallbackQuestions = (skill) => [
     answer: "To find problems",
   },
   {
-    question: `Which approach is best for ${skill}?`,
+    question: `What is useful when learning ${skill}?`,
+    options: [
+      "Hands-on practice",
+      "Avoiding examples",
+      "Ignoring documentation",
+      "Never experimenting",
+    ],
+    answer: "Hands-on practice",
+  },
+  {
+    question: `Which approach is best for improving ${skill} knowledge?`,
     options: [
       "Practice, projects and testing",
       "Avoiding practice",
@@ -419,81 +444,70 @@ const createFallbackQuestions = (skill) => [
     ],
     answer: "Practice, projects and testing",
   },
-  {
-    question: `How should ${skill} be used in a project?`,
-    options: [
-      "According to project requirements",
-      "Without requirements",
-      "Only for decoration",
-      "Never with other technologies",
-    ],
-    answer: "According to project requirements",
-  },
-  {
-    question: `What is the best proof of ${skill} knowledge?`,
-    options: [
-      "Practical assessment and projects",
-      "Only claiming the skill",
-      "Only writing the skill name",
-      "No evidence",
-    ],
-    answer: "Practical assessment and projects",
-  },
 ];
 
 /* =========================================================
-   NORMALIZE SKILL NAME
+   HELPERS
 ========================================================= */
 
 const normalizeSkillName = (skill) => {
   const value = String(skill || "").trim();
 
-  const found = Object.keys(skillQuestions).find(
-    (item) => item.toLowerCase() === value.toLowerCase()
-  );
+  const aliases = {
+    javascript: "JavaScript",
+    js: "JavaScript",
+    python: "Python",
+    html: "HTML",
+    css: "CSS",
+    sql: "SQL",
+    bootstrap: "Bootstrap",
+  };
 
-  return found || value;
+  return aliases[value.toLowerCase()] || value;
+};
+
+const safeUserId = (user) => {
+  if (!user) return "guest";
+
+  return String(
+    user.id ||
+      user._id ||
+      user.email ||
+      user.username ||
+      "guest"
+  )
+    .trim()
+    .replace(/[^a-zA-Z0-9_-]/g, "_");
 };
 
 /* =========================================================
    COMPONENT
 ========================================================= */
 
-function SkillTest({ skill, user, onBack }) {
-  const actualSkill = normalizeSkillName(skill || "Python");
+function SkillTest({ skill = "Python", user, onBack }) {
+  const actualSkill = normalizeSkillName(skill);
 
   const questions =
     skillQuestions[actualSkill] ||
     createFallbackQuestions(actualSkill);
 
-  /*
-   * USER ID
-   *
-   * Every user gets a separate storage area.
-   */
-  const userId =
-    user?.id ||
-    user?._id ||
-    user?.email ||
-    localStorage.getItem("currentUserId") ||
-    localStorage.getItem("currentUserEmail") ||
-    "guest";
+  const userId = safeUserId(user);
 
   /*
-   * IMPORTANT
-   *
-   * Score is stored as:
-   *
-   * skillTestResult_USERID_SKILL
-   *
-   * Example:
-   * skillTestResult_123_HTML
-   *
-   * Therefore another user cannot automatically
-   * receive the previous user's HTML score.
-   */
+    VERY IMPORTANT
+
+    Every user + every skill gets a separate key.
+
+    Example:
+    skillTestResult_user1_HTML
+    skillTestResult_user1_Python
+    skillTestResult_user2_HTML
+
+    So old user's score cannot appear for a new user.
+  */
+
   const resultStorageKey =
-    `skillTestResult_${String(userId)}_${actualSkill}`;
+    `skillTestResult_${userId}_${actualSkill}`;
 
   const [currentQuestion, setCurrentQuestion] =
     useState(0);
@@ -510,56 +524,38 @@ function SkillTest({ skill, user, onBack }) {
   const [score, setScore] =
     useState(0);
 
+  /* =======================================================
+     IMPORTANT FIX
+  ======================================================= */
+
+  const question =
+    questions[currentQuestion];
+
+  /* =======================================================
+     LEVEL
+  ======================================================= */
+
   const getLevel = (value) => {
     if (value >= 80) return "Advanced";
     if (value >= 60) return "Intermediate";
     return "Beginner";
   };
 
-  const handleNext = () => {
-    if (!selectedAnswer) return;
+  /* =======================================================
+     FINISH TEST
+  ======================================================= */
 
-    const updatedAnswers = {
-      ...answers,
-      [currentQuestion]: selectedAnswer,
-    };
-
-    setAnswers(updatedAnswers);
-
-    /*
-     * NEXT QUESTION
-     */
-    if (
-      currentQuestion <
-      questions.length - 1
-    ) {
-      const nextQuestion =
-        currentQuestion + 1;
-
-      setCurrentQuestion(nextQuestion);
-
-      setSelectedAnswer(
-        updatedAnswers[nextQuestion] || ""
-      );
-
-      return;
-    }
-
-    /*
-     * FINISH TEST
-     */
+  const finishTest = (finalAnswers) => {
     let correct = 0;
 
-    questions.forEach(
-      (item, index) => {
-        if (
-          updatedAnswers[index] ===
-          item.answer
-        ) {
-          correct++;
-        }
+    questions.forEach((item, index) => {
+      if (
+        finalAnswers[index] ===
+        item.answer
+      ) {
+        correct++;
       }
-    );
+    });
 
     const finalScore = Math.round(
       (correct / questions.length) * 100
@@ -577,24 +573,56 @@ function SkillTest({ skill, user, onBack }) {
         new Date().toISOString(),
     };
 
-    /*
-     * ONLY NOW save result.
-     *
-     * Before completing test there is NO
-     * verified result.
-     */
+    setScore(finalScore);
+    setCompleted(true);
+
     localStorage.setItem(
       resultStorageKey,
       JSON.stringify(result)
     );
-
-    setScore(finalScore);
-    setCompleted(true);
   };
 
-  /*
-   * RETAKE
-   */
+  /* =======================================================
+     NEXT
+  ======================================================= */
+
+  const handleNext = () => {
+    if (!selectedAnswer) return;
+
+    const updatedAnswers = {
+      ...answers,
+      [currentQuestion]:
+        selectedAnswer,
+    };
+
+    setAnswers(updatedAnswers);
+
+    if (
+      currentQuestion <
+      questions.length - 1
+    ) {
+      const nextQuestion =
+        currentQuestion + 1;
+
+      setCurrentQuestion(
+        nextQuestion
+      );
+
+      setSelectedAnswer(
+        updatedAnswers[nextQuestion] ||
+          ""
+      );
+
+      return;
+    }
+
+    finishTest(updatedAnswers);
+  };
+
+  /* =======================================================
+     RETAKE
+  ======================================================= */
+
   const handleRetake = () => {
     localStorage.removeItem(
       resultStorageKey
@@ -607,20 +635,24 @@ function SkillTest({ skill, user, onBack }) {
     setScore(0);
   };
 
-  /*
-   * CERTIFICATE
-   */
+  /* =======================================================
+     CERTIFICATE
+  ======================================================= */
+
   const downloadCertificate = () => {
-    const level = getLevel(score);
+    const level =
+      getLevel(score);
 
     const certificateHTML = `
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+
 <title>${actualSkill} Skill Certificate</title>
 
 <style>
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -700,57 +732,65 @@ body {
   color: #64748b;
   font-size: 13px;
 }
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .certificate {
+    margin: 0;
+  }
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div class="certificate">
-  <div class="inner">
 
-    <div class="logo">
-      AI RESUME ANALYZER
-    </div>
+<div class="inner">
 
-    <div class="title">
-      CERTIFICATE OF SKILL
-    </div>
-
-    <div class="subtitle">
-      This certificate verifies successful completion of the
-    </div>
-
-    <div class="skill">
-      ${actualSkill} Skill Assessment
-    </div>
-
-    <div class="score">
-      Skill Score: ${score} / 100
-    </div>
-
-    <div class="level">
-      ${level}
-    </div>
-
-    <div class="verified">
-      ✓ VERIFIED SKILL
-    </div>
-
-    <div class="footer">
-      Assessment completed on
-      ${new Date().toLocaleDateString()}
-      <br/>
-      AI Resume Analyzer • Skill Proof Certificate
-    </div>
-
-  </div>
+<div class="logo">
+AI RESUME ANALYZER
 </div>
 
-<script>
-window.onload = function() {
-  window.print();
-};
-</script>
+<div class="title">
+CERTIFICATE OF SKILL
+</div>
+
+<div class="subtitle">
+This certificate verifies successful completion of the
+</div>
+
+<div class="skill">
+${actualSkill} Skill Assessment
+</div>
+
+<div class="score">
+Skill Score: ${score} / 100
+</div>
+
+<div class="level">
+${level}
+</div>
+
+<div class="verified">
+✓ VERIFIED SKILL
+</div>
+
+<div class="footer">
+Assessment completed on
+${new Date().toLocaleDateString()}
+<br/>
+AI Resume Analyzer • Skill Proof Certificate
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>
@@ -759,7 +799,9 @@ window.onload = function() {
     const blob =
       new Blob(
         [certificateHTML],
-        { type: "text/html" }
+        {
+          type: "text/html",
+        }
       );
 
     const url =
@@ -784,12 +826,13 @@ window.onload = function() {
     }, 1000);
   };
 
-  /* =========================================================
-     COMPLETED
-  ========================================================= */
+  /* =======================================================
+     COMPLETED PAGE
+  ======================================================= */
 
   if (completed) {
-    const level = getLevel(score);
+    const level =
+      getLevel(score);
 
     return (
       <div
@@ -798,19 +841,21 @@ window.onload = function() {
           background:
             "linear-gradient(135deg,#eef2ff,#f8fafc)",
           padding: "40px 20px",
-          fontFamily: "Arial,sans-serif",
+          fontFamily:
+            "Arial, sans-serif",
         }}
       >
+
         <div
           style={{
             maxWidth: "650px",
             margin: "0 auto",
-            background: "#fff",
+            background: "#ffffff",
             padding: "45px",
             borderRadius: "24px",
             textAlign: "center",
             boxShadow:
-              "0 20px 60px rgba(15,23,42,.12)",
+              "0 20px 60px rgba(15,23,42,0.12)",
           }}
         >
 
@@ -818,7 +863,8 @@ window.onload = function() {
             style={{
               width: "75px",
               height: "75px",
-              margin: "0 auto 20px",
+              margin:
+                "0 auto 20px",
               borderRadius: "50%",
               background: "#dcfce7",
               color: "#16a34a",
@@ -832,13 +878,19 @@ window.onload = function() {
             ✓
           </div>
 
-          <h1>
+          <h1
+            style={{
+              color: "#111827",
+              marginBottom: "10px",
+            }}
+          >
             Skill Test Completed
           </h1>
 
           <p
             style={{
               color: "#64748b",
+              marginBottom: "30px",
             }}
           >
             Your {actualSkill} assessment result
@@ -849,7 +901,7 @@ window.onload = function() {
               background: "#eff6ff",
               padding: "30px",
               borderRadius: "18px",
-              marginTop: "25px",
+              marginBottom: "25px",
             }}
           >
 
@@ -858,6 +910,7 @@ window.onload = function() {
                 fontSize: "28px",
                 fontWeight: "900",
                 color: "#111827",
+                marginBottom: "10px",
               }}
             >
               {actualSkill}
@@ -876,6 +929,7 @@ window.onload = function() {
             <div
               style={{
                 color: "#64748b",
+                marginTop: "5px",
               }}
             >
               Skill Score
@@ -886,7 +940,6 @@ window.onload = function() {
           <div
             style={{
               display: "inline-block",
-              marginTop: "20px",
               padding: "10px 22px",
               borderRadius: "30px",
               background:
@@ -902,6 +955,7 @@ window.onload = function() {
                   ? "#b45309"
                   : "#dc2626",
               fontWeight: "800",
+              marginBottom: "20px",
             }}
           >
             {level}
@@ -910,16 +964,30 @@ window.onload = function() {
           <div
             style={{
               background: "#f0fdf4",
-              border: "1px solid #bbf7d0",
+              border:
+                "1px solid #bbf7d0",
               color: "#15803d",
               padding: "15px",
               borderRadius: "12px",
               fontWeight: "700",
-              marginTop: "20px",
+              marginBottom: "25px",
             }}
           >
             ✓ {actualSkill} Skill Assessment Verified
           </div>
+
+          <p
+            style={{
+              color: "#64748b",
+              fontSize: "14px",
+              lineHeight: "1.6",
+            }}
+          >
+            Your verified {actualSkill}
+            skill result can be used
+            as skill proof in your
+            career profile.
+          </p>
 
           <div
             style={{
@@ -932,31 +1000,40 @@ window.onload = function() {
           >
 
             <button
-              onClick={downloadCertificate}
+              onClick={
+                downloadCertificate
+              }
               style={{
-                padding: "14px 22px",
+                padding:
+                  "14px 22px",
                 border: "none",
                 borderRadius: "12px",
                 background:
                   "linear-gradient(135deg,#2563eb,#4f46e5)",
-                color: "#fff",
+                color: "#ffffff",
                 fontWeight: "800",
                 cursor: "pointer",
+                fontSize: "15px",
               }}
             >
               📜 Download Certificate
             </button>
 
             <button
-              onClick={handleRetake}
+              onClick={
+                handleRetake
+              }
               style={{
-                padding: "14px 22px",
-                border: "1px solid #d1d5db",
+                padding:
+                  "14px 22px",
+                border:
+                  "1px solid #d1d5db",
                 borderRadius: "12px",
-                background: "#fff",
+                background: "#ffffff",
                 color: "#374151",
                 fontWeight: "700",
                 cursor: "pointer",
+                fontSize: "15px",
               }}
             >
               Retake Test
@@ -970,24 +1047,26 @@ window.onload = function() {
               style={{
                 marginTop: "20px",
                 border: "none",
-                background: "transparent",
+                background:
+                  "transparent",
                 color: "#2563eb",
                 fontWeight: "700",
                 cursor: "pointer",
               }}
             >
-              ← Back
+              ← Back to Skill Proof
             </button>
           )}
 
         </div>
+
       </div>
     );
   }
 
-  /* =========================================================
+  /* =======================================================
      TEST PAGE
-  ========================================================= */
+  ======================================================= */
 
   const progress =
     ((currentQuestion + 1) /
@@ -1001,27 +1080,31 @@ window.onload = function() {
         background:
           "linear-gradient(135deg,#eef2ff,#f8fafc)",
         padding: "40px 20px",
-        fontFamily: "Arial,sans-serif",
+        fontFamily:
+          "Arial, sans-serif",
       }}
     >
+
       <div
         style={{
           maxWidth: "700px",
           margin: "0 auto",
-          background: "#fff",
+          background: "#ffffff",
           padding: "40px",
           borderRadius: "24px",
           boxShadow:
-            "0 20px 60px rgba(15,23,42,.12)",
+            "0 20px 60px rgba(15,23,42,0.12)",
         }}
       >
 
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent:
+              "space-between",
             alignItems: "center",
             marginBottom: "30px",
+            gap: "15px",
           }}
         >
 
@@ -1040,7 +1123,8 @@ window.onload = function() {
 
             <h1
               style={{
-                margin: "8px 0 5px",
+                margin:
+                  "8px 0 5px",
                 color: "#111827",
               }}
             >
@@ -1053,21 +1137,29 @@ window.onload = function() {
                 color: "#64748b",
               }}
             >
-              Prove your {actualSkill} knowledge
+              Prove your {actualSkill}
+              knowledge
             </p>
 
           </div>
 
           <div
             style={{
-              padding: "10px 14px",
-              background: "#eff6ff",
-              color: "#2563eb",
-              borderRadius: "10px",
+              padding:
+                "10px 14px",
+              background:
+                "#eff6ff",
+              color:
+                "#2563eb",
+              borderRadius:
+                "10px",
               fontWeight: "800",
+              whiteSpace:
+                "nowrap",
             }}
           >
-            {currentQuestion + 1}/
+            {currentQuestion + 1}
+            /
             {questions.length}
           </div>
 
@@ -1078,18 +1170,22 @@ window.onload = function() {
             height: "8px",
             background: "#e5e7eb",
             borderRadius: "20px",
-            marginBottom: "35px",
+            marginBottom:
+              "35px",
             overflow: "hidden",
           }}
         >
+
           <div
             style={{
-              width: `${progress}%`,
+              width:
+                `${progress}%`,
               height: "100%",
               background:
                 "linear-gradient(90deg,#2563eb,#4f46e5)",
             }}
           />
+
         </div>
 
         <h2
@@ -1106,7 +1202,8 @@ window.onload = function() {
           style={{
             display: "grid",
             gap: "12px",
-            marginTop: "25px",
+            marginTop:
+              "25px",
           }}
         >
 
@@ -1115,26 +1212,36 @@ window.onload = function() {
               <button
                 key={option}
                 onClick={() =>
-                  setSelectedAnswer(option)
+                  setSelectedAnswer(
+                    option
+                  )
                 }
                 style={{
-                  textAlign: "left",
-                  padding: "16px",
-                  borderRadius: "12px",
+                  textAlign:
+                    "left",
+                  padding:
+                    "16px",
                   border:
-                    selectedAnswer === option
+                    selectedAnswer ===
+                    option
                       ? "2px solid #2563eb"
                       : "1px solid #dbe1ea",
+                  borderRadius:
+                    "12px",
                   background:
-                    selectedAnswer === option
+                    selectedAnswer ===
+                    option
                       ? "#eff6ff"
-                      : "#fff",
-                  color: "#111827",
+                      : "#ffffff",
+                  color:
+                    "#111827",
                   fontWeight:
-                    selectedAnswer === option
+                    selectedAnswer ===
+                    option
                       ? "700"
                       : "500",
-                  cursor: "pointer",
+                  cursor:
+                    "pointer",
                 }}
               >
                 {option}
@@ -1145,23 +1252,35 @@ window.onload = function() {
         </div>
 
         <button
-          onClick={handleNext}
-          disabled={!selectedAnswer}
+          onClick={
+            handleNext
+          }
+          disabled={
+            !selectedAnswer
+          }
           style={{
             width: "100%",
-            marginTop: "30px",
-            padding: "15px",
+            marginTop:
+              "30px",
+            padding:
+              "15px",
             border: "none",
-            borderRadius: "12px",
-            background: selectedAnswer
-              ? "linear-gradient(135deg,#2563eb,#4f46e5)"
-              : "#cbd5e1",
-            color: "#fff",
-            fontWeight: "800",
-            fontSize: "16px",
-            cursor: selectedAnswer
-              ? "pointer"
-              : "not-allowed",
+            borderRadius:
+              "12px",
+            background:
+              selectedAnswer
+                ? "linear-gradient(135deg,#2563eb,#4f46e5)"
+                : "#cbd5e1",
+            color:
+              "#ffffff",
+            fontWeight:
+              "800",
+            fontSize:
+              "16px",
+            cursor:
+              selectedAnswer
+                ? "pointer"
+                : "not-allowed",
           }}
         >
           {currentQuestion ===
@@ -1175,13 +1294,19 @@ window.onload = function() {
             onClick={onBack}
             style={{
               width: "100%",
-              marginTop: "15px",
-              padding: "12px",
+              marginTop:
+                "15px",
+              padding:
+                "12px",
               border: "none",
-              background: "transparent",
-              color: "#2563eb",
-              fontWeight: "700",
-              cursor: "pointer",
+              background:
+                "transparent",
+              color:
+                "#2563eb",
+              fontWeight:
+                "700",
+              cursor:
+                "pointer",
             }}
           >
             ← Back to Resume
@@ -1189,6 +1314,7 @@ window.onload = function() {
         )}
 
       </div>
+
     </div>
   );
 }
