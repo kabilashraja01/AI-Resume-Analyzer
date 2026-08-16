@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import ResumeUpload from "./ResumeUpload";
 import Signup from "./Signup";
 import Signin from "./Signin";
+import SkillTest from "./SkillTest";
 import "./App.css";
 
-const UPLOAD_URL = "https://ai-resume-analyzer-u2b6.onrender.com/api/upload";
-const ANALYZE_URL = "https://ai-resume-analyzer-u2b6.onrender.com/api/analyze";
-const HISTORY_URL = "https://ai-resume-analyzer-u2b6.onrender.com/api/resumes";
+const UPLOAD_URL =
+  "https://ai-resume-analyzer-u2b6.onrender.com/api/upload";
+
+const ANALYZE_URL =
+  "https://ai-resume-analyzer-u2b6.onrender.com/api/analyze";
+
+const HISTORY_URL =
+  "https://ai-resume-analyzer-u2b6.onrender.com/api/resumes";
 
 function App() {
   // =====================================================
@@ -29,8 +35,15 @@ function App() {
 
   const [page, setPage] = useState(() => {
     const savedUser = localStorage.getItem("user");
+
     return savedUser ? "analyzer" : "login";
   });
+
+  // =====================================================
+  // SKILL TEST
+  // =====================================================
+
+  const [selectedSkill, setSelectedSkill] = useState("");
 
   // =====================================================
   // RESUME DATA
@@ -48,7 +61,9 @@ function App() {
     const savedAnalysis = localStorage.getItem("analysis");
 
     try {
-      return savedAnalysis ? JSON.parse(savedAnalysis) : null;
+      return savedAnalysis
+        ? JSON.parse(savedAnalysis)
+        : null;
     } catch {
       return null;
     }
@@ -64,7 +79,9 @@ function App() {
   const [error, setError] = useState("");
 
   const [history, setHistory] = useState([]);
-  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] =
+    useState(false);
+
   const [isDeleting, setIsDeleting] = useState(false);
 
   // =====================================================
@@ -130,15 +147,12 @@ function App() {
   // =====================================================
 
   const handleLogout = () => {
-    // Clear user session
     localStorage.removeItem("user");
 
-    // Clear resume data
     localStorage.removeItem("uploadedFileName");
     localStorage.removeItem("resumeText");
     localStorage.removeItem("analysis");
 
-    // Clear React state
     setUser(null);
     setPage("login");
 
@@ -146,6 +160,7 @@ function App() {
     setResumeText("");
     setAnalysis(null);
     setHistory([]);
+    setSelectedSkill("");
     setError("");
   };
 
@@ -249,6 +264,7 @@ function App() {
       setError(
         "Please upload a resume first."
       );
+
       return;
     }
 
@@ -385,6 +401,7 @@ function App() {
       setError(
         "Resume ID is missing."
       );
+
       return;
     }
 
@@ -515,6 +532,34 @@ function App() {
   }
 
   // =====================================================
+  // SKILL TEST PAGE
+  // =====================================================
+
+  if (page === "skill-test") {
+    return (
+      <SkillTest
+        skills={
+          analysis?.skills || []
+        }
+
+        selectedSkill={
+          selectedSkill
+        }
+
+        setSelectedSkill={
+          setSelectedSkill
+        }
+
+        onBack={() =>
+          setPage("analyzer")
+        }
+
+        user={user}
+      />
+    );
+  }
+
+  // =====================================================
   // MAIN APPLICATION
   // =====================================================
 
@@ -554,6 +599,20 @@ function App() {
             </span>
           )}
 
+          {/* SKILL TEST BUTTON */}
+
+          <button
+            className="header-button"
+            onClick={() => {
+              setSelectedSkill("");
+              setPage("skill-test");
+            }}
+          >
+            🧠 Skill Test
+          </button>
+
+          {/* HISTORY */}
+
           <button
             className="header-button history-button"
             onClick={() =>
@@ -563,6 +622,8 @@ function App() {
             📋 History
           </button>
 
+          {/* NEW RESUME */}
+
           <button
             className="header-button new-resume-button"
             onClick={
@@ -571,6 +632,8 @@ function App() {
           >
             + New Resume
           </button>
+
+          {/* LOGOUT */}
 
           <button
             type="button"
@@ -996,6 +1059,10 @@ function App() {
 
         <main className="dashboard">
 
+          {/* =====================================================
+              STEP 01
+          ===================================================== */}
+
           <section className="upload-card">
 
             <div className="section-heading">
@@ -1059,6 +1126,10 @@ function App() {
 
           </section>
 
+          {/* =====================================================
+              STEP 02
+          ===================================================== */}
+
           {resumeText && (
             <section className="resume-card">
 
@@ -1118,6 +1189,10 @@ function App() {
             </section>
           )}
 
+          {/* =====================================================
+              STEP 03
+          ===================================================== */}
+
           {analysis && (
             <section className="analysis-section">
 
@@ -1146,6 +1221,8 @@ function App() {
                 </div>
 
               </div>
+
+              {/* SCORES */}
 
               <div className="top-grid">
 
@@ -1215,6 +1292,8 @@ function App() {
 
               </div>
 
+              {/* SUMMARY */}
+
               <div
                 className="summary-card"
                 style={{
@@ -1237,6 +1316,83 @@ function App() {
                 </p>
 
               </div>
+
+              {/* =====================================================
+                  SKILL TEST CTA
+              ===================================================== */}
+
+              <div
+                className="analysis-card"
+                style={{
+                  marginBottom:
+                    "22px",
+                  background:
+                    "linear-gradient(135deg, #eff6ff, #eef2ff)",
+                  border:
+                    "1px solid #c7d2fe",
+                }}
+              >
+
+                <span className="card-label">
+                  VERIFY YOUR SKILLS
+                </span>
+
+                <h3>
+                  🧠 Prove Your Skills
+                </h3>
+
+                <p
+                  style={{
+                    color:
+                      "#475569",
+                    lineHeight:
+                      "1.6",
+                  }}
+                >
+                  Take a skill assessment based
+                  on the skills found in your
+                  resume. Get a score, skill level,
+                  rank and verified badge.
+                </p>
+
+                <button
+                  onClick={() => {
+                    setSelectedSkill("");
+                    setPage("skill-test");
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  }}
+                  style={{
+                    marginTop:
+                      "15px",
+                    padding:
+                      "12px 20px",
+                    border:
+                      "none",
+                    borderRadius:
+                      "11px",
+                    background:
+                      "linear-gradient(135deg, #2563eb, #4f46e5)",
+                    color:
+                      "#ffffff",
+                    fontWeight:
+                      "800",
+                    fontSize:
+                      "15px",
+                    cursor:
+                      "pointer",
+                    boxShadow:
+                      "0 8px 20px rgba(37,99,235,0.22)",
+                  }}
+                >
+                  🧠 Take Skill Test →
+                </button>
+
+              </div>
+
+              {/* RECOMMENDED JOBS */}
 
               <div className="analysis-card">
 
@@ -1370,6 +1526,8 @@ function App() {
 
               </div>
 
+              {/* SKILLS */}
+
               <div className="analysis-card">
 
                 <span className="card-label">
@@ -1403,6 +1561,8 @@ function App() {
                 </div>
 
               </div>
+
+              {/* EXPERIENCE */}
 
               <div className="analysis-card">
 
@@ -1482,6 +1642,8 @@ function App() {
 
               </div>
 
+              {/* EDUCATION */}
+
               <div className="analysis-card">
 
                 <span className="card-label">
@@ -1547,6 +1709,8 @@ function App() {
                 </div>
 
               </div>
+
+              {/* STRENGTHS / WEAKNESSES */}
 
               <div className="two-column">
 
@@ -1634,6 +1798,8 @@ function App() {
 
               </div>
 
+              {/* MISSING SKILLS */}
+
               <div className="analysis-card missing-card">
 
                 <div>
@@ -1689,6 +1855,8 @@ function App() {
 
               </div>
 
+              {/* FINAL */}
+
               <div className="final-card">
 
                 <div>
@@ -1729,6 +1897,10 @@ function App() {
 
         </main>
       )}
+
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
 
       <footer>
         AI Resume Analyzer • Powered by AI
