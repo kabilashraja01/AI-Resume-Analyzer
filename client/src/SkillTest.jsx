@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-// =====================================================
-// QUESTIONS FOR DIFFERENT SKILLS
-// =====================================================
+/* =========================================================
+   QUESTION BANK
+========================================================= */
 
-const skillQuestions = {
-  python: [
+const questionBank = {
+  Python: [
     {
       question: "Which keyword is used to define a function in Python?",
       options: ["function", "def", "fun", "define"],
@@ -58,239 +58,7 @@ const skillQuestions = {
     },
   ],
 
-  java: [
-    {
-      question: "Which keyword is used to create a class in Java?",
-      options: ["class", "struct", "define", "object"],
-      answer: "class",
-    },
-    {
-      question: "Which method is the entry point of a Java program?",
-      options: ["start()", "main()", "run()", "execute()"],
-      answer: "main()",
-    },
-    {
-      question: "Which keyword is used for inheritance in Java?",
-      options: ["inherits", "extends", "implements", "inherit"],
-      answer: "extends",
-    },
-    {
-      question: "Which data type stores whole numbers?",
-      options: ["float", "String", "int", "boolean"],
-      answer: "int",
-    },
-    {
-      question: "Which symbol ends a Java statement?",
-      options: [".", ";", ":", ","],
-      answer: ";",
-    },
-    {
-      question: "Which keyword creates an object?",
-      options: ["object", "create", "new", "make"],
-      answer: "new",
-    },
-    {
-      question: "Which keyword is used to implement an interface?",
-      options: ["extends", "interface", "implements", "inherit"],
-      answer: "implements",
-    },
-    {
-      question: "Java is mainly which type of language?",
-      options: ["Object-oriented", "Markup", "Query", "Assembly"],
-      answer: "Object-oriented",
-    },
-    {
-      question: "Which keyword prevents a class from being inherited?",
-      options: ["static", "private", "final", "const"],
-      answer: "final",
-    },
-    {
-      question: "Which file extension is used for Java source code?",
-      options: [".js", ".java", ".class", ".jav"],
-      answer: ".java",
-    },
-  ],
-
-  javascript: [
-    {
-      question: "Which keyword declares a variable that can be reassigned?",
-      options: ["let", "constant", "fixed", "define"],
-      answer: "let",
-    },
-    {
-      question: "Which keyword declares a constant?",
-      options: ["let", "var", "const", "constant"],
-      answer: "const",
-    },
-    {
-      question: "Which symbol is used for single-line comments?",
-      options: ["#", "//", "<!--", "/*"],
-      answer: "//",
-    },
-    {
-      question: "Which method prints output to the browser console?",
-      options: ["print()", "console.log()", "display()", "output()"],
-      answer: "console.log()",
-    },
-    {
-      question: "Which operator checks both value and type?",
-      options: ["==", "=", "===", "!="],
-      answer: "===",
-    },
-    {
-      question: "Which keyword defines a function?",
-      options: ["function", "def", "fun", "method"],
-      answer: "function",
-    },
-    {
-      question: "Which value represents no value in JavaScript?",
-      options: ["empty", "null", "none", "void"],
-      answer: "null",
-    },
-    {
-      question: "Which method adds an item to the end of an array?",
-      options: ["add()", "push()", "append()", "insert()"],
-      answer: "push()",
-    },
-    {
-      question: "Which language is JavaScript primarily used for?",
-      options: ["Web development", "Database management", "Operating systems", "Networking only"],
-      answer: "Web development",
-    },
-    {
-      question: "What does DOM stand for?",
-      options: [
-        "Document Object Model",
-        "Data Object Management",
-        "Document Oriented Method",
-        "Digital Object Model",
-      ],
-      answer: "Document Object Model",
-    },
-  ],
-
-  react: [
-    {
-      question: "What is React mainly used for?",
-      options: [
-        "Building user interfaces",
-        "Database management",
-        "Operating systems",
-        "Networking",
-      ],
-      answer: "Building user interfaces",
-    },
-    {
-      question: "Which library is React?",
-      options: ["JavaScript UI library", "Database", "CSS framework", "Operating system"],
-      answer: "JavaScript UI library",
-    },
-    {
-      question: "Which hook is used to manage state?",
-      options: ["useState", "useData", "useValue", "useManage"],
-      answer: "useState",
-    },
-    {
-      question: "Which hook is commonly used for side effects?",
-      options: ["useEffect", "useSide", "useAction", "useEvent"],
-      answer: "useEffect",
-    },
-    {
-      question: "What syntax is commonly used to write HTML-like code in React?",
-      options: ["XML", "JSX", "JHTML", "ReactHTML"],
-      answer: "JSX",
-    },
-    {
-      question: "React components should normally return what?",
-      options: ["UI/JSX", "SQL", "CSS only", "JSON only"],
-      answer: "UI/JSX",
-    },
-    {
-      question: "Props are mainly used to do what?",
-      options: [
-        "Pass data to components",
-        "Create databases",
-        "Style the browser",
-        "Install packages",
-      ],
-      answer: "Pass data to components",
-    },
-    {
-      question: "Which command commonly creates a React project with Vite?",
-      options: ["npm create vite", "react start", "create-react-only", "npm react-new"],
-      answer: "npm create vite",
-    },
-    {
-      question: "What is a component in React?",
-      options: [
-        "Reusable UI building block",
-        "Database table",
-        "CSS property",
-        "Server",
-      ],
-      answer: "Reusable UI building block",
-    },
-    {
-      question: "Which file commonly contains a React component?",
-      options: [".jsx", ".sql", ".java", ".php"],
-      answer: ".jsx",
-    },
-  ],
-
-  sql: [
-    {
-      question: "Which command is used to retrieve data?",
-      options: ["GET", "SELECT", "FETCHALL", "READ"],
-      answer: "SELECT",
-    },
-    {
-      question: "Which command adds new records?",
-      options: ["ADD", "INSERT", "CREATE", "PUT"],
-      answer: "INSERT",
-    },
-    {
-      question: "Which command modifies existing records?",
-      options: ["CHANGE", "UPDATE", "MODIFY", "ALTER"],
-      answer: "UPDATE",
-    },
-    {
-      question: "Which command removes records?",
-      options: ["REMOVE", "DELETE", "DROP", "CLEAR"],
-      answer: "DELETE",
-    },
-    {
-      question: "Which clause filters records?",
-      options: ["FILTER", "WHERE", "WHEN", "CHECK"],
-      answer: "WHERE",
-    },
-    {
-      question: "Which keyword sorts query results?",
-      options: ["SORT", "ORDER BY", "ARRANGE", "GROUP"],
-      answer: "ORDER BY",
-    },
-    {
-      question: "Which keyword removes duplicate results?",
-      options: ["UNIQUE", "DISTINCT", "ONLY", "SINGLE"],
-      answer: "DISTINCT",
-    },
-    {
-      question: "Which command creates a table?",
-      options: ["MAKE TABLE", "CREATE TABLE", "NEW TABLE", "ADD TABLE"],
-      answer: "CREATE TABLE",
-    },
-    {
-      question: "Which function counts rows?",
-      options: ["TOTAL()", "COUNT()", "NUMBER()", "ROWS()"],
-      answer: "COUNT()",
-    },
-    {
-      question: "Which key uniquely identifies a row?",
-      options: ["Foreign key", "Primary key", "Unique row", "Index key"],
-      answer: "Primary key",
-    },
-  ],
-
-  html: [
+  HTML: [
     {
       question: "What does HTML stand for?",
       options: [
@@ -302,59 +70,59 @@ const skillQuestions = {
       answer: "Hyper Text Markup Language",
     },
     {
-      question: "Which tag creates a heading?",
-      options: ["<head>", "<h1>", "<heading>", "<title>"],
+      question: "Which tag is used for the largest heading?",
+      options: ["<h6>", "<heading>", "<h1>", "<head>"],
       answer: "<h1>",
     },
     {
-      question: "Which tag creates a paragraph?",
-      options: ["<para>", "<p>", "<text>", "<paragraph>"],
-      answer: "<p>",
-    },
-    {
-      question: "Which tag creates a hyperlink?",
+      question: "Which tag is used to create a hyperlink?",
       options: ["<link>", "<a>", "<href>", "<url>"],
       answer: "<a>",
     },
     {
-      question: "Which tag displays an image?",
+      question: "Which tag is used to display an image?",
       options: ["<image>", "<img>", "<picture>", "<src>"],
       answer: "<img>",
     },
     {
+      question: "Which tag creates a paragraph?",
+      options: ["<p>", "<para>", "<text>", "<paragraph>"],
+      answer: "<p>",
+    },
+    {
+      question: "Which attribute specifies an image source?",
+      options: ["href", "src", "link", "source"],
+      answer: "src",
+    },
+    {
       question: "Which tag creates an unordered list?",
-      options: ["<ol>", "<list>", "<ul>", "<li>"],
+      options: ["<ol>", "<ul>", "<list>", "<li>"],
       answer: "<ul>",
     },
     {
-      question: "Which attribute provides alternative image text?",
-      options: ["src", "alt", "title", "text"],
-      answer: "alt",
+      question: "Which tag is used to create a table row?",
+      options: ["<td>", "<tr>", "<th>", "<row>"],
+      answer: "<tr>",
     },
     {
-      question: "Which tag creates a form?",
+      question: "Which HTML element is used for a form?",
       options: ["<input>", "<form>", "<field>", "<data>"],
       answer: "<form>",
     },
     {
-      question: "HTML is a...",
-      options: ["Programming language", "Markup language", "Database", "Operating system"],
-      answer: "Markup language",
-    },
-    {
-      question: "Which tag creates a line break?",
-      options: ["<break>", "<br>", "<lb>", "<newline>"],
-      answer: "<br>",
+      question: "Which declaration defines an HTML5 document?",
+      options: ["<html5>", "<doctype>", "<!DOCTYPE html>", "<html version='5'>"],
+      answer: "<!DOCTYPE html>",
     },
   ],
 
-  css: [
+  CSS: [
     {
       question: "What does CSS stand for?",
       options: [
         "Cascading Style Sheets",
-        "Computer Style System",
-        "Creative Style Syntax",
+        "Computer Style Sheets",
+        "Creative Style System",
         "Colorful Style Sheets",
       ],
       answer: "Cascading Style Sheets",
@@ -365,101 +133,342 @@ const skillQuestions = {
       answer: "color",
     },
     {
-      question: "Which property changes background color?",
-      options: ["background-color", "bgcolor", "background", "color-bg"],
+      question: "Which property changes the background color?",
+      options: ["background-color", "bgcolor", "background", "color"],
       answer: "background-color",
     },
     {
-      question: "Which property changes font size?",
-      options: ["font-size", "text-size", "size", "font-height"],
-      answer: "font-size",
-    },
-    {
-      question: "Which symbol selects a class?",
-      options: ["#", ".", "*", "$"],
+      question: "Which symbol selects a class in CSS?",
+      options: ["#", ".", "*", "&"],
       answer: ".",
     },
     {
-      question: "Which symbol selects an ID?",
-      options: [".", "#", "*", "@"],
+      question: "Which symbol selects an ID in CSS?",
+      options: [".", "#", "@", "*"],
       answer: "#",
     },
     {
-      question: "Which property controls spacing inside an element?",
-      options: ["margin", "padding", "spacing", "inside"],
+      question: "Which property makes text bold?",
+      options: ["font-style", "font-weight", "text-bold", "bold"],
+      answer: "font-weight",
+    },
+    {
+      question: "Which CSS property controls spacing inside an element?",
+      options: ["margin", "padding", "spacing", "border"],
       answer: "padding",
     },
     {
       question: "Which property controls spacing outside an element?",
-      options: ["padding", "margin", "outside", "space"],
+      options: ["padding", "margin", "space", "outside"],
       answer: "margin",
     },
     {
       question: "Which CSS layout system is useful for one-dimensional layouts?",
-      options: ["Flexbox", "SQL", "DOM", "GridSQL"],
+      options: ["Flexbox", "Table", "Float", "Position"],
       answer: "Flexbox",
     },
     {
-      question: "Which property makes text bold?",
-      options: ["font-weight", "text-bold", "bold", "font-style"],
-      answer: "font-weight",
+      question: "Which property is used to change font size?",
+      options: ["font-size", "text-size", "size", "font"],
+      answer: "font-size",
+    },
+  ],
+
+  JavaScript: [
+    {
+      question: "Which keyword declares a block-scoped variable?",
+      options: ["var", "let", "define", "variable"],
+      answer: "let",
+    },
+    {
+      question: "Which keyword declares a constant?",
+      options: ["constant", "const", "fixed", "static"],
+      answer: "const",
+    },
+    {
+      question: "Which method prints output to the console?",
+      options: ["print()", "console.log()", "output()", "display()"],
+      answer: "console.log()",
+    },
+    {
+      question: "Which symbol is used for strict equality?",
+      options: ["=", "==", "===", "!="],
+      answer: "===",
+    },
+    {
+      question: "Which method adds an item to the end of an array?",
+      options: ["push()", "add()", "append()", "insert()"],
+      answer: "push()",
+    },
+    {
+      question: "Which keyword is used to define a function?",
+      options: ["function", "def", "fun", "method"],
+      answer: "function",
+    },
+    {
+      question: "Which method converts JSON text into an object?",
+      options: [
+        "JSON.parse()",
+        "JSON.convert()",
+        "JSON.object()",
+        "JSON.decode()",
+      ],
+      answer: "JSON.parse()",
+    },
+    {
+      question: "Which event occurs when a user clicks an element?",
+      options: ["onhover", "onclick", "onpress", "onselect"],
+      answer: "onclick",
+    },
+    {
+      question: "Which value represents absence of a value?",
+      options: ["empty", "null", "void", "none"],
+      answer: "null",
+    },
+    {
+      question: "Which method removes the last item from an array?",
+      options: ["remove()", "delete()", "pop()", "last()"],
+      answer: "pop()",
+    },
+  ],
+
+  SQL: [
+    {
+      question: "Which command is used to retrieve data?",
+      options: ["GET", "SELECT", "FETCH", "READ"],
+      answer: "SELECT",
+    },
+    {
+      question: "Which command adds new data to a table?",
+      options: ["ADD", "INSERT", "CREATE", "APPEND"],
+      answer: "INSERT",
+    },
+    {
+      question: "Which command modifies existing data?",
+      options: ["CHANGE", "UPDATE", "MODIFY", "ALTER"],
+      answer: "UPDATE",
+    },
+    {
+      question: "Which command removes rows from a table?",
+      options: ["REMOVE", "DELETE", "DROP", "CLEAR"],
+      answer: "DELETE",
+    },
+    {
+      question: "Which clause filters records?",
+      options: ["FILTER", "WHERE", "HAVING", "SEARCH"],
+      answer: "WHERE",
+    },
+    {
+      question: "Which keyword sorts query results?",
+      options: ["SORT BY", "ORDER BY", "GROUP BY", "ARRANGE"],
+      answer: "ORDER BY",
+    },
+    {
+      question: "Which function counts rows?",
+      options: ["COUNT()", "TOTAL()", "NUMBER()", "ROWS()"],
+      answer: "COUNT()",
+    },
+    {
+      question: "Which command creates a table?",
+      options: ["MAKE TABLE", "CREATE TABLE", "NEW TABLE", "BUILD TABLE"],
+      answer: "CREATE TABLE",
+    },
+    {
+      question: "Which key uniquely identifies a row?",
+      options: ["Foreign Key", "Primary Key", "Unique Row", "Main Key"],
+      answer: "Primary Key",
+    },
+    {
+      question: "Which clause groups rows?",
+      options: ["GROUP BY", "ORDER BY", "COLLECT BY", "MERGE BY"],
+      answer: "GROUP BY",
+    },
+  ],
+
+  Bootstrap: [
+    {
+      question: "Bootstrap is primarily used for what?",
+      options: [
+        "Database management",
+        "Web interface design",
+        "Server hosting",
+        "Programming logic",
+      ],
+      answer: "Web interface design",
+    },
+    {
+      question: "Which Bootstrap class creates a responsive container?",
+      options: [".container", ".box", ".wrapper", ".responsive"],
+      answer: ".container",
+    },
+    {
+      question: "Which class creates a primary button?",
+      options: [".button-primary", ".btn-primary", ".primary-btn", ".btn-blue"],
+      answer: ".btn-primary",
+    },
+    {
+      question: "Which class creates a Bootstrap row?",
+      options: [".line", ".row", ".grid-row", ".horizontal"],
+      answer: ".row",
+    },
+    {
+      question: "Which class creates columns?",
+      options: [".column", ".col", ".grid", ".cell"],
+      answer: ".col",
+    },
+    {
+      question: "Bootstrap is based on which layout system?",
+      options: ["12-column grid", "10-column grid", "8-column grid", "5-column grid"],
+      answer: "12-column grid",
+    },
+    {
+      question: "Which class makes an image responsive?",
+      options: [".responsive-img", ".img-responsive", ".img-fluid", ".fluid-image"],
+      answer: ".img-fluid",
+    },
+    {
+      question: "Which class adds margin?",
+      options: [".m-3", ".margin-3", ".space-3", ".mg-3"],
+      answer: ".m-3",
+    },
+    {
+      question: "Bootstrap provides ready-made what?",
+      options: ["Components", "Databases", "Servers", "Compilers"],
+      answer: "Components",
+    },
+    {
+      question: "Which Bootstrap class creates a navigation bar?",
+      options: [".navigation", ".navbar", ".nav-bar", ".menu"],
+      answer: ".navbar",
     },
   ],
 };
 
-// =====================================================
-// NORMALIZE SKILL NAME
-// =====================================================
+/* =========================================================
+   FALLBACK QUESTIONS
+========================================================= */
 
-const normalizeSkill = (skill) => {
-  const value = String(skill || "")
-    .trim()
-    .toLowerCase();
+const createFallbackQuestions = (skill) => [
+  {
+    question: `Which statement best describes ${skill}?`,
+    options: [
+      `${skill} is a technology or professional skill`,
+      `${skill} is only a database`,
+      `${skill} is only an operating system`,
+      `${skill} is a hardware component`,
+    ],
+    answer: `${skill} is a technology or professional skill`,
+  },
+  {
+    question: `Why is ${skill} useful in a professional environment?`,
+    options: [
+      "It can be used to solve practical problems",
+      "It is only used for gaming",
+      "It cannot be used in projects",
+      "It is unrelated to technology",
+    ],
+    answer: "It can be used to solve practical problems",
+  },
+  {
+    question: `What is a good way to improve ${skill}?`,
+    options: [
+      "Practice projects and real-world tasks",
+      "Never practice",
+      "Only memorize the name",
+      "Avoid using documentation",
+    ],
+    answer: "Practice projects and real-world tasks",
+  },
+  {
+    question: `How can ${skill} be demonstrated to an employer?`,
+    options: [
+      "Projects and practical work",
+      "Only by mentioning it",
+      "By avoiding projects",
+      "By deleting it from the resume",
+    ],
+    answer: "Projects and practical work",
+  },
+  {
+    question: `What should a beginner do when learning ${skill}?`,
+    options: [
+      "Learn fundamentals and practice",
+      "Skip fundamentals",
+      "Avoid examples",
+      "Only read the skill name",
+    ],
+    answer: "Learn fundamentals and practice",
+  },
+  {
+    question: `Which approach is useful for becoming better at ${skill}?`,
+    options: [
+      "Build practical projects",
+      "Never use it",
+      "Avoid feedback",
+      "Only watch unrelated videos",
+    ],
+    answer: "Build practical projects",
+  },
+  {
+    question: `How should ${skill} be used in a project?`,
+    options: [
+      "According to the project's requirements",
+      "Without understanding the requirement",
+      "Only for decoration",
+      "Never with other technologies",
+    ],
+    answer: "According to the project's requirements",
+  },
+  {
+    question: `What is important when working with ${skill}?`,
+    options: [
+      "Understanding concepts and applying them",
+      "Only memorizing definitions",
+      "Ignoring errors",
+      "Avoiding practice",
+    ],
+    answer: "Understanding concepts and applying them",
+  },
+  {
+    question: `How can ${skill} knowledge become stronger?`,
+    options: [
+      "Regular practice and projects",
+      "Avoiding practical work",
+      "Never reviewing mistakes",
+      "Only reading the resume",
+    ],
+    answer: "Regular practice and projects",
+  },
+  {
+    question: `What is the best proof of ${skill} knowledge?`,
+    options: [
+      "Practical assessment and projects",
+      "Only claiming the skill",
+      "Only writing the skill name",
+      "No evidence is needed",
+    ],
+    answer: "Practical assessment and projects",
+  },
+];
 
-  if (value.includes("python")) return "python";
-  if (value.includes("java") && !value.includes("javascript"))
-    return "java";
-  if (value.includes("javascript") || value === "js")
-    return "javascript";
-  if (value.includes("react")) return "react";
-  if (value.includes("sql") || value.includes("mysql"))
-    return "sql";
-  if (value.includes("html")) return "html";
-  if (value.includes("css")) return "css";
+/* =========================================================
+   COMPONENT
+========================================================= */
 
-  return null;
-};
+function SkillTest({ skill, onBack }) {
+  const selectedSkill = skill || "Skill";
 
-// =====================================================
-// DISPLAY NAME
-// =====================================================
+  const normalizedSkill =
+    Object.keys(questionBank).find(
+      (item) =>
+        item.toLowerCase() === selectedSkill.toLowerCase()
+    ) || selectedSkill;
 
-const getSkillDisplayName = (skillKey) => {
-  const names = {
-    python: "Python",
-    java: "Java",
-    javascript: "JavaScript",
-    react: "React",
-    sql: "SQL",
-    html: "HTML",
-    css: "CSS",
-  };
+  const questions =
+    questionBank[normalizedSkill] ||
+    createFallbackQuestions(selectedSkill);
 
-  return names[skillKey] || skillKey;
-};
-
-// =====================================================
-// COMPONENT
-// =====================================================
-
-function SkillTest({ skill, user, onBack }) {
-  const skillKey = normalizeSkill(skill);
-
-  const questions = skillQuestions[skillKey] || [];
-
-  const displaySkill = getSkillDisplayName(
-    skillKey || skill || "Skill"
-  );
+  const storageKey = `skillTestResult_${selectedSkill}`;
 
   const [currentQuestion, setCurrentQuestion] =
     useState(0);
@@ -467,18 +476,12 @@ function SkillTest({ skill, user, onBack }) {
   const [selectedAnswer, setSelectedAnswer] =
     useState("");
 
-  const [answers, setAnswers] =
-    useState({});
+  const [answers, setAnswers] = useState({});
 
   const [completed, setCompleted] =
     useState(false);
 
-  const [score, setScore] =
-    useState(0);
-
-  // =====================================================
-  // LEVEL
-  // =====================================================
+  const [score, setScore] = useState(0);
 
   const getLevel = (value) => {
     if (value >= 80) return "Advanced";
@@ -486,9 +489,55 @@ function SkillTest({ skill, user, onBack }) {
     return "Beginner";
   };
 
-  // =====================================================
-  // NEXT
-  // =====================================================
+  /* =====================================================
+     FINISH TEST
+  ===================================================== */
+
+  const finishTest = (updatedAnswers) => {
+    let correct = 0;
+
+    questions.forEach((item, index) => {
+      if (
+        updatedAnswers[index] ===
+        item.answer
+      ) {
+        correct++;
+      }
+    });
+
+    const finalScore = Math.round(
+      (correct / questions.length) * 100
+    );
+
+    const result = {
+      skill: selectedSkill,
+      score: finalScore,
+      level: getLevel(finalScore),
+      verified: true,
+      completedAt:
+        new Date().toISOString(),
+    };
+
+    setScore(finalScore);
+    setCompleted(true);
+
+    /*
+      Each skill gets its own result.
+      Example:
+      skillTestResult_Python
+      skillTestResult_HTML
+      skillTestResult_SQL
+    */
+
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify(result)
+    );
+  };
+
+  /* =====================================================
+     NEXT QUESTION
+  ===================================================== */
 
   const handleNext = () => {
     if (!selectedAnswer) return;
@@ -507,69 +556,21 @@ function SkillTest({ skill, user, onBack }) {
       const nextQuestion =
         currentQuestion + 1;
 
-      setCurrentQuestion(nextQuestion);
+      setCurrentQuestion(
+        nextQuestion
+      );
 
       setSelectedAnswer(
         updatedAnswers[nextQuestion] || ""
       );
-
-      return;
+    } else {
+      finishTest(updatedAnswers);
     }
-
-    // ===================================================
-    // CALCULATE SCORE
-    // ===================================================
-
-    let correct = 0;
-
-    questions.forEach(
-      (item, index) => {
-        if (
-          updatedAnswers[index] ===
-          item.answer
-        ) {
-          correct++;
-        }
-      }
-    );
-
-    const finalScore = Math.round(
-      (correct / questions.length) *
-        100
-    );
-
-    setScore(finalScore);
-    setCompleted(true);
-
-    // ===================================================
-    // SAVE RESULT
-    // ===================================================
-
-    const result = {
-      skill: displaySkill,
-      score: finalScore,
-      level: getLevel(finalScore),
-      verified: true,
-      userId: user?.id || null,
-      completedAt:
-        new Date().toISOString(),
-    };
-
-    localStorage.setItem(
-      `skillTestResult_${skillKey}`,
-      JSON.stringify(result)
-    );
-
-    // Keep latest result also
-    localStorage.setItem(
-      "skillTestResult",
-      JSON.stringify(result)
-    );
   };
 
-  // =====================================================
-  // RETAKE
-  // =====================================================
+  /* =====================================================
+     RETAKE
+  ===================================================== */
 
   const handleRetake = () => {
     setCurrentQuestion(0);
@@ -577,11 +578,15 @@ function SkillTest({ skill, user, onBack }) {
     setAnswers({});
     setCompleted(false);
     setScore(0);
+
+    localStorage.removeItem(
+      storageKey
+    );
   };
 
-  // =====================================================
-  // DOWNLOAD CERTIFICATE
-  // =====================================================
+  /* =====================================================
+     CERTIFICATE DOWNLOAD
+  ===================================================== */
 
   const downloadCertificate = () => {
     const level = getLevel(score);
@@ -591,10 +596,9 @@ function SkillTest({ skill, user, onBack }) {
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${displaySkill} Skill Certificate</title>
+<title>${selectedSkill} Skill Certificate</title>
 
 <style>
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -674,15 +678,12 @@ body {
   color: #64748b;
   font-size: 13px;
 }
-
 </style>
-
 </head>
 
 <body>
 
 <div class="certificate">
-
 <div class="inner">
 
 <div class="logo">
@@ -698,7 +699,7 @@ This certificate verifies successful completion of the
 </div>
 
 <div class="skill">
-${displaySkill} Skill Assessment
+${selectedSkill} Skill Assessment
 </div>
 
 <div class="score">
@@ -720,7 +721,6 @@ AI Resume Analyzer • Skill Proof Certificate
 </div>
 
 </div>
-
 </div>
 
 </body>
@@ -743,7 +743,7 @@ AI Resume Analyzer • Skill Proof Certificate
     link.href = url;
 
     link.download =
-      `${displaySkill}-Skill-Certificate-${score}.html`;
+      `${selectedSkill}-Skill-Certificate-${score}.html`;
 
     document.body.appendChild(link);
 
@@ -756,78 +756,9 @@ AI Resume Analyzer • Skill Proof Certificate
     }, 1000);
   };
 
-  // =====================================================
-  // UNSUPPORTED SKILL
-  // =====================================================
-
-  if (!skillKey || questions.length === 0) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          background:
-            "linear-gradient(135deg, #eef2ff, #f8fafc)",
-          padding: "40px 20px",
-          fontFamily: "Arial, sans-serif",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "650px",
-            margin: "0 auto",
-            background: "#ffffff",
-            padding: "45px",
-            borderRadius: "24px",
-            textAlign: "center",
-            boxShadow:
-              "0 20px 60px rgba(15,23,42,0.12)",
-          }}
-        >
-          <div style={{ fontSize: "50px" }}>
-            🧪
-          </div>
-
-          <h1>
-            Skill Test Coming Soon
-          </h1>
-
-          <p
-            style={{
-              color: "#64748b",
-              lineHeight: "1.6",
-            }}
-          >
-            We detected{" "}
-            <strong>{skill}</strong>{" "}
-            from your resume, but a
-            dedicated assessment for this
-            skill is not available yet.
-          </p>
-
-          <button
-            onClick={onBack}
-            style={{
-              marginTop: "20px",
-              padding: "13px 22px",
-              border: "none",
-              borderRadius: "12px",
-              background:
-                "linear-gradient(135deg, #2563eb, #4f46e5)",
-              color: "#ffffff",
-              fontWeight: "800",
-              cursor: "pointer",
-            }}
-          >
-            ← Back to Resume
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // =====================================================
-  // COMPLETED
-  // =====================================================
+  /* =====================================================
+     COMPLETED PAGE
+  ===================================================== */
 
   if (completed) {
     const level = getLevel(score);
@@ -887,8 +818,7 @@ AI Resume Analyzer • Skill Proof Certificate
               marginBottom: "30px",
             }}
           >
-            Your {displaySkill} assessment
-            result
+            Your {selectedSkill} assessment result
           </p>
 
           <div
@@ -896,9 +826,20 @@ AI Resume Analyzer • Skill Proof Certificate
               background: "#eff6ff",
               padding: "30px",
               borderRadius: "18px",
-              marginBottom: "25px",
+              marginBottom: "20px",
             }}
           >
+            <div
+              style={{
+                fontSize: "28px",
+                fontWeight: "900",
+                color: "#111827",
+                marginBottom: "12px",
+              }}
+            >
+              {selectedSkill}
+            </div>
+
             <div
               style={{
                 fontSize: "52px",
@@ -946,8 +887,7 @@ AI Resume Analyzer • Skill Proof Certificate
           <div
             style={{
               background: "#f0fdf4",
-              border:
-                "1px solid #bbf7d0",
+              border: "1px solid #bbf7d0",
               color: "#15803d",
               padding: "15px",
               borderRadius: "12px",
@@ -955,7 +895,7 @@ AI Resume Analyzer • Skill Proof Certificate
               marginBottom: "25px",
             }}
           >
-            ✓ Skill Assessment Verified
+            ✓ {selectedSkill} Skill Assessment Verified
           </div>
 
           <p
@@ -965,9 +905,9 @@ AI Resume Analyzer • Skill Proof Certificate
               lineHeight: "1.6",
             }}
           >
-            Your verified {displaySkill} skill
-            result can be used as skill proof
-            in your career profile.
+            Your verified {selectedSkill} skill result
+            can be used as skill proof in your career
+            profile.
           </p>
 
           <div
@@ -980,9 +920,7 @@ AI Resume Analyzer • Skill Proof Certificate
             }}
           >
             <button
-              onClick={
-                downloadCertificate
-              }
+              onClick={downloadCertificate}
               style={{
                 padding: "14px 22px",
                 border: "none",
@@ -1002,8 +940,7 @@ AI Resume Analyzer • Skill Proof Certificate
               onClick={handleRetake}
               style={{
                 padding: "14px 22px",
-                border:
-                  "1px solid #d1d5db",
+                border: "1px solid #d1d5db",
                 borderRadius: "12px",
                 background: "#ffffff",
                 color: "#374151",
@@ -1022,14 +959,13 @@ AI Resume Analyzer • Skill Proof Certificate
               style={{
                 marginTop: "20px",
                 border: "none",
-                background:
-                  "transparent",
+                background: "transparent",
                 color: "#2563eb",
                 fontWeight: "700",
                 cursor: "pointer",
               }}
             >
-              ← Back to Resume
+              ← Back to Skill Proof
             </button>
           )}
         </div>
@@ -1037,12 +973,14 @@ AI Resume Analyzer • Skill Proof Certificate
     );
   }
 
-  // =====================================================
-  // TEST PAGE
-  // =====================================================
+  /* =====================================================
+     TEST PAGE
+  ===================================================== */
 
-  const question =
-    questions[currentQuestion];
+  const progress =
+    ((currentQuestion + 1) /
+      questions.length) *
+    100;
 
   return (
     <div
@@ -1092,7 +1030,7 @@ AI Resume Analyzer • Skill Proof Certificate
                 color: "#111827",
               }}
             >
-              {displaySkill} Skill Test
+              {selectedSkill} Skill Test
             </h1>
 
             <p
@@ -1101,7 +1039,7 @@ AI Resume Analyzer • Skill Proof Certificate
                 color: "#64748b",
               }}
             >
-              Prove your {displaySkill} knowledge
+              Prove your {selectedSkill} knowledge
             </p>
           </div>
 
@@ -1115,8 +1053,7 @@ AI Resume Analyzer • Skill Proof Certificate
               whiteSpace: "nowrap",
             }}
           >
-            {currentQuestion + 1}/
-            {questions.length}
+            {currentQuestion + 1}/{questions.length}
           </div>
         </div>
 
@@ -1131,11 +1068,7 @@ AI Resume Analyzer • Skill Proof Certificate
         >
           <div
             style={{
-              width: `${
-                ((currentQuestion + 1) /
-                  questions.length) *
-                100
-              }%`,
+              width: `${progress}%`,
               height: "100%",
               background:
                 "linear-gradient(90deg, #2563eb, #4f46e5)",
@@ -1150,7 +1083,9 @@ AI Resume Analyzer • Skill Proof Certificate
             lineHeight: "1.5",
           }}
         >
-          {question.question}
+          {questionBank[normalizedSkill]
+            ? questions[currentQuestion].question
+            : questions[currentQuestion].question}
         </h2>
 
         <div
@@ -1160,42 +1095,37 @@ AI Resume Analyzer • Skill Proof Certificate
             marginTop: "25px",
           }}
         >
-          {question.options.map(
-            (option) => (
-              <button
-                key={option}
-                onClick={() =>
-                  setSelectedAnswer(
-                    option
-                  )
-                }
-                style={{
-                  textAlign: "left",
-                  padding: "16px",
-                  borderRadius: "12px",
-                  border:
-                    selectedAnswer ===
-                    option
-                      ? "2px solid #2563eb"
-                      : "1px solid #dbe1ea",
-                  background:
-                    selectedAnswer ===
-                    option
-                      ? "#eff6ff"
-                      : "#ffffff",
-                  color: "#111827",
-                  fontWeight:
-                    selectedAnswer ===
-                    option
-                      ? "700"
-                      : "500",
-                  cursor: "pointer",
-                }}
-              >
-                {option}
-              </button>
-            )
-          )}
+          {questions[
+            currentQuestion
+          ].options.map((option) => (
+            <button
+              key={option}
+              onClick={() =>
+                setSelectedAnswer(option)
+              }
+              style={{
+                textAlign: "left",
+                padding: "16px",
+                borderRadius: "12px",
+                border:
+                  selectedAnswer === option
+                    ? "2px solid #2563eb"
+                    : "1px solid #dbe1ea",
+                background:
+                  selectedAnswer === option
+                    ? "#eff6ff"
+                    : "#ffffff",
+                color: "#111827",
+                fontWeight:
+                  selectedAnswer === option
+                    ? "700"
+                    : "500",
+                cursor: "pointer",
+              }}
+            >
+              {option}
+            </button>
+          ))}
         </div>
 
         <button
@@ -1228,17 +1158,16 @@ AI Resume Analyzer • Skill Proof Certificate
           <button
             onClick={onBack}
             style={{
-              width: "100%",
-              marginTop: "15px",
-              padding: "12px",
+              display: "block",
+              margin: "20px auto 0",
               border: "none",
               background: "transparent",
-              color: "#64748b",
+              color: "#2563eb",
               fontWeight: "700",
               cursor: "pointer",
             }}
           >
-            ← Back to Resume
+            ← Back
           </button>
         )}
       </div>
