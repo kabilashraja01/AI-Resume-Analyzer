@@ -1,338 +1,327 @@
 import React, { useState } from "react";
+import "./Auth.css";
 
-const LOGIN_URL = "https://ai-resume-analyzer-u2b6.onrender.com/api/login";
+const SIGNIN_URL ="https://ai-resume-analyzer-u2b6.onrender.com/api/login";
 
 function Signin({ onLoginSuccess, onGoToSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setError("");
 
-    const cleanEmail = email.trim().toLowerCase();
-
-    // Empty validation
-    if (!cleanEmail || !password) {
-      setError("Please enter your email and password.");
-      return;
-    }
-
-    // Email validation
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(cleanEmail)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    // Password validation
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+    if (!email || !password) {
+      setError("Please enter email and password.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(LOGIN_URL, {
+      const response = await fetch(SIGNIN_URL, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
+
         body: JSON.stringify({
-          email: cleanEmail,
+          email: email.trim(),
           password,
         }),
       });
 
-      const data = await response.json();
+      /*
+       * IMPORTANT:
+       * First read the response as TEXT.
+       * This prevents:
+       *
+       * Unexpected token '<'
+       *
+       * when Render returns an HTML page.
+       */
 
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed.");
+      const responseText = await response.text();
+
+      console.log("Signin status:", response.status);
+      console.log("Signin response:", responseText);
+
+      let data = null;
+
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        /*
+         * Server returned HTML instead of JSON.
+         */
+
+        if (responseText.includes("<!DOCTYPE")) {
+          throw new Error(
+            "Signin API is not responding. Please check your backend server and /api/signin route."
+          );
+        }
+
+        throw new Error(
+          "Invalid response received from server."
+        );
       }
 
-      // Save logged-in user
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
-      );
+      if (!response.ok) {
+        throw new Error(
+          data?.message ||
+            data?.error ||
+            "Invalid email or password."
+        );
+      }
 
-      // Go to Resume Analyzer
-      onLoginSuccess(data.user);
+      const loggedInUser =
+        data?.user || data;
+
+      if (!loggedInUser) {
+        throw new Error(
+          "Login successful, but user information was not returned."
+        );
+      }
+
+      /*
+       * Send logged-in user to App.jsx
+       */
+
+      onLoginSuccess(loggedInUser);
 
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
 
       setError(
         err.message ||
-        "Unable to login. Please try again."
+          "Login failed. Please try again."
       );
+
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background:
-          "linear-gradient(135deg, #eef2ff, #f8fafc, #e0e7ff)",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
+    <div className="auth-page">
 
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "430px",
-          background: "rgba(255,255,255,0.95)",
-          padding: "38px",
-          borderRadius: "22px",
-          border: "1px solid rgba(255,255,255,0.8)",
-          boxShadow:
-            "0 25px 70px rgba(15,23,42,0.12)",
-        }}
-      >
+      <div className="auth-container">
 
-        {/* LOGO / BADGE */}
+        {/* LEFT SIDE */}
 
-        <div
-          style={{
-            width: "58px",
-            height: "58px",
-            margin: "0 auto 18px",
-            borderRadius: "16px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background:
-              "linear-gradient(135deg, #2563eb, #4f46e5)",
-            color: "#ffffff",
-            fontSize: "25px",
-            fontWeight: "900",
-            boxShadow:
-              "0 12px 25px rgba(37,99,235,0.25)",
-          }}
-        >
-          AI
+        <div className="auth-brand">
+
+          <div className="brand-logo">
+            ✦
+          </div>
+
+          <div className="brand-badge">
+            AI POWERED
+          </div>
+
+          <h1>
+            Build a Resume
+            <br />
+            That Gets Noticed.
+          </h1>
+
+          <p>
+            Analyze your resume, discover your strengths,
+            improve your skills and find better career
+            opportunities with AI.
+          </p>
+
+          <div className="brand-features">
+
+            <div>
+              <span>✓</span>
+              AI Resume Analysis
+            </div>
+
+            <div>
+              <span>✓</span>
+              ATS Compatibility Score
+            </div>
+
+            <div>
+              <span>✓</span>
+              Personalized Job Matching
+            </div>
+
+          </div>
+
         </div>
 
-        {/* TITLE */}
 
-        <h1
-          style={{
-            textAlign: "center",
-            color: "#111827",
-            marginBottom: "8px",
-            fontSize: "30px",
-          }}
-        >
-          Welcome Back
-        </h1>
+        {/* LOGIN CARD */}
 
-        <p
-          style={{
-            textAlign: "center",
-            color: "#64748b",
-            marginBottom: "30px",
-            lineHeight: "1.5",
-          }}
-        >
-          Sign in to your AI Resume Analyzer
-        </p>
+        <div className="auth-card">
 
-        <form onSubmit={handleLogin}>
+          <div className="auth-card-header">
 
-          {/* EMAIL */}
+            <div className="mobile-logo">
+              ✦
+            </div>
 
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontWeight: "700",
-              color: "#374151",
-            }}
-          >
-            Email Address
-          </label>
+            <span className="auth-eyebrow">
+              WELCOME BACK
+            </span>
 
-          <input
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setError("");
-            }}
-            autoComplete="email"
-            style={{
-              width: "100%",
-              boxSizing: "border-box",
-              padding: "14px 15px",
-              marginBottom: "20px",
-              border: "1px solid #d1d5db",
-              borderRadius: "12px",
-              fontSize: "15px",
-              outline: "none",
-              background: "#f8fafc",
-            }}
-          />
+            <h2>
+              Sign in to your account
+            </h2>
 
-          {/* PASSWORD */}
+            <p>
+              Continue your resume improvement journey.
+            </p>
 
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontWeight: "700",
-              color: "#374151",
-            }}
-          >
-            Password
-          </label>
+          </div>
 
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setError("");
-            }}
-            autoComplete="current-password"
-            style={{
-              width: "100%",
-              boxSizing: "border-box",
-              padding: "14px 15px",
-              marginBottom: "18px",
-              border: "1px solid #d1d5db",
-              borderRadius: "12px",
-              fontSize: "15px",
-              outline: "none",
-              background: "#f8fafc",
-            }}
-          />
 
           {/* ERROR */}
 
           {error && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "8px",
-                background: "#fef2f2",
-                color: "#dc2626",
-                border: "1px solid #fecaca",
-                padding: "12px 14px",
-                borderRadius: "11px",
-                marginBottom: "18px",
-                fontSize: "14px",
-                lineHeight: "1.4",
-              }}
-            >
-              <span>⚠</span>
-
-              <span>
-                {error}
-              </span>
+            <div className="auth-error">
+              ⚠ {error}
             </div>
           )}
 
-          {/* LOGIN BUTTON */}
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "14px",
-              border: "none",
-              borderRadius: "12px",
-              background: loading
-                ? "#94a3b8"
-                : "linear-gradient(135deg, #2563eb, #4f46e5)",
-              color: "#fff",
-              fontSize: "16px",
-              fontWeight: "800",
-              cursor: loading
-                ? "wait"
-                : "pointer",
-              boxShadow: loading
-                ? "none"
-                : "0 10px 25px rgba(37,99,235,0.25)",
-              transition: "0.2s",
-            }}
-          >
-            {loading
-              ? "Signing In..."
-              : "Sign In →"}
-          </button>
+          {/* FORM */}
 
-        </form>
+          <form onSubmit={handleSubmit}>
 
-        {/* SIGNUP */}
+            {/* EMAIL */}
 
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "26px",
-            paddingTop: "22px",
-            borderTop: "1px solid #e5e7eb",
-          }}
-        >
+            <div className="auth-field">
 
-          <span
-            style={{
-              color: "#64748b",
-              fontSize: "14px",
-            }}
-          >
-            Don't have an account?
-          </span>
+              <label>
+                Email Address
+              </label>
+
+              <div className="input-wrapper">
+
+                <span className="input-icon">
+                  ✉
+                </span>
+
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) =>
+                    setEmail(e.target.value)
+                  }
+                  autoComplete="email"
+                  disabled={loading}
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* PASSWORD */}
+
+            <div className="auth-field">
+
+              <label>
+                Password
+              </label>
+
+              <div className="input-wrapper">
+
+                <span className="input-icon">
+                  🔒
+                </span>
+
+                <input
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
+                  autoComplete="current-password"
+                  disabled={loading}
+                />
+
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() =>
+                    setShowPassword(
+                      !showPassword
+                    )
+                  }
+                  disabled={loading}
+                >
+                  {showPassword
+                    ? "🙈"
+                    : "👁"}
+                </button>
+
+              </div>
+
+            </div>
+
+
+            {/* LOGIN BUTTON */}
+
+            <button
+              type="submit"
+              className="auth-submit"
+              disabled={loading}
+            >
+
+              {loading
+                ? "Signing in..."
+                : "Sign In →"}
+
+            </button>
+
+          </form>
+
+
+          {/* DIVIDER */}
+
+          <div className="auth-divider">
+            <span>
+              New to AI Resume Analyzer?
+            </span>
+          </div>
+
+
+          {/* SIGNUP */}
 
           <button
             type="button"
+            className="auth-secondary"
             onClick={onGoToSignup}
-            style={{
-              marginLeft: "7px",
-              border: "none",
-              background: "none",
-              color: "#2563eb",
-              fontWeight: "800",
-              cursor: "pointer",
-              fontSize: "14px",
-            }}
+            disabled={loading}
           >
-            Create Account
+            Create an Account
           </button>
+
+
+          <p className="auth-footer-text">
+            Your resume data is securely processed.
+          </p>
 
         </div>
 
-        {/* FOOTER */}
-
-        <p
-          style={{
-            textAlign: "center",
-            marginTop: "20px",
-            marginBottom: 0,
-            color: "#94a3b8",
-            fontSize: "12px",
-          }}
-        >
-          AI Resume Analyzer • Secure Login
-        </p>
-
       </div>
+
     </div>
   );
 }

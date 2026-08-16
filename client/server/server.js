@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -34,7 +35,10 @@ mongoose
     console.log("MongoDB connected successfully");
   })
   .catch((error) => {
-    console.error("MongoDB connection error:", error);
+    console.error(
+      "MongoDB connection error:",
+      error
+    );
   });
 
 // =====================================================
@@ -85,9 +89,7 @@ const upload = multer({
 
     if (!isPDF) {
       return cb(
-        new Error(
-          "INVALID_FILE_TYPE"
-        )
+        new Error("INVALID_FILE_TYPE")
       );
     }
 
@@ -105,34 +107,20 @@ async function extractPDFText(filePath) {
       "Reading PDF with PDF.js..."
     );
 
-    // -------------------------------------------------
-    // CHECK FILE EXISTS
-    // -------------------------------------------------
-
     if (!fs.existsSync(filePath)) {
       throw new Error(
         "PDF file not found"
       );
     }
 
-    // -------------------------------------------------
-    // READ PDF
-    // -------------------------------------------------
-
     const pdfBuffer =
       fs.readFileSync(filePath);
-
-    // -------------------------------------------------
-    // EMPTY FILE CHECK
-    // -------------------------------------------------
 
     if (
       !pdfBuffer ||
       pdfBuffer.length === 0
     ) {
-      throw new Error(
-        "EMPTY_PDF"
-      );
+      throw new Error("EMPTY_PDF");
     }
 
     console.log(
@@ -140,10 +128,6 @@ async function extractPDFText(filePath) {
       pdfBuffer.length,
       "bytes"
     );
-
-    // -------------------------------------------------
-    // PDF HEADER CHECK
-    // -------------------------------------------------
 
     const pdfHeader =
       pdfBuffer
@@ -155,10 +139,6 @@ async function extractPDFText(filePath) {
         "INVALID_PDF"
       );
     }
-
-    // -------------------------------------------------
-    // PDF.JS
-    // -------------------------------------------------
 
     const pdfjsLib =
       await import(
@@ -184,19 +164,11 @@ async function extractPDFText(filePath) {
       pdf.numPages
     );
 
-    // -------------------------------------------------
-    // CHECK PAGE COUNT
-    // -------------------------------------------------
-
     if (!pdf.numPages) {
       throw new Error(
         "EMPTY_PDF"
       );
     }
-
-    // -------------------------------------------------
-    // EXTRACT TEXT
-    // -------------------------------------------------
 
     let fullText = "";
 
@@ -236,10 +208,6 @@ async function extractPDFText(filePath) {
       }
     }
 
-    // -------------------------------------------------
-    // CLEAN TEXT
-    // -------------------------------------------------
-
     fullText = fullText
       .replace(/\r/g, "")
       .replace(/[ \t]+/g, " ")
@@ -250,10 +218,6 @@ async function extractPDFText(filePath) {
       "Extracted text length:",
       fullText.length
     );
-
-    // -------------------------------------------------
-    // EMPTY / SCANNED PDF CHECK
-    // -------------------------------------------------
 
     if (
       !fullText ||
@@ -435,9 +399,7 @@ app.post(
 
         user: {
           id: user._id,
-
           name: user.name,
-
           email: user.email,
         },
       });
@@ -456,6 +418,674 @@ app.post(
 );
 
 // =====================================================
+// AI RESUME-BASED SKILL TEST
+// =====================================================
+
+app.post(
+  "/api/skill-test",
+  async (req, res) => {
+    try {
+      const {
+        skill,
+        resumeText,
+        count = 10,
+      } = req.body;
+
+      // -------------------------------------------------
+      // VALIDATION
+      // -------------------------------------------------
+
+      if (
+        !skill &&
+        !resumeText
+      ) {
+        return res.status(400).json({
+          message:
+            "Resume text or skill is required",
+        });
+      }
+
+      const cleanSkill =
+        skill
+          ? String(skill).trim()
+          : "";
+
+      const cleanResume =
+        resumeText
+          ? String(resumeText).trim()
+          : "";
+
+      const questionCount =
+        Math.min(
+          Math.max(
+            Number(count) || 10,
+            5
+          ),
+          15
+        );
+
+      console.log(
+        "================================="
+      );
+
+      console.log(
+        "Generating resume-based AI test"
+      );
+
+      console.log(
+        "Skill:",
+        cleanSkill || "Resume Based"
+      );
+
+      console.log(
+        "Resume available:",
+        Boolean(cleanResume)
+      );
+
+      console.log(
+        "Question count:",
+        questionCount
+      );
+
+      console.log(
+        "================================="
+      );
+
+      // -------------------------------------------------
+      // RESUME-BASED PROMPT
+      // -------------------------------------------------
+
+      const prompt = `
+
+You are a senior technical interviewer and professional hiring manager.
+
+Your task is to create a REALISTIC technical interview assessment based on the candidate's ACTUAL RESUME.
+
+This is NOT a generic quiz.
+
+The questions must be generated by carefully analyzing the candidate's resume.
+
+==================================================
+CANDIDATE RESUME
+==================================================
+
+${cleanResume || "No resume text was provided."}
+
+==================================================
+OPTIONAL TARGET SKILL
+==================================================
+
+${cleanSkill || "Use the strongest technical skills found in the resume."}
+
+==================================================
+MAIN OBJECTIVE
+==================================================
+
+Generate exactly ${questionCount} multiple-choice technical interview questions.
+
+The questions must feel like questions asked in a REAL JOB INTERVIEW.
+
+Do NOT generate extremely easy textbook questions.
+
+Do NOT generate generic questions that could be asked to anyone.
+
+Questions must be connected to the candidate's actual resume.
+
+==================================================
+QUESTION DIFFICULTY
+==================================================
+
+Use this distribution approximately:
+
+- 20% Easy
+- 40% Medium
+- 40% Hard
+
+Hard questions are especially important.
+
+Hard questions should test:
+
+- debugging
+- architecture
+- practical implementation
+- optimization
+- trade-offs
+- real-world scenarios
+- security
+- scalability
+- performance
+- database design
+- API design
+- code behavior
+- project decisions
+- technology limitations
+- problem solving
+
+==================================================
+RESUME PERSONALIZATION
+==================================================
+
+If the resume contains projects:
+
+Ask questions about those projects.
+
+For example:
+
+- Why was a particular technology used?
+- How would you improve the project?
+- What happens if the application receives many users?
+- How would you debug a failure?
+- How would you secure the application?
+- How would you optimize performance?
+- What database design would be appropriate?
+- What alternative technology could be used and why?
+- What limitations would the current implementation have?
+
+If the resume contains work experience:
+
+Ask questions related to the candidate's responsibilities.
+
+If the resume contains internships:
+
+Ask realistic questions about technologies mentioned there.
+
+If the resume contains programming languages:
+
+Ask practical programming and debugging questions.
+
+If the resume contains frameworks:
+
+Ask framework-specific practical questions.
+
+If the resume contains databases:
+
+Ask query, indexing, normalization, transaction and performance questions.
+
+If the resume contains frontend technologies:
+
+Ask practical browser, UI, state management, API and performance questions.
+
+If the resume contains backend technologies:
+
+Ask API, authentication, database, error handling, scalability and security questions.
+
+==================================================
+IMPORTANT
+==================================================
+
+NEVER claim that the candidate used a technology if it is not present in the resume.
+
+NEVER invent a project.
+
+NEVER invent a company.
+
+NEVER invent work experience.
+
+Only use information actually present in the resume.
+
+However, you MAY ask hypothetical questions such as:
+
+"If you had to scale this project to 100,000 users, what would you change?"
+
+These hypothetical questions must be based on technologies or projects actually present in the resume.
+
+==================================================
+QUESTION TYPES
+==================================================
+
+Use a mixture of:
+
+1. Conceptual questions
+2. Practical questions
+3. Scenario-based questions
+4. Debugging questions
+5. Architecture questions
+6. Optimization questions
+7. Security questions
+8. Database questions
+9. Project-specific questions
+10. Code-behavior questions
+
+Do NOT make every question definition-based.
+
+==================================================
+DIFFICULTY REQUIREMENT
+==================================================
+
+Easy questions should verify fundamentals.
+
+Medium questions should test practical understanding.
+
+Hard questions should require reasoning.
+
+A hard question should NOT simply be a difficult definition.
+
+Example of BAD question:
+
+"What is React?"
+
+Example of BETTER question:
+
+"Your React application fetches data whenever a component renders, causing repeated API calls. What change would prevent unnecessary requests?"
+
+Example of BAD question:
+
+"What is MongoDB?"
+
+Example of BETTER question:
+
+"Your MongoDB collection grows to millions of documents and a query filtering by userId becomes slow. What would you investigate first?"
+
+==================================================
+OPTIONS
+==================================================
+
+Every question must have exactly 4 options.
+
+Only ONE option can be correct.
+
+The incorrect options must be plausible.
+
+Do not create obviously silly wrong answers.
+
+Do not make the correct answer significantly longer than all other options.
+
+Randomize the correct answer position.
+
+Do not always put the correct answer in option 1.
+
+==================================================
+NO REPETITION
+==================================================
+
+Do not repeat questions.
+
+Do not ask the same concept multiple times using slightly different wording.
+
+Each question should test a different aspect.
+
+==================================================
+JSON FORMAT
+==================================================
+
+Return ONLY valid JSON.
+
+Do not use markdown.
+
+Do not use code fences.
+
+Do not add explanations outside JSON.
+
+Return exactly:
+
+{
+  "source": "resume",
+  "skill": "detected or selected skill",
+  "questions": [
+    {
+      "question": "Question text",
+      "options": [
+        "Option 1",
+        "Option 2",
+        "Option 3",
+        "Option 4"
+      ],
+      "answer": "Correct option",
+      "difficulty": "Hard",
+      "topic": "Topic tested",
+      "resumeReference": "Short explanation of what part of the resume caused this question to be generated"
+    }
+  ]
+}
+
+==================================================
+STRICT RULES
+==================================================
+
+1. Generate exactly ${questionCount} questions.
+
+2. Every question must be technically meaningful.
+
+3. Every question must be related to the candidate's resume.
+
+4. If a target skill is provided, prioritize that skill.
+
+5. If the target skill is not present in the resume, do NOT pretend the candidate has experience with it.
+
+6. Use the candidate's strongest technical skills.
+
+7. Use projects when available.
+
+8. Use work experience when available.
+
+9. Use internship experience when available.
+
+10. Use education/project technologies when relevant.
+
+11. Do not invent technologies.
+
+12. Do not invent companies.
+
+13. Do not invent project details.
+
+14. Do not repeat questions.
+
+15. Exactly 4 options per question.
+
+16. Exactly one correct answer.
+
+17. The answer must exactly match one of the four options.
+
+18. Mix difficulty levels.
+
+19. At least 3 questions must be Medium or Hard when generating 5 questions.
+
+20. At least 5 questions must be Medium or Hard when generating 10 questions.
+
+21. For 10 questions, try to include at least 3 Hard questions.
+
+22. Prefer practical interview questions over definitions.
+
+23. Include project-based questions whenever the resume contains projects.
+
+24. Include debugging or troubleshooting questions when appropriate.
+
+25. Include performance or optimization questions when appropriate.
+
+26. Include security questions when appropriate.
+
+27. Include architecture/scalability questions when appropriate.
+
+28. Do not ask impossible questions unrelated to the candidate's level.
+
+29. Keep the assessment suitable for a real fresher/junior job interview.
+
+30. Return JSON only.
+
+`;
+
+      // -------------------------------------------------
+      // GEMINI
+      // -------------------------------------------------
+
+      const response =
+        await ai.models.generateContent({
+          model:
+            "gemini-3.5-flash-lite",
+
+          contents:
+            prompt,
+
+          config: {
+            responseMimeType:
+              "application/json",
+          },
+        });
+
+      let result =
+        response.text;
+
+      if (!result) {
+        throw new Error(
+          "Gemini returned empty questions"
+        );
+      }
+
+      result =
+        result
+          .replace(
+            /```json/g,
+            ""
+          )
+          .replace(
+            /```/g,
+            ""
+          )
+          .trim();
+
+      // -------------------------------------------------
+      // PARSE
+      // -------------------------------------------------
+
+      let parsed;
+
+      try {
+        parsed =
+          JSON.parse(result);
+      } catch (parseError) {
+        console.error(
+          "Skill test JSON parse error:",
+          parseError
+        );
+
+        console.error(
+          "Gemini skill response:",
+          result
+        );
+
+        return res.status(500).json({
+          message:
+            "AI returned invalid skill questions",
+        });
+      }
+
+      // -------------------------------------------------
+      // VALIDATE
+      // -------------------------------------------------
+
+      if (
+        !parsed.questions ||
+        !Array.isArray(
+          parsed.questions
+        )
+      ) {
+        return res.status(500).json({
+          message:
+            "AI did not return valid questions",
+        });
+      }
+
+      if (
+        parsed.questions.length <
+        questionCount
+      ) {
+        return res.status(500).json({
+          message:
+            "AI returned fewer questions than requested",
+        });
+      }
+
+      const validDifficulties = [
+        "Easy",
+        "Medium",
+        "Hard",
+      ];
+
+      const validQuestions =
+        parsed.questions
+          .slice(
+            0,
+            questionCount
+          )
+          .filter(
+            (item) => {
+              if (
+                !item ||
+                typeof item.question !==
+                  "string"
+              ) {
+                return false;
+              }
+
+              if (
+                !Array.isArray(
+                  item.options
+                ) ||
+                item.options.length !== 4
+              ) {
+                return false;
+              }
+
+              if (
+                typeof item.answer !==
+                "string"
+              ) {
+                return false;
+              }
+
+              if (
+                !item.options.includes(
+                  item.answer
+                )
+              ) {
+                return false;
+              }
+
+              if (
+                item.options.filter(
+                  (option) =>
+                    option ===
+                    item.answer
+                ).length !== 1
+              ) {
+                return false;
+              }
+
+              if (
+                item.difficulty &&
+                !validDifficulties.includes(
+                  item.difficulty
+                )
+              ) {
+                return false;
+              }
+
+              return true;
+            }
+          )
+          .map((item) => ({
+            question:
+              item.question.trim(),
+
+            options:
+              item.options.map(
+                (option) =>
+                  String(option).trim()
+              ),
+
+            answer:
+              item.answer.trim(),
+
+            difficulty:
+              validDifficulties.includes(
+                item.difficulty
+              )
+                ? item.difficulty
+                : "Medium",
+
+            topic:
+              item.topic
+                ? String(
+                    item.topic
+                  ).trim()
+                : "Technical",
+
+            resumeReference:
+              item.resumeReference
+                ? String(
+                    item.resumeReference
+                  ).trim()
+                : "Generated from resume content",
+          }));
+
+      if (
+        validQuestions.length !==
+        questionCount
+      ) {
+        return res.status(500).json({
+          message:
+            "AI generated invalid question format",
+        });
+      }
+
+      // -------------------------------------------------
+      // DUPLICATE CHECK
+      // -------------------------------------------------
+
+      const questionTexts =
+        validQuestions.map(
+          (item) =>
+            item.question
+              .toLowerCase()
+              .replace(
+                /\s+/g,
+                " "
+              )
+              .trim()
+        );
+
+      const uniqueQuestions =
+        new Set(
+          questionTexts
+        );
+
+      if (
+        uniqueQuestions.size !==
+        questionTexts.length
+      ) {
+        return res.status(500).json({
+          message:
+            "AI generated duplicate questions",
+        });
+      }
+
+      // -------------------------------------------------
+      // SEND RESULT
+      // -------------------------------------------------
+
+      console.log(
+        "================================="
+      );
+
+      console.log(
+        `Generated ${validQuestions.length} resume-based AI questions`
+      );
+
+      console.log(
+        "================================="
+      );
+
+      res.json({
+        success: true,
+
+        source:
+          cleanResume
+            ? "resume"
+            : "skill",
+
+        skill:
+          cleanSkill ||
+          parsed.skill ||
+          "Resume Based",
+
+        questions:
+          validQuestions,
+      });
+    } catch (error) {
+      console.error(
+        "AI skill test error:",
+        error
+      );
+
+      res.status(500).json({
+        message:
+          "Failed to generate AI skill test",
+      });
+    }
+  }
+);
+
+// =====================================================
 // RESUME UPLOAD
 // =====================================================
 
@@ -466,10 +1096,6 @@ app.post(
     let uploadedPath = null;
 
     try {
-      // -------------------------------------------------
-      // CHECK FILE
-      // -------------------------------------------------
-
       if (!req.file) {
         return res.status(400).json({
           message:
@@ -509,10 +1135,6 @@ app.post(
         "================================="
       );
 
-      // -------------------------------------------------
-      // PDF EXTENSION CHECK
-      // -------------------------------------------------
-
       const hasPDFExtension =
         req.file.originalname
           .toLowerCase()
@@ -525,10 +1147,6 @@ app.post(
         });
       }
 
-      // -------------------------------------------------
-      // MIME TYPE CHECK
-      // -------------------------------------------------
-
       if (
         req.file.mimetype !==
         "application/pdf"
@@ -539,10 +1157,6 @@ app.post(
         });
       }
 
-      // -------------------------------------------------
-      // FILE SIZE CHECK
-      // -------------------------------------------------
-
       if (
         req.file.size >
         10 * 1024 * 1024
@@ -552,10 +1166,6 @@ app.post(
             "File is too large. Maximum size is 10 MB.",
         });
       }
-
-      // -------------------------------------------------
-      // FILE EXISTS
-      // -------------------------------------------------
 
       if (
         !fs.existsSync(
@@ -568,20 +1178,12 @@ app.post(
         });
       }
 
-      // -------------------------------------------------
-      // EMPTY FILE CHECK
-      // -------------------------------------------------
-
       if (req.file.size === 0) {
         return res.status(400).json({
           message:
             "The uploaded PDF is empty. Please upload a valid resume.",
         });
       }
-
-      // -------------------------------------------------
-      // EXTRACT PDF TEXT
-      // -------------------------------------------------
 
       const pdfResult =
         await extractPDFText(
@@ -590,10 +1192,6 @@ app.post(
 
       const extractedText =
         pdfResult.text;
-
-      // -------------------------------------------------
-      // TEXT CHECK
-      // -------------------------------------------------
 
       if (
         !extractedText ||
@@ -605,10 +1203,6 @@ app.post(
             "This PDF contains no readable text. Please upload a text-based resume instead of a scanned/image-only PDF.",
         });
       }
-
-      // -------------------------------------------------
-      // SUCCESS
-      // -------------------------------------------------
 
       console.log(
         "Resume extracted successfully!"
@@ -644,10 +1238,6 @@ app.post(
         "================================="
       );
 
-      // -------------------------------------------------
-      // CUSTOM ERRORS
-      // -------------------------------------------------
-
       if (
         error.message ===
         "EMPTY_PDF"
@@ -674,23 +1264,15 @@ app.post(
       ) {
         return res.status(400).json({
           message:
-            "This PDF contains no readable text. It may be a scanned or image-only PDF. Please upload a text-based resume.",
+            "This PDF contains no readable text. It may be a scanned or image-only PDF. Please upload a text-based PDF resume.",
         });
       }
-
-      // -------------------------------------------------
-      // GENERAL PDF ERROR
-      // -------------------------------------------------
 
       return res.status(400).json({
         message:
           "This PDF could not be read. Please upload a valid text-based PDF resume.",
       });
     } finally {
-      // -------------------------------------------------
-      // DELETE TEMP FILE
-      // -------------------------------------------------
-
       if (uploadedPath) {
         try {
           if (
@@ -731,10 +1313,6 @@ app.post(
         fileName,
       } = req.body;
 
-      // -------------------------------------------------
-      // CHECK RESUME TEXT
-      // -------------------------------------------------
-
       if (
         !resumeText ||
         !resumeText.trim()
@@ -748,10 +1326,6 @@ app.post(
       console.log(
         "Sending resume to Gemini..."
       );
-
-      // -------------------------------------------------
-      // PROMPT
-      // -------------------------------------------------
 
       const prompt = `
 
@@ -824,16 +1398,14 @@ Rules:
 10. Recommended jobs must be based only on this resume.
 11. Skills must contain only skills actually mentioned or clearly demonstrated in the resume.
 12. Strengths and weaknesses should be realistic.
+13. Missing skills should be relevant to the candidate's likely target jobs.
+14. Do not invent technologies as existing skills.
 
 RESUME:
 
 ${resumeText}
 
 `;
-
-      // -------------------------------------------------
-      // GEMINI
-      // -------------------------------------------------
 
       const response =
         await ai.models.generateContent({
@@ -870,17 +1442,11 @@ ${resumeText}
           )
           .trim();
 
-      // -------------------------------------------------
-      // PARSE JSON
-      // -------------------------------------------------
-
       let parsedAnalysis;
 
       try {
         parsedAnalysis =
-          JSON.parse(
-            result
-          );
+          JSON.parse(result);
       } catch (parseError) {
         console.error(
           "Gemini JSON parse error:",
@@ -897,10 +1463,6 @@ ${resumeText}
             "AI returned invalid analysis",
         });
       }
-
-      // -------------------------------------------------
-      // SAVE MONGODB
-      // -------------------------------------------------
 
       if (userId) {
         try {
@@ -939,10 +1501,6 @@ ${resumeText}
           );
         }
       }
-
-      // -------------------------------------------------
-      // SEND RESULT
-      // -------------------------------------------------
 
       res.json({
         message:
@@ -1068,10 +1626,6 @@ app.use(
       error
     );
 
-    // -------------------------------------------------
-    // MULTER FILE SIZE
-    // -------------------------------------------------
-
     if (
       error.code ===
       "LIMIT_FILE_SIZE"
@@ -1081,10 +1635,6 @@ app.use(
           "File is too large. Maximum size is 10 MB.",
       });
     }
-
-    // -------------------------------------------------
-    // INVALID FILE TYPE
-    // -------------------------------------------------
 
     if (
       error.message ===
@@ -1096,22 +1646,15 @@ app.use(
       });
     }
 
-    // -------------------------------------------------
-    // MULTER ERROR
-    // -------------------------------------------------
-
     if (
-      error instanceof multer.MulterError
+      error instanceof
+      multer.MulterError
     ) {
       return res.status(400).json({
         message:
           "Resume upload failed. Please check the file and try again.",
       });
     }
-
-    // -------------------------------------------------
-    // GENERAL ERROR
-    // -------------------------------------------------
 
     res.status(500).json({
       message:

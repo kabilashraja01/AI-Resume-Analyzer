@@ -2298,3 +2298,962 @@ footer {
   }
 
 }
+
+/* =========================================================
+   3D FEATURES SECTION
+   ========================================================= */
+
+.features-section {
+  position: relative;
+  margin-top: 45px;
+  padding: 38px;
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.95),
+      rgba(238, 242, 255, 0.82)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.85);
+
+  box-shadow:
+    0 25px 60px rgba(30, 41, 59, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+
+  overflow: hidden;
+}
+
+/* Background 3D glow */
+
+.features-section::before {
+  content: "";
+
+  position: absolute;
+
+  width: 220px;
+  height: 220px;
+
+  top: -120px;
+  left: -80px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.22),
+      transparent 70%
+    );
+
+  filter: blur(10px);
+
+  pointer-events: none;
+}
+
+.features-section::after {
+  content: "";
+
+  position: absolute;
+
+  width: 240px;
+  height: 240px;
+
+  right: -100px;
+  bottom: -130px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(124, 58, 237, 0.18),
+      transparent 70%
+    );
+
+  filter: blur(15px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   FEATURES HEADER
+   ========================================================= */
+
+.features-header {
+  position: relative;
+  z-index: 2;
+
+  text-align: center;
+
+  margin-bottom: 30px;
+}
+
+.features-header .card-label {
+  margin-bottom: 8px;
+}
+
+.features-header h2 {
+  margin: 0;
+
+  font-size: 30px;
+  font-weight: 900;
+
+  letter-spacing: -1px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #111827,
+      #4f46e5,
+      #7c3aed
+    );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.features-header p {
+  max-width: 650px;
+
+  margin: 10px auto 0;
+
+  color: var(--muted);
+
+  line-height: 1.6;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   FEATURES GRID
+   ========================================================= */
+
+.features-grid {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+
+/* =========================================================
+   3D FEATURE CARD
+   ========================================================= */
+
+.feature-card {
+  position: relative;
+
+  min-height: 190px;
+
+  padding: 26px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(248, 250, 252, 0.82)
+    );
+
+  border: 1px solid rgba(226, 232, 240, 0.9);
+
+  box-shadow:
+    0 12px 25px rgba(15, 23, 42, 0.08),
+    0 25px 45px rgba(79, 70, 229, 0.07);
+
+  transform:
+    perspective(900px)
+    rotateX(0deg)
+    rotateY(0deg)
+    translateZ(0);
+
+  transform-style: preserve-3d;
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.3s ease;
+
+  overflow: hidden;
+}
+
+
+/* Top shine */
+
+.feature-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 10%;
+
+  width: 80%;
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 1),
+      transparent
+    );
+}
+
+
+/* 3D hover */
+
+.feature-card:hover {
+  transform:
+    perspective(900px)
+    rotateX(4deg)
+    rotateY(-4deg)
+    translateY(-8px)
+    translateZ(12px);
+
+  box-shadow:
+    0 20px 35px rgba(30, 41, 59, 0.12),
+    0 35px 65px rgba(79, 70, 229, 0.16);
+
+  border-color:
+    rgba(99, 102, 241, 0.3);
+}
+
+
+/* =========================================================
+   FEATURE ICON
+   ========================================================= */
+
+.feature-icon {
+  position: relative;
+
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 18px;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef2ff,
+      #ede9fe
+    );
+
+  border: 1px solid #ddd6fe;
+
+  color: #4f46e5;
+
+  font-size: 25px;
+
+  box-shadow:
+    0 10px 20px rgba(79, 70, 229, 0.12),
+    inset 0 2px 5px rgba(255, 255, 255, 0.9);
+
+  transform: translateZ(25px);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform:
+    translateZ(35px)
+    rotate(-5deg)
+    scale(1.08);
+
+  box-shadow:
+    0 15px 28px rgba(79, 70, 229, 0.2);
+}
+
+
+/* =========================================================
+   FEATURE TEXT
+   ========================================================= */
+
+.feature-card h3 {
+  position: relative;
+
+  margin: 0 0 8px;
+
+  font-size: 18px;
+
+  font-weight: 850;
+
+  color: #111827;
+
+  transform: translateZ(18px);
+}
+
+.feature-card p {
+  position: relative;
+
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+
+  transform: translateZ(12px);
+}
+
+
+/* =========================================================
+   FEATURE NUMBER
+   ========================================================= */
+
+.feature-number {
+  position: absolute;
+
+  right: 18px;
+  top: 15px;
+
+  font-size: 45px;
+
+  font-weight: 900;
+
+  line-height: 1;
+
+  color: rgba(79, 70, 229, 0.06);
+
+  user-select: none;
+
+  transform: translateZ(5px);
+}
+
+
+/* =========================================================
+   FEATURE CARD COLORS
+   ========================================================= */
+
+.feature-card.success .feature-icon {
+  background:
+    linear-gradient(
+      135deg,
+      #ecfdf5,
+      #d1fae5
+    );
+
+  border-color: #a7f3d0;
+
+  color: #059669;
+}
+
+.feature-card.warning .feature-icon {
+  background:
+    linear-gradient(
+      135deg,
+      #fffbeb,
+      #fef3c7
+    );
+
+  border-color: #fde68a;
+
+  color: #d97706;
+}
+
+.feature-card.purple .feature-icon {
+  background:
+    linear-gradient(
+      135deg,
+      #f5f3ff,
+      #ede9fe
+    );
+
+  border-color: #ddd6fe;
+
+  color: #7c3aed;
+}
+
+
+/* =========================================================
+   FEATURE BADGE
+   ========================================================= */
+
+.feature-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin-top: 15px;
+
+  padding: 5px 9px;
+
+  border-radius: 999px;
+
+  background: #eef2ff;
+
+  color: #4338ca;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   FEATURES RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .features-section {
+    padding: 28px;
+  }
+
+  .features-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .features-section {
+    margin-top: 30px;
+
+    padding: 22px;
+
+    border-radius: 22px;
+  }
+
+  .features-header {
+    text-align: left;
+
+    margin-bottom: 22px;
+  }
+
+  .features-header h2 {
+    font-size: 25px;
+  }
+
+  .features-header p {
+    font-size: 13px;
+
+    margin-left: 0;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .feature-card {
+    min-height: 165px;
+
+    padding: 22px;
+
+    border-radius: 19px;
+  }
+
+  .feature-card:hover {
+    transform:
+      translateY(-5px)
+      translateZ(5px);
+  }
+
+  .feature-icon {
+    width: 52px;
+    height: 52px;
+
+    font-size: 22px;
+  }
+
+}
+
+
+@media (max-width: 400px) {
+
+  .features-section {
+    padding: 18px;
+  }
+
+  .feature-card {
+    padding: 19px;
+  }
+
+  .feature-card h3 {
+    font-size: 17px;
+  }
+
+  .feature-card p {
+    font-size: 12px;
+  }
+
+}
+
+/* =====================================================
+   FEATURES SECTION
+===================================================== */
+
+.features-section {
+  margin-top: 40px;
+  padding: 50px 20px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #e5eaf2;
+}
+
+.features-header {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 40px;
+}
+
+.features-header .card-label {
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.features-header h2 {
+  margin: 0;
+  font-size: 32px;
+  color: #111827;
+  line-height: 1.25;
+}
+
+.features-header p {
+  margin: 14px auto 0;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+
+/* =====================================================
+   FEATURES GRID
+===================================================== */
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+
+/* =====================================================
+   FEATURE CARD
+===================================================== */
+
+.feature-card {
+  position: relative;
+  padding: 28px;
+  min-height: 270px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+/* Hover */
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  border-color: #bfdbfe;
+}
+
+
+/* =====================================================
+   FEATURE NUMBER
+===================================================== */
+
+.feature-number {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+
+  font-size: 12px;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+
+/* =====================================================
+   FEATURE ICON
+===================================================== */
+
+.feature-icon {
+  width: 54px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: #dbeafe;
+
+  font-size: 27px;
+
+  margin-bottom: 22px;
+
+  transition: transform 0.25s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+
+/* =====================================================
+   FEATURE TITLE
+===================================================== */
+
+.feature-card h3 {
+  margin: 0 0 10px;
+
+  font-size: 20px;
+  color: #111827;
+}
+
+
+/* =====================================================
+   FEATURE DESCRIPTION
+===================================================== */
+
+.feature-card p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* =====================================================
+   FEATURE BADGE
+===================================================== */
+
+.feature-badge {
+  display: inline-block;
+
+  margin-top: 20px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =====================================================
+   PURPLE CARD
+===================================================== */
+
+.feature-card.purple {
+  background: #faf5ff;
+  border-color: #e9d5ff;
+}
+
+.feature-card.purple .feature-icon {
+  background: #ede9fe;
+}
+
+.feature-card.purple .feature-badge {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+
+/* =====================================================
+   SUCCESS CARD
+===================================================== */
+
+.feature-card.success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.feature-card.success .feature-icon {
+  background: #dcfce7;
+}
+
+.feature-card.success .feature-badge {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+
+/* =====================================================
+   WARNING CARD
+===================================================== */
+
+.feature-card.warning {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.feature-card.warning .feature-icon {
+  background: #fef3c7;
+}
+
+.feature-card.warning .feature-badge {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .features-header h2 {
+    font-size: 28px;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+  .features-section {
+    padding: 35px 15px;
+    margin-top: 30px;
+    border-radius: 18px;
+  }
+
+  .features-header {
+    margin-bottom: 28px;
+  }
+
+  .features-header h2 {
+    font-size: 24px;
+  }
+
+  .features-header p {
+    font-size: 14px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .feature-card {
+    min-height: auto;
+    padding: 23px;
+  }
+
+  .feature-card h3 {
+    font-size: 18px;
+  }
+
+}
+
+/* =====================================================
+   RESUME UPLOAD
+===================================================== */
+
+.resume-upload {
+  width: 100%;
+  margin-top: 20px;
+  padding: 30px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f8fbff, #ffffff);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.resume-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 13px 25px;
+
+  border: none;
+  border-radius: 11px;
+
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.resume-upload-btn::before {
+  content: "📤";
+  font-size: 16px;
+}
+
+.resume-upload-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.32);
+}
+
+.resume-upload-btn:active {
+  transform: translateY(0);
+}
+
+.resume-upload-filename {
+  margin-top: 16px;
+  padding: 10px 14px;
+
+  display: inline-block;
+
+  border-radius: 10px;
+
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+
+  color: #15803d;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.resume-upload-error {
+  margin-top: 12px;
+
+  color: #dc2626;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* ================================
+   SHASTIX TECH LOGO
+================================ */
+
+.brand-logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+  padding: 0;
+}
+
+.brand-logo img {
+  width: 0px;
+  height: auto;
+  max-width: 70%;
+  display: block;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .brand-logo img {
+    width: 150px;
+    max-width: 65%;
+  }
+
+  .brand-logo {
+    margin-bottom: 16px;
+  }
+}
+
+.hero {
+  position: relative;
+}
+
+.site-brand {
+  position: absolute;
+  top: 0px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 5px;
+}
+
+.site-brand img {
+  width: 250px;
+  height: 250px;
+  object-fit: contain;
+  display: block;
+}
+
+.site-brand span {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.hero-content {
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .site-brand {
+    position: relative;
+    top: auto;
+    left: auto;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+
+}

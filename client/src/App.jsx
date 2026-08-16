@@ -14,6 +14,497 @@ const ANALYZE_URL =
 const HISTORY_URL =
   "https://ai-resume-analyzer-u2b6.onrender.com/api/resumes";
 
+/* =========================================================
+   SKILL PERFORMANCE GRAPH
+========================================================= */
+
+function SkillPerformanceChart({
+  skills = [],
+  getSkillResultKey,
+}) {
+  const [hoveredSkill, setHoveredSkill] = useState(null);
+
+  const skillData = skills.map((skill) => {
+    let result = null;
+
+    try {
+      const key = getSkillResultKey(skill);
+      const saved = localStorage.getItem(key);
+      result = saved ? JSON.parse(saved) : null;
+    } catch {
+      result = null;
+    }
+
+    const score =
+      result &&
+      result.verified === true &&
+      typeof result.score === "number"
+        ? Math.max(0, Math.min(100, Number(result.score)))
+        : 0;
+
+    return {
+      skill,
+      score,
+      verified: result?.verified === true,
+      level: result?.level || "Not Tested",
+    };
+  });
+
+  if (!skills.length) {
+    return (
+      <div
+        style={{
+          marginTop: "22px",
+          padding: "28px",
+          borderRadius: "16px",
+          background: "#ffffff",
+          border: "1px solid #e5e7eb",
+          textAlign: "center",
+          color: "#64748b",
+        }}
+      >
+        No skills available for the graph.
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="analysis-card"
+      style={{
+        marginTop: "22px",
+        background:
+          "linear-gradient(135deg, #ffffff, #f8fbff)",
+        border: "1px solid #dbeafe",
+        overflow: "visible",
+      }}
+    >
+      {/* HEADER */}
+
+      <span className="card-label">
+        SKILL PERFORMANCE
+      </span>
+
+      <h3
+        style={{
+          marginBottom: "8px",
+        }}
+      >
+        📊 Skill Performance Graph
+      </h3>
+
+      <p
+        style={{
+          color: "#64748b",
+          lineHeight: "1.6",
+          marginBottom: "24px",
+        }}
+      >
+        Compare your verified skill performance based on
+        the assessments you completed.
+      </p>
+
+      {/* LEGEND */}
+
+      <div
+        style={{
+          display: "flex",
+          gap: "18px",
+          flexWrap: "wrap",
+          marginBottom: "22px",
+          fontSize: "12px",
+          fontWeight: "700",
+          color: "#64748b",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "7px",
+          }}
+        >
+          <span
+            style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              background: "#2563eb",
+              display: "inline-block",
+            }}
+          />
+          Skill Score
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "7px",
+          }}
+        >
+          <span
+            style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              background: "#22c55e",
+              display: "inline-block",
+            }}
+          />
+          Verified
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "7px",
+          }}
+        >
+          <span
+            style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              background: "#cbd5e1",
+              display: "inline-block",
+            }}
+          />
+          Not Tested
+        </div>
+      </div>
+
+      {/* GRAPH */}
+
+      <div
+        style={{
+          width: "100%",
+          overflowX: "auto",
+          overflowY: "visible",
+          paddingBottom: "8px",
+        }}
+      >
+        <div
+          style={{
+            minWidth: "650px",
+            width: "100%",
+          }}
+        >
+          {/* SCALE */}
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "180px 1fr 55px",
+              gap: "14px",
+              alignItems: "end",
+              marginBottom: "10px",
+            }}
+          >
+            <div />
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                color: "#94a3b8",
+                fontSize: "10px",
+                fontWeight: "700",
+              }}
+            >
+              <span>0</span>
+              <span>20</span>
+              <span>40</span>
+              <span>60</span>
+              <span>80</span>
+              <span>100</span>
+            </div>
+
+            <div
+              style={{
+                textAlign: "right",
+                color: "#94a3b8",
+                fontSize: "10px",
+                fontWeight: "700",
+              }}
+            >
+              SCORE
+            </div>
+          </div>
+
+          {/* SKILL ROWS */}
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "13px",
+            }}
+          >
+            {skillData.map((item, index) => {
+              const isHovered =
+                hoveredSkill === index;
+
+              const barBackground =
+                item.verified
+                  ? "linear-gradient(90deg, #16a34a, #22c55e)"
+                  : item.score > 0
+                  ? "linear-gradient(90deg, #2563eb, #4f46e5)"
+                  : "#cbd5e1";
+
+              return (
+                <div
+                  key={`${item.skill}-${index}`}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "180px 1fr 55px",
+                    gap: "14px",
+                    alignItems: "center",
+                    position: "relative",
+                  }}
+                >
+                  {/* SKILL NAME */}
+
+                  <div
+                    style={{
+                      minWidth: 0,
+                      paddingRight: "5px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: "800",
+                        color: "#111827",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      title={item.skill}
+                    >
+                      {item.skill}
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        color: item.verified
+                          ? "#15803d"
+                          : "#94a3b8",
+                        fontWeight: "700",
+                        marginTop: "3px",
+                      }}
+                    >
+                      {item.verified
+                        ? `✓ ${item.level}`
+                        : "Not Tested"}
+                    </div>
+                  </div>
+
+                  {/* BAR AREA */}
+
+                  <div
+                    style={{
+                      position: "relative",
+                      height: "30px",
+                      borderRadius: "8px",
+                      background:
+                        "repeating-linear-gradient(to right, #f1f5f9 0px, #f1f5f9 1px, transparent 1px, transparent 20%)",
+                      border:
+                        "1px solid #e2e8f0",
+                      cursor: "pointer",
+                    }}
+                    onMouseEnter={() =>
+                      setHoveredSkill(index)
+                    }
+                    onMouseLeave={() =>
+                      setHoveredSkill(null)
+                    }
+                  >
+                    {/* TRACK */}
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        borderRadius: "8px",
+                        background:
+                          "repeating-linear-gradient(to right, transparent 0%, transparent calc(20% - 1px), rgba(148,163,184,0.18) calc(20% - 1px), rgba(148,163,184,0.18) 20%)",
+                        pointerEvents: "none",
+                      }}
+                    />
+
+                    {/* VALUE BAR */}
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: `${item.score}%`,
+                        minWidth:
+                          item.score > 0
+                            ? "8px"
+                            : "0px",
+                        borderRadius: "8px",
+                        background:
+                          barBackground,
+                        transition:
+                          "width 0.6s ease",
+                        boxShadow:
+                          isHovered
+                            ? "0 4px 12px rgba(37,99,235,0.25)"
+                            : "none",
+                      }}
+                    />
+
+                    {/* HOVER TOOLTIP */}
+
+                    {isHovered && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          left:
+                            item.score === 0
+                              ? "10px"
+                              : `${Math.min(
+                                  Math.max(
+                                    item.score,
+                                    8
+                                  ),
+                                  88
+                                )}%`,
+                          top: "-48px",
+                          transform:
+                            "translateX(-50%)",
+                          zIndex: 100,
+                          pointerEvents: "none",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: "#111827",
+                            color: "#ffffff",
+                            padding:
+                              "8px 11px",
+                            borderRadius: "8px",
+                            fontSize: "11px",
+                            fontWeight: "700",
+                            boxShadow:
+                              "0 8px 20px rgba(15,23,42,0.2)",
+                          }}
+                        >
+                          {item.skill}:{" "}
+                          {item.score}/100
+                          <div
+                            style={{
+                              fontSize: "10px",
+                              color: "#cbd5e1",
+                              marginTop: "2px",
+                            }}
+                          >
+                            {item.verified
+                              ? `Verified • ${item.level}`
+                              : "Complete test to verify"}
+                          </div>
+                        </div>
+
+                        <div
+                          style={{
+                            width: 0,
+                            height: 0,
+                            borderLeft:
+                              "5px solid transparent",
+                            borderRight:
+                              "5px solid transparent",
+                            borderTop:
+                              "5px solid #111827",
+                            margin:
+                              "0 auto",
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* SCORE */}
+
+                  <div
+                    style={{
+                      textAlign: "right",
+                      fontSize: "13px",
+                      fontWeight: "900",
+                      color: item.verified
+                        ? "#15803d"
+                        : item.score > 0
+                        ? "#2563eb"
+                        : "#94a3b8",
+                    }}
+                  >
+                    {item.score > 0
+                      ? `${item.score}%`
+                      : "—"}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* X AXIS */}
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "180px 1fr 55px",
+              gap: "14px",
+              marginTop: "12px",
+            }}
+          >
+            <div />
+
+            <div
+              style={{
+                height: "1px",
+                background: "#cbd5e1",
+              }}
+            />
+
+            <div />
+          </div>
+        </div>
+      </div>
+
+      {/* FOOTER INFO */}
+
+      <div
+        style={{
+          marginTop: "20px",
+          padding: "13px 15px",
+          borderRadius: "10px",
+          background: "#f8fafc",
+          border: "1px solid #e2e8f0",
+          fontSize: "12px",
+          color: "#64748b",
+          lineHeight: "1.5",
+        }}
+      >
+        💡 <strong>Tip:</strong> Complete more skill
+        assessments to populate the graph with verified
+        scores.
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   MAIN APP
+========================================================= */
+
 function App() {
   // =====================================================
   // USER
@@ -42,32 +533,36 @@ function App() {
   // SKILL TEST
   // =====================================================
 
-  const [selectedSkill, setSelectedSkill] = useState("");
+  const [selectedSkill, setSelectedSkill] =
+    useState("");
 
-  const [skillTestResult, setSkillTestResult] = useState(() => {
-    const saved = localStorage.getItem("skillTestResult");
+  const [skillTestResult, setSkillTestResult] =
+    useState(null);
 
-    try {
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
+  const [skillRefresh, setSkillRefresh] =
+    useState(0);
 
   // =====================================================
   // RESUME
   // =====================================================
 
-  const [uploadedFileName, setUploadedFileName] = useState(
-    () => localStorage.getItem("uploadedFileName") || ""
-  );
+  const [uploadedFileName, setUploadedFileName] =
+    useState(
+      () =>
+        localStorage.getItem(
+          "uploadedFileName"
+        ) || ""
+    );
 
-  const [resumeText, setResumeText] = useState(
-    () => localStorage.getItem("resumeText") || ""
-  );
+  const [resumeText, setResumeText] =
+    useState(
+      () =>
+        localStorage.getItem("resumeText") || ""
+    );
 
   const [analysis, setAnalysis] = useState(() => {
-    const saved = localStorage.getItem("analysis");
+    const saved =
+      localStorage.getItem("analysis");
 
     try {
       return saved ? JSON.parse(saved) : null;
@@ -80,23 +575,185 @@ function App() {
   // STATES
   // =====================================================
 
-  const [isUploading, setIsUploading] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+  const [isUploading, setIsUploading] =
+    useState(false);
+
+  const [isAnalyzing, setIsAnalyzing] =
+    useState(false);
+
+  const [isDeleting, setIsDeleting] =
+    useState(false);
+
+  const [isLoadingHistory, setIsLoadingHistory] =
+    useState(false);
 
   const [error, setError] = useState("");
+
   const [history, setHistory] = useState([]);
 
   // =====================================================
-  // REFRESH SKILL RESULT
+  // USER ID
+  // =====================================================
+
+  const getUserId = () => {
+    if (!user) return "guest";
+
+    return String(
+      user.id ||
+        user._id ||
+        user.email ||
+        user.username ||
+        "guest"
+    )
+      .trim()
+      .replace(/[^a-zA-Z0-9_-]/g, "_");
+  };
+
+  // =====================================================
+  // SKILL RESULT KEY
+  // =====================================================
+
+  const getSkillResultKey = (skill) => {
+    return `skillTestResult_${getUserId()}_${skill}`;
+  };
+
+  // =====================================================
+  // GET SKILL RESULTS
+  // =====================================================
+
+  const getSkillResults = () => {
+    const skills = analysis?.skills || [];
+
+    return skills.map((skill) => {
+      try {
+        const key =
+          getSkillResultKey(skill);
+
+        const saved =
+          localStorage.getItem(key);
+
+        return saved
+          ? JSON.parse(saved)
+          : null;
+      } catch {
+        return null;
+      }
+    });
+  };
+
+  // =====================================================
+  // OVERALL SKILL PROOF
+  // =====================================================
+
+
+// =====================================================
+// OVERALL SKILL PROOF
+// =====================================================
+
+const getOverallSkillProof = () => {
+  const skills = analysis?.skills || [];
+
+  // No skills detected
+  if (!skills.length) {
+    return {
+      percentage: 0,
+      verifiedCount: 0,
+      totalSkills: 0,
+    };
+  }
+
+  const results = getSkillResults();
+
+  // Calculate total score of ALL verified skills
+  const totalScore = results.reduce(
+    (total, result) => {
+      if (
+        result &&
+        result.verified === true &&
+        typeof result.score === "number"
+      ) {
+        return total + Number(result.score);
+      }
+
+      // Untested skills = 0
+      return total;
+    },
+    0
+  );
+
+  // Count verified skills
+  const verifiedCount = results.filter(
+    (result) =>
+      result &&
+      result.verified === true &&
+      typeof result.score === "number"
+  ).length;
+
+  // Total skills detected from resume
+  const totalSkills = skills.length;
+
+  /*
+    IMPORTANT:
+
+    Overall Skill Proof is calculated using
+    TOTAL DETECTED SKILLS.
+
+    Example:
+
+    Total skills = 10
+    Tested skill 1 = 20
+    Tested skill 2 = 70
+
+    Calculation:
+
+    (20 + 70) / 10
+    = 9%
+
+    NOT:
+
+    (20 + 70) / 2
+    = 45%
+  */
+
+  const overallPercentage =
+    totalScore / totalSkills;
+
+  return {
+    percentage: Math.round(overallPercentage),
+    verifiedCount,
+    totalSkills,
+  };
+};
+
+  // =====================================================
+  // REFRESH SKILL TEST RESULT
   // =====================================================
 
   const refreshSkillTestResult = () => {
-    const saved = localStorage.getItem("skillTestResult");
+    if (!selectedSkill) {
+      setSkillTestResult(null);
+      return;
+    }
 
     try {
-      setSkillTestResult(saved ? JSON.parse(saved) : null);
+      const key =
+        getSkillResultKey(
+          selectedSkill
+        );
+
+      const saved =
+        localStorage.getItem(key);
+
+      setSkillTestResult(
+        saved
+          ? JSON.parse(saved)
+          : null
+      );
+
+      setSkillRefresh(
+        (previous) =>
+          previous + 1
+      );
     } catch {
       setSkillTestResult(null);
     }
@@ -107,32 +764,42 @@ function App() {
   // =====================================================
 
   useEffect(() => {
-    if (user?.id) {
+    if (user?.id || user?._id) {
       loadHistory();
     }
   }, [user]);
 
   const loadHistory = async () => {
-    if (!user?.id) return;
+    const currentUserId =
+      user?.id || user?._id;
+
+    if (!currentUserId) return;
 
     setIsLoadingHistory(true);
 
     try {
       const response = await fetch(
-        `${HISTORY_URL}/${user.id}`
+        `${HISTORY_URL}/${currentUserId}`
       );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Could not load history"
+          data.message ||
+            "Could not load history"
         );
       }
 
-      setHistory(data.resumes || []);
+      setHistory(
+        data.resumes || []
+      );
     } catch (err) {
-      console.error("History error:", err);
+      console.error(
+        "History error:",
+        err
+      );
     } finally {
       setIsLoadingHistory(false);
     }
@@ -150,7 +817,9 @@ function App() {
   // LOGIN
   // =====================================================
 
-  const handleLoginSuccess = (loggedInUser) => {
+  const handleLoginSuccess = (
+    loggedInUser
+  ) => {
     localStorage.setItem(
       "user",
       JSON.stringify(loggedInUser)
@@ -166,7 +835,9 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
-    localStorage.removeItem("uploadedFileName");
+    localStorage.removeItem(
+      "uploadedFileName"
+    );
     localStorage.removeItem("resumeText");
     localStorage.removeItem("analysis");
 
@@ -178,6 +849,7 @@ function App() {
     setAnalysis(null);
     setHistory([]);
     setSelectedSkill("");
+    setSkillTestResult(null);
     setError("");
   };
 
@@ -190,11 +862,20 @@ function App() {
     setResumeText("");
     setAnalysis(null);
     setSelectedSkill("");
+    setSkillTestResult(null);
     setError("");
 
-    localStorage.removeItem("uploadedFileName");
-    localStorage.removeItem("resumeText");
-    localStorage.removeItem("analysis");
+    localStorage.removeItem(
+      "uploadedFileName"
+    );
+
+    localStorage.removeItem(
+      "resumeText"
+    );
+
+    localStorage.removeItem(
+      "analysis"
+    );
 
     setPage("analyzer");
 
@@ -208,45 +889,67 @@ function App() {
   // UPLOAD
   // =====================================================
 
-  const handleFileSelect = async (file) => {
+  const handleFileSelect = async (
+    file
+  ) => {
     setError("");
     setUploadedFileName("");
     setResumeText("");
     setAnalysis(null);
 
-    localStorage.removeItem("uploadedFileName");
-    localStorage.removeItem("resumeText");
-    localStorage.removeItem("analysis");
+    localStorage.removeItem(
+      "uploadedFileName"
+    );
+
+    localStorage.removeItem(
+      "resumeText"
+    );
+
+    localStorage.removeItem(
+      "analysis"
+    );
 
     setIsUploading(true);
 
-    const formData = new FormData();
+    const formData =
+      new FormData();
 
-    formData.append("resume", file);
+    formData.append(
+      "resume",
+      file
+    );
 
     try {
-      const response = await fetch(
-        UPLOAD_URL,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response =
+        await fetch(
+          UPLOAD_URL,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Upload failed"
+          data.message ||
+            "Upload failed"
         );
       }
 
       const fileName =
-        data.filename || file.name;
+        data.filename ||
+        file.name;
 
-      const text = data.text || "";
+      const text =
+        data.text || "";
 
-      setUploadedFileName(fileName);
+      setUploadedFileName(
+        fileName
+      );
+
       setResumeText(text);
 
       localStorage.setItem(
@@ -259,10 +962,14 @@ function App() {
         text
       );
     } catch (err) {
-      console.error("Upload error:", err);
+      console.error(
+        "Upload error:",
+        err
+      );
 
       setError(
-        err.message || "Upload failed"
+        err.message ||
+          "Upload failed"
       );
     } finally {
       setIsUploading(false);
@@ -285,22 +992,28 @@ function App() {
     setIsAnalyzing(true);
 
     try {
-      const response = await fetch(
-        ANALYZE_URL,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            resumeText,
-            userId: user?.id,
-            fileName: uploadedFileName,
-          }),
-        }
-      );
+      const response =
+        await fetch(
+          ANALYZE_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              resumeText,
+              userId:
+                user?.id ||
+                user?._id,
+              fileName:
+                uploadedFileName,
+            }),
+          }
+        );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -309,15 +1022,26 @@ function App() {
         );
       }
 
-      let result = data.analysis;
+      let result =
+        data.analysis;
 
-      if (typeof result === "string") {
+      if (
+        typeof result ===
+        "string"
+      ) {
         result = result
-          .replace(/```json/g, "")
-          .replace(/```/g, "")
+          .replace(
+            /```json/g,
+            ""
+          )
+          .replace(
+            /```/g,
+            ""
+          )
           .trim();
 
-        result = JSON.parse(result);
+        result =
+          JSON.parse(result);
       }
 
       setAnalysis(result);
@@ -351,7 +1075,8 @@ function App() {
     if (!item) return;
 
     setUploadedFileName(
-      item.fileName || "Resume.pdf"
+      item.fileName ||
+        "Resume.pdf"
     );
 
     setResumeText(
@@ -379,7 +1104,9 @@ function App() {
     if (item.analysis) {
       localStorage.setItem(
         "analysis",
-        JSON.stringify(item.analysis)
+        JSON.stringify(
+          item.analysis
+        )
       );
     }
 
@@ -395,15 +1122,20 @@ function App() {
   // DELETE HISTORY
   // =====================================================
 
-  const deleteHistory = async (id) => {
+  const deleteHistory = async (
+    id
+  ) => {
     if (!id) {
-      setError("Resume ID is missing.");
+      setError(
+        "Resume ID is missing."
+      );
       return;
     }
 
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this resume analysis?"
-    );
+    const confirmed =
+      window.confirm(
+        "Are you sure you want to delete this resume analysis?"
+      );
 
     if (!confirmed) return;
 
@@ -411,14 +1143,16 @@ function App() {
     setIsDeleting(true);
 
     try {
-      const response = await fetch(
-        `${HISTORY_URL}/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response =
+        await fetch(
+          `${HISTORY_URL}/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -427,10 +1161,12 @@ function App() {
         );
       }
 
-      setHistory((previous) =>
-        previous.filter(
-          (item) => item._id !== id
-        )
+      setHistory(
+        (previous) =>
+          previous.filter(
+            (item) =>
+              item._id !== id
+          )
       );
 
       alert(
@@ -455,8 +1191,27 @@ function App() {
   // SKILL TEST
   // =====================================================
 
-  const openSkillTest = (skill) => {
+  const openSkillTest = (
+    skill
+  ) => {
     setSelectedSkill(skill);
+
+    try {
+      const key =
+        getSkillResultKey(skill);
+
+      const saved =
+        localStorage.getItem(key);
+
+      setSkillTestResult(
+        saved
+          ? JSON.parse(saved)
+          : null
+      );
+    } catch {
+      setSkillTestResult(null);
+    }
+
     setPage("skill-test");
 
     window.scrollTo({
@@ -465,18 +1220,19 @@ function App() {
     });
   };
 
-  const backFromSkillTest = () => {
-    refreshSkillTestResult();
+  const backFromSkillTest =
+    () => {
+      refreshSkillTestResult();
 
-    setPage("analyzer");
+      setPage("analyzer");
 
-    setTimeout(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }, 50);
-  };
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }, 50);
+    };
 
   // =====================================================
   // SCORES
@@ -487,6 +1243,25 @@ function App() {
 
   const atsScore =
     analysis?.atsScore || 0;
+
+  // =====================================================
+  // OVERALL SKILL PROOF
+  // =====================================================
+
+  const skillProof =
+    getOverallSkillProof();
+
+  const overallSkillProof =
+    skillProof.percentage;
+
+  const verifiedSkillCount =
+    skillProof.verifiedCount;
+
+  const totalSkillCount =
+    skillProof.totalSkills;
+
+  void skillRefresh;
+  void skillTestResult;
 
   // =====================================================
   // SIGNUP
@@ -528,7 +1303,9 @@ function App() {
       <SkillTest
         skill={selectedSkill}
         user={user}
-        onBack={backFromSkillTest}
+        onBack={
+          backFromSkillTest
+        }
       />
     );
   }
@@ -540,70 +1317,81 @@ function App() {
   return (
     <div className="app-container">
 
-      {/* HEADER */}
+     
 
-      <header className="hero">
+      {/* =================================================
+          HEADER
+      ================================================= */}
 
-        <div className="hero-badge">
-          ✦ AI POWERED
-        </div>
+   <header className="hero">
 
-        <h1>
-          AI Resume Analyzer
-        </h1>
+  {/* SHASTIX TECH BRAND */}
+  <div className="site-brand">
+    <img
+      src="/shastix-logo.png"
+      alt="Shastix Tech"
+    />
+  </div>
 
-        <p>
-          Get intelligent insights,
-          skill analysis and career
-          recommendations from your
-          resume.
-        </p>
+  {/* HERO CONTENT */}
+  <div className="hero-content">
 
-        <div className="user-actions">
+    <div className="hero-badge">
+      ✦ AI POWERED
+    </div>
 
-          {user && (
-            <span className="welcome-user">
-              Welcome,{" "}
-              <strong>
-                {user.name ||
-                  user.email}
-              </strong>
-            </span>
-          )}
+    <h1>
+      AI Resume Analyzer
+    </h1>
 
-          <button
-            className="header-button history-button"
-            onClick={() =>
-              setPage("history")
-            }
-          >
-            📋 History
-          </button>
+    <p>
+      Get intelligent insights, skill analysis and career
+      recommendations from your resume.
+    </p>
 
-          <button
-            className="header-button new-resume-button"
-            onClick={
-              handleNewAnalysis
-            }
-          >
-            + New Resume
-          </button>
+  </div>
 
-          <button
-            type="button"
-            className="header-button logout-button"
-            onClick={
-              handleLogout
-            }
-          >
-            Logout
-          </button>
+  {/* USER ACTIONS */}
+  <div className="user-actions">
 
-        </div>
+    {user && (
+      <span className="welcome-user">
+        Welcome,{" "}
+        <strong>
+          {user.name || user.email}
+        </strong>
+      </span>
+    )}
 
-      </header>
+    <button
+      className="header-button history-button"
+      onClick={() => setPage("history")}
+    >
+      📋 History
+    </button>
 
-      {/* HISTORY */}
+    <button
+      className="header-button new-resume-button"
+      onClick={handleNewAnalysis}
+    >
+      + New Resume
+    </button>
+
+    <button
+      type="button"
+      className="header-button logout-button"
+      onClick={handleLogout}
+    >
+      Logout
+    </button>
+
+  </div>
+
+</header>
+
+      {/* =================================================
+          HISTORY
+      ================================================= */}
 
       {page === "history" ? (
 
@@ -654,8 +1442,10 @@ function App() {
                     "#2563eb",
                   color:
                     "#ffffff",
-                  fontWeight: "700",
-                  cursor: "pointer",
+                  fontWeight:
+                    "700",
+                  cursor:
+                    "pointer",
                 }}
               >
                 ← Back to Analyzer
@@ -667,7 +1457,8 @@ function App() {
               <div
                 className="status error"
                 style={{
-                  marginTop: "20px",
+                  marginTop:
+                    "20px",
                 }}
               >
                 ⚠ {error}
@@ -677,9 +1468,12 @@ function App() {
             {isLoadingHistory && (
               <div
                 style={{
-                  marginTop: "30px",
-                  textAlign: "center",
-                  color: "#64748b",
+                  marginTop:
+                    "30px",
+                  textAlign:
+                    "center",
+                  color:
+                    "#64748b",
                 }}
               >
                 Loading history...
@@ -690,9 +1484,12 @@ function App() {
               history.length === 0 && (
                 <div
                   style={{
-                    marginTop: "30px",
-                    padding: "40px",
-                    textAlign: "center",
+                    marginTop:
+                      "30px",
+                    padding:
+                      "40px",
+                    textAlign:
+                      "center",
                     background:
                       "#f8fafc",
                     borderRadius:
@@ -701,9 +1498,11 @@ function App() {
                       "#64748b",
                   }}
                 >
+
                   <div
                     style={{
-                      fontSize: "40px",
+                      fontSize:
+                        "40px",
                     }}
                   >
                     📄
@@ -728,7 +1527,8 @@ function App() {
                         "10px",
                       padding:
                         "10px 16px",
-                      border: "none",
+                      border:
+                        "none",
                       borderRadius:
                         "10px",
                       background:
@@ -743,6 +1543,7 @@ function App() {
                   >
                     + Analyze Resume
                   </button>
+
                 </div>
               )}
 
@@ -750,13 +1551,20 @@ function App() {
               history.length > 0 && (
                 <div
                   style={{
-                    display: "grid",
-                    gap: "15px",
-                    marginTop: "30px",
+                    display:
+                      "grid",
+                    gap:
+                      "15px",
+                    marginTop:
+                      "30px",
                   }}
                 >
+
                   {history.map(
-                    (item, index) => {
+                    (
+                      item,
+                      index
+                    ) => {
 
                       const itemScore =
                         item.overallScore ||
@@ -959,6 +1767,7 @@ function App() {
                       );
                     }
                   )}
+
                 </div>
               )}
 
@@ -968,13 +1777,15 @@ function App() {
 
       ) : (
 
-        /* =====================================================
+        /* =================================================
            ANALYZER
-        ===================================================== */
+        ================================================= */
 
         <main className="dashboard">
 
-          {/* UPLOAD */}
+          {/* =================================================
+              UPLOAD
+          ================================================= */}
 
           <section className="upload-card">
 
@@ -1033,7 +1844,9 @@ function App() {
 
           </section>
 
-          {/* RESUME PREVIEW */}
+          {/* =================================================
+              RESUME PREVIEW
+          ================================================= */}
 
           {resumeText && (
             <section className="resume-card">
@@ -1076,6 +1889,7 @@ function App() {
                   isAnalyzing
                 }
               >
+
                 {isAnalyzing ? (
                   <>
                     <span className="spinner white"></span>
@@ -1087,12 +1901,15 @@ function App() {
                     <span>→</span>
                   </>
                 )}
+
               </button>
 
             </section>
           )}
 
-          {/* ANALYSIS */}
+          {/* =================================================
+              ANALYSIS
+          ================================================= */}
 
           {analysis && (
             <section className="analysis-section">
@@ -1123,9 +1940,13 @@ function App() {
 
               </div>
 
-              {/* SCORES */}
+              {/* =================================================
+                  SCORES
+              ================================================= */}
 
               <div className="top-grid">
+
+                {/* RESUME SCORE */}
 
                 <div className="score-card">
 
@@ -1152,6 +1973,8 @@ function App() {
 
                 </div>
 
+                {/* ATS SCORE */}
+
                 <div className="score-card">
 
                   <div className="score-circle">
@@ -1177,151 +2000,119 @@ function App() {
 
                 </div>
 
-              </div>
-
-              {/* SUMMARY */}
-
-              <div
-                className="summary-card"
-                style={{
-                  marginBottom:
-                    "22px",
-                }}
-              >
-
-                <div className="card-icon">
-                  ✦
-                </div>
-
-                <h3>
-                  Executive Summary
-                </h3>
-
-                <p>
-                  {analysis.summary ||
-                    "No summary available."}
-                </p>
-
-              </div>
-
-              {/* JOBS */}
-
-              <div className="analysis-card">
-
-                <span className="card-label">
-                  CAREER MATCHING
-                </span>
-
-                <h3>
-                  Recommended Jobs
-                </h3>
-
-                <p
-                  style={{
-                    color:
-                      "#64748b",
-                  }}
-                >
-                  Job roles that match
-                  your current skills
-                  and experience.
-                </p>
+                {/* SKILL PROOF */}
 
                 <div
+                  className="score-card"
                   style={{
-                    display:
-                      "grid",
-                    gap: "12px",
-                    marginTop:
-                      "20px",
+                    background:
+                      "linear-gradient(135deg, #f0fdf4, #ffffff)",
+                    border:
+                      "1px solid #bbf7d0",
                   }}
                 >
 
-                  {analysis.recommendedJobs?.map(
-                    (job, index) => (
-                      <div
-                        key={index}
+                  <div
+                    className="score-circle"
+                    style={{
+                      border:
+                        "7px solid #22c55e",
+                    }}
+                  >
+
+                    <div>
+
+                      <strong
                         style={{
-                          display:
-                            "flex",
-                          justifyContent:
-                            "space-between",
-                          alignItems:
-                            "center",
-                          gap: "20px",
-                          padding:
-                            "18px",
-                          border:
-                            "1px solid #e5eaf2",
-                          borderRadius:
-                            "14px",
-                          background:
-                            "#f8fafc",
+                          color:
+                            "#15803d",
                         }}
                       >
+                        {
+                          overallSkillProof
+                        }
+                      </strong>
 
-                        <div>
+                      <span>
+                        %
+                      </span>
 
-                          <h4
-                            style={{
-                              margin:
-                                "0 0 6px",
-                              color:
-                                "#111827",
-                              fontSize:
-                                "16px",
-                            }}
-                          >
-                            {job.title}
-                          </h4>
+                    </div>
 
-                          <p
-                            style={{
-                              margin: 0,
-                              color:
-                                "#64748b",
-                              fontSize:
-                                "14px",
-                              lineHeight:
-                                "1.5",
-                            }}
-                          >
-                            {job.reason}
-                          </p>
+                  </div>
 
-                        </div>
+                  <h3>
+                    🏆 Skill Proof
+                  </h3>
 
-                        <div
-                          style={{
-                            minWidth:
-                              "65px",
-                            textAlign:
-                              "center",
-                            padding:
-                              "8px 10px",
-                            borderRadius:
-                              "10px",
-                            background:
-                              "#e8f0ff",
-                            color:
-                              "#2563eb",
-                            fontWeight:
-                              "800",
-                          }}
-                        >
-                          {job.match}%
-                        </div>
+                  <p>
+                    {verifiedSkillCount >
+                    0
+                      ? `${verifiedSkillCount} of ${totalSkillCount} skills verified`
+                      : "No skills verified yet"}
+                  </p>
 
-                      </div>
-                    )
-                  )}
+                  <div
+                    style={{
+                      width:
+                        "100%",
+                      marginTop:
+                        "10px",
+                    }}
+                  >
+
+                    <div
+                      style={{
+                        height:
+                          "8px",
+                        width:
+                          "100%",
+                        background:
+                          "#dcfce7",
+                        borderRadius:
+                          "20px",
+                        overflow:
+                          "hidden",
+                      }}
+                    >
+
+                      <div
+                        style={{
+                          height:
+                            "100%",
+                          width: `${overallSkillProof}%`,
+                          background:
+                            "#22c55e",
+                          borderRadius:
+                            "20px",
+                          transition:
+                            "width 0.5s ease",
+                        }}
+                      />
+
+                    </div>
+
+                  </div>
 
                 </div>
 
               </div>
 
               {/* =================================================
-                  SKILL PROOF
+                  NEW SKILL GRAPH
+              ================================================= */}
+
+              <SkillPerformanceChart
+                skills={
+                  analysis.skills || []
+                }
+                getSkillResultKey={
+                  getSkillResultKey
+                }
+              />
+
+              {/* =================================================
+                  SKILL PROOF DETAILS
               ================================================= */}
 
               <div
@@ -1354,33 +2145,37 @@ function App() {
                       "20px",
                   }}
                 >
-                  Verify the skills identified
-                  from your resume by completing
-                  a skill assessment.
+                  Verify the skills identified from your resume
+                  by completing a skill assessment.
                 </p>
 
-                {/* VERIFIED RESULT */}
+                {/* OVERALL SUMMARY */}
 
-                {skillTestResult && (
+                <div
+                  style={{
+                    padding:
+                      "20px",
+                    marginBottom:
+                      "20px",
+                    borderRadius:
+                      "14px",
+                    background:
+                      "linear-gradient(135deg, #eff6ff, #f0fdf4)",
+                    border:
+                      "1px solid #dbeafe",
+                  }}
+                >
+
                   <div
                     style={{
-                      marginBottom:
-                        "20px",
-                      padding:
-                        "18px",
-                      borderRadius:
-                        "14px",
-                      background:
-                        "#f0fdf4",
-                      border:
-                        "1px solid #bbf7d0",
                       display:
                         "flex",
                       justifyContent:
                         "space-between",
                       alignItems:
                         "center",
-                      gap: "15px",
+                      gap:
+                        "20px",
                       flexWrap:
                         "wrap",
                     }}
@@ -1395,197 +2190,415 @@ function App() {
                           fontWeight:
                             "800",
                           color:
-                            "#15803d",
+                            "#64748b",
                           letterSpacing:
-                            "1px",
+                            "0.08em",
+                          marginBottom:
+                            "6px",
                         }}
                       >
-                        ✓ VERIFIED SKILL
+                        OVERALL SKILL PROOF
                       </div>
 
-                      <h4
+                      <div
                         style={{
-                          margin:
-                            "6px 0",
-                          color:
-                            "#111827",
                           fontSize:
-                            "18px",
+                            "42px",
+                          fontWeight:
+                            "900",
+                          color:
+                            "#15803d",
+                          lineHeight:
+                            "1",
                         }}
                       >
                         {
-                          skillTestResult.skill
-                        }
-                      </h4>
-
-                      <p
-                        style={{
-                          margin: 0,
-                          color:
-                            "#64748b",
-                          fontSize:
-                            "14px",
-                        }}
-                      >
-                        Skill assessment
-                        successfully
-                        completed
-                      </p>
+                          overallSkillProof
+                        }%
+                      </div>
 
                     </div>
 
                     <div
                       style={{
-                        display:
-                          "flex",
-                        alignItems:
-                          "center",
-                        gap: "10px",
+                        textAlign:
+                          "right",
                       }}
                     >
 
                       <div
                         style={{
-                          padding:
-                            "10px 14px",
-                          borderRadius:
-                            "10px",
-                          background:
-                            "#ffffff",
-                          color:
-                            "#2563eb",
+                          fontSize:
+                            "15px",
                           fontWeight:
-                            "900",
+                            "800",
+                          color:
+                            "#111827",
                         }}
                       >
                         {
-                          skillTestResult.score
-                        }%
+                          verifiedSkillCount
+                        } /{" "}
+                        {
+                          totalSkillCount
+                        }
                       </div>
 
                       <div
                         style={{
-                          padding:
-                            "10px 14px",
-                          borderRadius:
-                            "10px",
-                          background:
-                            "#dcfce7",
+                          fontSize:
+                            "12px",
                           color:
-                            "#15803d",
-                          fontWeight:
-                            "800",
+                            "#64748b",
+                          marginTop:
+                            "4px",
                         }}
                       >
-                        {
-                          skillTestResult.level
-                        }
+                        Skills Verified
                       </div>
 
                     </div>
 
                   </div>
-                )}
 
-                {/* SKILLS */}
+                  <div
+                    style={{
+                      marginTop:
+                        "16px",
+                      height:
+                        "10px",
+                      background:
+                        "#dcfce7",
+                      borderRadius:
+                        "20px",
+                      overflow:
+                        "hidden",
+                    }}
+                  >
+
+                    <div
+                      style={{
+                        height:
+                          "100%",
+                        width: `${overallSkillProof}%`,
+                        background:
+                          "linear-gradient(90deg, #16a34a, #22c55e)",
+                        borderRadius:
+                          "20px",
+                        transition:
+                          "width 0.5s ease",
+                      }}
+                    />
+
+                  </div>
+
+                </div>
 
                 {analysis.skills &&
-                analysis.skills.length > 0 ? (
+                analysis.skills.length >
+                  0 ? (
 
                   <div
                     style={{
                       display:
                         "grid",
                       gridTemplateColumns:
-                        "repeat(auto-fit, minmax(230px, 1fr))",
-                      gap: "14px",
+                        "repeat(auto-fit, minmax(260px, 1fr))",
+                      gap:
+                        "14px",
                     }}
                   >
 
                     {analysis.skills.map(
-                      (skill, index) => (
+                      (
+                        skill,
+                        index
+                      ) => {
 
-                        <div
-                          key={index}
-                          style={{
-                            padding:
-                              "18px",
-                            border:
-                              "1px solid #e5e7eb",
-                            borderRadius:
-                              "14px",
-                            background:
-                              "#ffffff",
-                            display:
-                              "flex",
-                            justifyContent:
-                              "space-between",
-                            alignItems:
-                              "center",
-                            gap:
-                              "12px",
-                          }}
-                        >
+                        let testResult =
+                          null;
 
-                          <div>
+                        try {
 
-                            <strong
-                              style={{
-                                color:
-                                  "#111827",
-                                fontSize:
-                                  "16px",
-                              }}
-                            >
-                              {skill}
-                            </strong>
+                          const key =
+                            getSkillResultKey(
+                              skill
+                            );
+
+                          const savedResult =
+                            localStorage.getItem(
+                              key
+                            );
+
+                          testResult =
+                            savedResult
+                              ? JSON.parse(
+                                  savedResult
+                                )
+                              : null;
+
+                        } catch {
+
+                          testResult =
+                            null;
+
+                        }
+
+                        return (
+                          <div
+                            key={index}
+                            style={{
+                              padding:
+                                "18px",
+                              border:
+                                testResult?.verified
+                                  ? "1px solid #bbf7d0"
+                                  : "1px solid #e5e7eb",
+                              borderRadius:
+                                "14px",
+                              background:
+                                testResult?.verified
+                                  ? "#f0fdf4"
+                                  : "#ffffff",
+                            }}
+                          >
 
                             <div
                               style={{
-                                marginTop:
-                                  "5px",
-                                fontSize:
+                                display:
+                                  "flex",
+                                justifyContent:
+                                  "space-between",
+                                alignItems:
+                                  "center",
+                                gap:
+                                  "10px",
+                                marginBottom:
                                   "12px",
-                                color:
-                                  "#64748b",
                               }}
                             >
-                              Detected in resume
+
+                              <strong
+                                style={{
+                                  color:
+                                    "#111827",
+                                  fontSize:
+                                    "17px",
+                                  minWidth:
+                                    0,
+                                  overflow:
+                                    "hidden",
+                                  textOverflow:
+                                    "ellipsis",
+                                  whiteSpace:
+                                    "nowrap",
+                                }}
+                                title={
+                                  skill
+                                }
+                              >
+                                {skill}
+                              </strong>
+
+                              {testResult?.verified && (
+                                <span
+                                  style={{
+                                    padding:
+                                      "5px 9px",
+                                    borderRadius:
+                                      "20px",
+                                    background:
+                                      "#dcfce7",
+                                    color:
+                                      "#15803d",
+                                    fontSize:
+                                      "11px",
+                                    fontWeight:
+                                      "800",
+                                    flexShrink:
+                                      0,
+                                  }}
+                                >
+                                  ✓ VERIFIED
+                                </span>
+                              )}
+
                             </div>
 
+                            {testResult?.verified ? (
+
+                              <>
+
+                                <div
+                                  style={{
+                                    display:
+                                      "flex",
+                                    alignItems:
+                                      "center",
+                                    gap:
+                                      "12px",
+                                    marginBottom:
+                                      "12px",
+                                  }}
+                                >
+
+                                  <div
+                                    style={{
+                                      fontSize:
+                                        "30px",
+                                      fontWeight:
+                                        "900",
+                                      color:
+                                        "#2563eb",
+                                    }}
+                                  >
+                                    {
+                                      testResult.score
+                                    }%
+                                  </div>
+
+                                  <div>
+
+                                    <div
+                                      style={{
+                                        fontSize:
+                                          "12px",
+                                        color:
+                                          "#64748b",
+                                      }}
+                                    >
+                                      Skill Score
+                                    </div>
+
+                                    <div
+                                      style={{
+                                        fontWeight:
+                                          "800",
+                                        color:
+                                          testResult.level ===
+                                          "Advanced"
+                                            ? "#15803d"
+                                            : testResult.level ===
+                                              "Intermediate"
+                                            ? "#b45309"
+                                            : "#dc2626",
+                                      }}
+                                    >
+                                      {
+                                        testResult.level
+                                      }
+                                    </div>
+
+                                  </div>
+
+                                </div>
+
+                                <div
+                                  style={{
+                                    background:
+                                      "#ffffff",
+                                    border:
+                                      "1px solid #bbf7d0",
+                                    borderRadius:
+                                      "10px",
+                                    padding:
+                                      "10px",
+                                    marginBottom:
+                                      "12px",
+                                    color:
+                                      "#15803d",
+                                    fontSize:
+                                      "13px",
+                                    fontWeight:
+                                      "700",
+                                  }}
+                                >
+                                  ✓ Skill assessment successfully
+                                  completed
+                                </div>
+
+                                <button
+                                  onClick={() =>
+                                    openSkillTest(
+                                      skill
+                                    )
+                                  }
+                                  style={{
+                                    width:
+                                      "100%",
+                                    padding:
+                                      "10px",
+                                    border:
+                                      "1px solid #d1d5db",
+                                    borderRadius:
+                                      "9px",
+                                    background:
+                                      "#ffffff",
+                                    color:
+                                      "#374151",
+                                    fontWeight:
+                                      "700",
+                                    cursor:
+                                      "pointer",
+                                  }}
+                                >
+                                  Retake Test →
+                                </button>
+
+                              </>
+
+                            ) : (
+
+                              <>
+
+                                <div
+                                  style={{
+                                    marginBottom:
+                                      "14px",
+                                    fontSize:
+                                      "12px",
+                                    color:
+                                      "#64748b",
+                                  }}
+                                >
+                                  Detected in resume
+                                </div>
+
+                                <button
+                                  onClick={() =>
+                                    openSkillTest(
+                                      skill
+                                    )
+                                  }
+                                  style={{
+                                    width:
+                                      "100%",
+                                    padding:
+                                      "11px",
+                                    border:
+                                      "none",
+                                    borderRadius:
+                                      "9px",
+                                    background:
+                                      "linear-gradient(135deg, #2563eb, #4f46e5)",
+                                    color:
+                                      "#ffffff",
+                                    fontWeight:
+                                      "700",
+                                    cursor:
+                                      "pointer",
+                                  }}
+                                >
+                                  Take Test →
+                                </button>
+
+                              </>
+
+                            )}
+
                           </div>
-
-                          <button
-                            onClick={() =>
-                              openSkillTest(
-                                skill
-                              )
-                            }
-                            style={{
-                              padding:
-                                "9px 13px",
-                              border:
-                                "none",
-                              borderRadius:
-                                "9px",
-                              background:
-                                "linear-gradient(135deg, #2563eb, #4f46e5)",
-                              color:
-                                "#ffffff",
-                              fontWeight:
-                                "700",
-                              cursor:
-                                "pointer",
-                              whiteSpace:
-                                "nowrap",
-                            }}
-                          >
-                            Take Test →
-                          </button>
-
-                        </div>
-
-                      )
+                        );
+                      }
                     )}
 
                   </div>
@@ -1604,15 +2617,172 @@ function App() {
                         "#64748b",
                     }}
                   >
-                    No skills were detected
-                    from this resume.
+                    No skills were detected from this resume.
                   </div>
 
                 )}
 
               </div>
 
-              {/* TECHNICAL PROFILE */}
+              {/* =================================================
+                  SUMMARY
+              ================================================= */}
+
+              <div
+                className="summary-card"
+                style={{
+                  marginBottom:
+                    "22px",
+                }}
+              >
+
+                <div className="card-icon">
+                  ✦
+                </div>
+
+                <h3>
+                  Executive Summary
+                </h3>
+
+                <p>
+                  {analysis.summary ||
+                    "No summary available."}
+                </p>
+
+              </div>
+
+              {/* =================================================
+                  JOBS
+              ================================================= */}
+
+              <div className="analysis-card">
+
+                <span className="card-label">
+                  CAREER MATCHING
+                </span>
+
+                <h3>
+                  Recommended Jobs
+                </h3>
+
+                <p
+                  style={{
+                    color:
+                      "#64748b",
+                  }}
+                >
+                  Job roles that match
+                  your current skills
+                  and experience.
+                </p>
+
+                <div
+                  style={{
+                    display:
+                      "grid",
+                    gap:
+                      "12px",
+                    marginTop:
+                      "20px",
+                  }}
+                >
+
+                  {analysis.recommendedJobs?.map(
+                    (
+                      job,
+                      index
+                    ) => (
+                      <div
+                        key={index}
+                        style={{
+                          display:
+                            "flex",
+                          justifyContent:
+                            "space-between",
+                          alignItems:
+                            "center",
+                          gap:
+                            "20px",
+                          padding:
+                            "18px",
+                          border:
+                            "1px solid #e5eaf2",
+                          borderRadius:
+                            "14px",
+                          background:
+                            "#f8fafc",
+                        }}
+                      >
+
+                        <div>
+
+                          <h4
+                            style={{
+                              margin:
+                                "0 0 6px",
+                              color:
+                                "#111827",
+                              fontSize:
+                                "16px",
+                            }}
+                          >
+                            {
+                              job.title
+                            }
+                          </h4>
+
+                          <p
+                            style={{
+                              margin: 0,
+                              color:
+                                "#64748b",
+                              fontSize:
+                                "14px",
+                              lineHeight:
+                                "1.5",
+                            }}
+                          >
+                            {
+                              job.reason
+                            }
+                          </p>
+
+                        </div>
+
+                        <div
+                          style={{
+                            minWidth:
+                              "65px",
+                            textAlign:
+                              "center",
+                            padding:
+                              "8px 10px",
+                            borderRadius:
+                              "10px",
+                            background:
+                              "#e8f0ff",
+                            color:
+                              "#2563eb",
+                            fontWeight:
+                              "800",
+                          }}
+                        >
+                          {
+                            job.match
+                          }%
+                        </div>
+
+                      </div>
+                    )
+                  )}
+
+                </div>
+
+              </div>
+
+              {/* =================================================
+                  TECHNICAL PROFILE
+              ================================================= */}
 
               <div className="analysis-card">
 
@@ -1627,7 +2797,10 @@ function App() {
                 <div className="skills-container">
 
                   {analysis.skills?.map(
-                    (skill, index) => (
+                    (
+                      skill,
+                      index
+                    ) => (
                       <span
                         className="skill-tag"
                         key={index}
@@ -1641,7 +2814,9 @@ function App() {
 
               </div>
 
-              {/* EXPERIENCE */}
+              {/* =================================================
+                  EXPERIENCE
+              ================================================= */}
 
               <div className="analysis-card">
 
@@ -1653,8 +2828,8 @@ function App() {
                   Experience
                 </h3>
 
-                {analysis.experience?.length ===
-                  0 && (
+                {analysis.experience
+                  ?.length === 0 && (
                   <p
                     style={{
                       color:
@@ -1668,7 +2843,10 @@ function App() {
                 )}
 
                 {analysis.experience?.map(
-                  (item, index) => (
+                  (
+                    item,
+                    index
+                  ) => (
 
                     <div
                       className="timeline-item"
@@ -1680,19 +2858,27 @@ function App() {
                       <div className="timeline-content">
 
                         <h4>
-                          {item.title}
+                          {
+                            item.title
+                          }
                         </h4>
 
                         <div className="company">
-                          {item.company}
+                          {
+                            item.company
+                          }
                         </div>
 
                         <div className="duration">
-                          {item.duration}
+                          {
+                            item.duration
+                          }
                         </div>
 
                         <p>
-                          {item.description}
+                          {
+                            item.description
+                          }
                         </p>
 
                       </div>
@@ -1704,7 +2890,9 @@ function App() {
 
               </div>
 
-              {/* EDUCATION */}
+              {/* =================================================
+                  EDUCATION
+              ================================================= */}
 
               <div className="analysis-card">
 
@@ -1719,7 +2907,10 @@ function App() {
                 <div className="education-grid">
 
                   {analysis.education?.map(
-                    (item, index) => (
+                    (
+                      item,
+                      index
+                    ) => (
 
                       <div
                         className="education-item"
@@ -1733,17 +2924,25 @@ function App() {
                         <div>
 
                           <h4>
-                            {item.degree}
+                            {
+                              item.degree
+                            }
                           </h4>
 
                           <p>
-                            {item.institution}
+                            {
+                              item.institution
+                            }
                           </p>
 
                           <span>
-                            {item.duration}{" "}
+                            {
+                              item.duration
+                            }{" "}
                             •{" "}
-                            {item.score}
+                            {
+                              item.score
+                            }
                           </span>
 
                         </div>
@@ -1757,7 +2956,9 @@ function App() {
 
               </div>
 
-              {/* STRENGTHS */}
+              {/* =================================================
+                  STRENGTHS / WEAKNESSES
+              ================================================= */}
 
               <div className="two-column">
 
@@ -1774,7 +2975,10 @@ function App() {
                   <ul>
 
                     {analysis.strengths?.map(
-                      (item, index) => (
+                      (
+                        item,
+                        index
+                      ) => (
 
                         <li key={index}>
                           <span>✓</span>
@@ -1801,7 +3005,10 @@ function App() {
                   <ul>
 
                     {analysis.weaknesses?.map(
-                      (item, index) => (
+                      (
+                        item,
+                        index
+                      ) => (
 
                         <li key={index}>
                           <span>!</span>
@@ -1817,7 +3024,9 @@ function App() {
 
               </div>
 
-              {/* MISSING SKILLS */}
+              {/* =================================================
+                  MISSING SKILLS
+              ================================================= */}
 
               <div className="analysis-card missing-card">
 
@@ -1843,7 +3052,10 @@ function App() {
                 <div className="recommended-skills">
 
                   {analysis.missingSkills?.map(
-                    (item, index) => (
+                    (
+                      item,
+                      index
+                    ) => (
 
                       <div
                         className="recommended-item"
@@ -1860,7 +3072,9 @@ function App() {
 
               </div>
 
-              {/* FINAL */}
+              {/* =================================================
+                  FINAL
+              ================================================= */}
 
               <div className="final-card">
 
@@ -1903,8 +3117,187 @@ function App() {
         </main>
       )}
 
+      {/* =====================================================
+          FEATURES SECTION
+      ===================================================== */}
+
+      <section className="features-section">
+
+        <div className="features-header">
+
+          <span className="card-label">
+            POWERFUL FEATURES
+          </span>
+
+          <h2>
+            Everything You Need for a Better Resume
+          </h2>
+
+          <p>
+            AI-powered tools to analyze, improve and optimize your resume
+            for better career opportunities.
+          </p>
+
+        </div>
+
+        <div className="features-grid">
+
+          <div className="feature-card">
+
+            <span className="feature-number">
+              01
+            </span>
+
+            <div className="feature-icon">
+              📄
+            </div>
+
+            <h3>
+              Resume Analysis
+            </h3>
+
+            <p>
+              Upload your resume and get an AI-powered analysis
+              of your overall resume quality.
+            </p>
+
+            <span className="feature-badge">
+              AI POWERED
+            </span>
+
+          </div>
+
+          <div className="feature-card purple">
+
+            <span className="feature-number">
+              02
+            </span>
+
+            <div className="feature-icon">
+              🎯
+            </div>
+
+            <h3>
+              ATS Score
+            </h3>
+
+            <p>
+              Check how well your resume performs against
+              Applicant Tracking Systems.
+            </p>
+
+            <span className="feature-badge">
+              SMART SCORING
+            </span>
+
+          </div>
+
+          <div className="feature-card success">
+
+            <span className="feature-number">
+              03
+            </span>
+
+            <div className="feature-icon">
+              💼
+            </div>
+
+            <h3>
+              Job Recommendations
+            </h3>
+
+            <p>
+              Discover suitable job roles based on your
+              skills, experience and resume profile.
+            </p>
+
+            <span className="feature-badge">
+              CAREER MATCH
+            </span>
+
+          </div>
+
+          <div className="feature-card warning">
+
+            <span className="feature-number">
+              04
+            </span>
+
+            <div className="feature-icon">
+              ⚡
+            </div>
+
+            <h3>
+              Missing Skills
+            </h3>
+
+            <p>
+              Identify important skills missing from your resume
+              and get recommendations to improve it.
+            </p>
+
+            <span className="feature-badge">
+              SKILL GAP
+            </span>
+
+          </div>
+
+          <div className="feature-card purple">
+
+            <span className="feature-number">
+              05
+            </span>
+
+            <div className="feature-icon">
+              📊
+            </div>
+
+            <h3>
+              Resume Score
+            </h3>
+
+            <p>
+              Get a clear score showing the strengths and
+              improvement areas of your resume.
+            </p>
+
+            <span className="feature-badge">
+              SMART INSIGHTS
+            </span>
+
+          </div>
+
+          <div className="feature-card">
+
+            <span className="feature-number">
+              06
+            </span>
+
+            <div className="feature-icon">
+              🕘
+            </div>
+
+            <h3>
+              Resume History
+            </h3>
+
+            <p>
+              Save and review your previous resume analyses
+              whenever you need them.
+            </p>
+
+            <span className="feature-badge">
+              SAVED RESULTS
+            </span>
+
+          </div>
+
+        </div>
+
+      </section>
+
       <footer>
-        AI Resume Analyzer • Powered by AI
+        AI Resume Analyzer • Powered by SHASTIX Technologies Pvt. Ltd.
       </footer>
 
     </div>
