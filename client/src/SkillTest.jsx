@@ -1,5 +1,12 @@
 import React, { useState } from "react";
 
+/*
+  Question bank
+  Each skill can have its own questions.
+  If a skill does not exist here, Python questions
+  will be used as a fallback.
+*/
+
 const questionBank = {
   Python: [
     {
@@ -62,12 +69,7 @@ const questionBank = {
     },
     {
       question: "Which method converts JSON text into a JavaScript object?",
-      options: [
-        "JSON.parse()",
-        "JSON.stringify()",
-        "JSON.object()",
-        "JSON.convert()",
-      ],
+      options: ["JSON.parse()", "JSON.convert()", "JSON.object()", "JSON.read()"],
       answer: "JSON.parse()",
     },
     {
@@ -77,208 +79,287 @@ const questionBank = {
     },
     {
       question: "Which function prints output to the browser console?",
-      options: ["print()", "console.log()", "echo()", "display()"],
+      options: ["print()", "console.log()", "display()", "output()"],
       answer: "console.log()",
     },
     {
-      question: "Which keyword is used to define a function?",
-      options: ["func", "function", "define", "method"],
-      answer: "function",
-    },
-  ],
-
-  Java: [
-    {
-      question: "Which keyword is used to create a class in Java?",
-      options: ["class", "struct", "object", "define"],
-      answer: "class",
+      question: "Which keyword is used to define an asynchronous function?",
+      options: ["async", "await", "promise", "defer"],
+      answer: "async",
     },
     {
-      question: "Which method is the entry point of a Java program?",
-      options: ["start()", "run()", "main()", "init()"],
-      answer: "main()",
+      question: "Which method adds an item to the end of an array?",
+      options: ["push()", "add()", "append()", "insert()"],
+      answer: "push()",
     },
     {
-      question: "Which keyword is used for inheritance?",
-      options: ["inherits", "extends", "implements", "super"],
-      answer: "extends",
+      question: "Which language is JavaScript primarily used for?",
+      options: ["Web development", "Database only", "Operating systems only", "Networking only"],
+      answer: "Web development",
     },
     {
-      question: "Which data type stores whole numbers?",
-      options: ["float", "boolean", "int", "char"],
-      answer: "int",
+      question: "Which file extension is commonly used for JavaScript?",
+      options: [".java", ".js", ".jsxonly", ".script"],
+      answer: ".js",
     },
     {
-      question: "Which keyword creates an object?",
-      options: ["object", "create", "new", "instance"],
-      answer: "new",
+      question: "What does DOM stand for?",
+      options: [
+        "Document Object Model",
+        "Data Object Method",
+        "Document Order Model",
+        "Digital Object Management",
+      ],
+      answer: "Document Object Model",
+    },
+    {
+      question: "Which keyword creates a promise-like asynchronous wait?",
+      options: ["await", "wait", "pause", "delay"],
+      answer: "await",
     },
   ],
 
   React: [
     {
-      question: "Which library is React primarily used for?",
-      options: [
-        "Database management",
-        "Building user interfaces",
-        "Operating systems",
-        "Networking",
-      ],
-      answer: "Building user interfaces",
+      question: "React is primarily used to build what?",
+      options: ["User interfaces", "Databases", "Operating systems", "Servers only"],
+      answer: "User interfaces",
     },
     {
-      question: "Which hook is used to manage state in a functional component?",
-      options: ["useEffect", "useState", "useMemo", "useRef"],
+      question: "Which hook is used to manage state in a React component?",
+      options: ["useState", "useData", "useValue", "useComponent"],
       answer: "useState",
     },
     {
-      question: "Which syntax is commonly used to write React components?",
-      options: ["JSX", "XML only", "SQL", "PHP"],
-      answer: "JSX",
-    },
-    {
       question: "Which hook is commonly used for side effects?",
-      options: ["useState", "useEffect", "useContext", "useReducer"],
+      options: ["useEffect", "useSide", "useAction", "useEvent"],
       answer: "useEffect",
     },
     {
-      question: "What does React use to efficiently update the UI?",
+      question: "What is JSX?",
       options: [
-        "Virtual DOM",
-        "SQL",
-        "File System",
-        "Compiler only",
+        "JavaScript XML syntax",
+        "Java syntax",
+        "JSON extension",
+        "CSS framework",
       ],
-      answer: "Virtual DOM",
+      answer: "JavaScript XML syntax",
+    },
+    {
+      question: "How are React components commonly created?",
+      options: [
+        "Functions",
+        "SQL queries",
+        "CSS selectors",
+        "Database tables",
+      ],
+      answer: "Functions",
+    },
+    {
+      question: "Which prop is used to uniquely identify items in a list?",
+      options: ["key", "idOnly", "unique", "indexOnly"],
+      answer: "key",
+    },
+    {
+      question: "What does a React component return?",
+      options: ["UI", "Database", "Server", "SQL"],
+      answer: "UI",
+    },
+    {
+      question: "Which command commonly starts a Vite React app?",
+      options: ["npm run dev", "npm start-only", "react run", "vite start-only"],
+      answer: "npm run dev",
+    },
+    {
+      question: "Which library is used for rendering React DOM?",
+      options: ["react-dom", "react-render", "dom-react", "render-react"],
+      answer: "react-dom",
+    },
+    {
+      question: "Can React state change trigger a re-render?",
+      options: ["Yes", "No", "Only in production", "Only with CSS"],
+      answer: "Yes",
     },
   ],
 
-  HTML: [
+  Java: [
     {
-      question: "What does HTML stand for?",
-      options: [
-        "Hyper Text Markup Language",
-        "High Text Machine Language",
-        "Hyper Transfer Markup Language",
-        "Home Tool Markup Language",
-      ],
-      answer: "Hyper Text Markup Language",
+      question: "Which keyword is used to define a class in Java?",
+      options: ["class", "define", "struct", "object"],
+      answer: "class",
     },
     {
-      question: "Which tag creates a hyperlink?",
-      options: ["<link>", "<a>", "<href>", "<url>"],
-      answer: "<a>",
+      question: "Which method is the entry point of a Java application?",
+      options: ["main()", "start()", "run()", "execute()"],
+      answer: "main()",
     },
     {
-      question: "Which tag creates the largest heading?",
-      options: ["<h6>", "<head>", "<h1>", "<heading>"],
-      answer: "<h1>",
+      question: "Which keyword creates an object?",
+      options: ["new", "create", "object", "make"],
+      answer: "new",
     },
     {
-      question: "Which tag is used to display an image?",
-      options: ["<image>", "<img>", "<pic>", "<src>"],
-      answer: "<img>",
+      question: "Which data type stores whole numbers?",
+      options: ["int", "float", "char", "boolean"],
+      answer: "int",
     },
     {
-      question: "Which tag creates a paragraph?",
-      options: ["<paragraph>", "<p>", "<para>", "<text>"],
-      answer: "<p>",
-    },
-  ],
-
-  CSS: [
-    {
-      question: "What does CSS stand for?",
-      options: [
-        "Cascading Style Sheets",
-        "Computer Style System",
-        "Creative Style Syntax",
-        "Colorful Style Sheets",
-      ],
-      answer: "Cascading Style Sheets",
+      question: "Which keyword is used for inheritance?",
+      options: ["extends", "inherits", "parent", "superclass"],
+      answer: "extends",
     },
     {
-      question: "Which property changes text color?",
-      options: ["font-color", "text-color", "color", "foreground"],
-      answer: "color",
+      question: "Which keyword prevents inheritance?",
+      options: ["final", "stop", "private", "static"],
+      answer: "final",
     },
     {
-      question: "Which property controls the background color?",
-      options: ["background-color", "bg", "background-style", "color-bg"],
-      answer: "background-color",
+      question: "Which keyword refers to the current object?",
+      options: ["this", "self", "current", "object"],
+      answer: "this",
     },
     {
-      question: "Which CSS property makes text bold?",
-      options: ["font-weight", "text-bold", "font-style", "weight"],
-      answer: "font-weight",
+      question: "Which keyword handles exceptions?",
+      options: ["try", "check", "handle", "exception"],
+      answer: "try",
     },
     {
-      question: "Which layout system is commonly used for one-dimensional layouts?",
-      options: ["Flexbox", "SQL", "DOM", "AJAX"],
-      answer: "Flexbox",
+      question: "Which concept allows multiple forms?",
+      options: ["Polymorphism", "Inheritance", "Compilation", "Packaging"],
+      answer: "Polymorphism",
+    },
+    {
+      question: "Java source files commonly use which extension?",
+      options: [".java", ".js", ".classonly", ".jav"],
+      answer: ".java",
     },
   ],
 };
 
-const defaultQuestions = [
+/*
+  Generic fallback questions.
+  If resume contains a skill for which we have
+  not created a question set yet, these questions
+  are shown.
+*/
+
+const fallbackQuestions = [
   {
-    question: "What is the main purpose of a programming language?",
+    question: "What is the main purpose of this technology?",
     options: [
-      "To communicate instructions to a computer",
-      "To design hardware",
-      "To create electricity",
-      "To browse websites",
+      "Software development",
+      "Cooking",
+      "Video editing only",
+      "Hardware repair only",
     ],
-    answer: "To communicate instructions to a computer",
+    answer: "Software development",
   },
   {
-    question: "What is a variable?",
+    question: "Which is important when learning a technical skill?",
     options: [
-      "A storage location for data",
-      "A computer screen",
-      "A network cable",
-      "An operating system",
+      "Practice",
+      "Avoiding practice",
+      "Only memorization",
+      "Ignoring projects",
     ],
-    answer: "A storage location for data",
+    answer: "Practice",
   },
   {
-    question: "What is a function?",
+    question: "Which activity best demonstrates technical knowledge?",
     options: [
-      "A reusable block of code",
-      "A database",
-      "A hardware device",
-      "A browser",
+      "Building projects",
+      "Only reading",
+      "Avoiding exercises",
+      "Never testing code",
     ],
-    answer: "A reusable block of code",
+    answer: "Building projects",
   },
   {
-    question: "What is debugging?",
+    question: "What helps improve programming skills?",
     options: [
-      "Finding and fixing errors",
-      "Installing hardware",
-      "Deleting an application",
-      "Creating a password",
+      "Regular coding practice",
+      "Never writing code",
+      "Only watching videos",
+      "Avoiding debugging",
     ],
-    answer: "Finding and fixing errors",
+    answer: "Regular coding practice",
   },
   {
-    question: "What is an algorithm?",
+    question: "Which is important in software development?",
     options: [
-      "A step-by-step procedure to solve a problem",
-      "A programming language",
-      "A database table",
-      "A computer monitor",
+      "Problem solving",
+      "Ignoring errors",
+      "Avoiding testing",
+      "Never learning",
     ],
-    answer: "A step-by-step procedure to solve a problem",
+    answer: "Problem solving",
+  },
+  {
+    question: "What is a good way to verify a technical skill?",
+    options: [
+      "Assessment and practical work",
+      "Guessing",
+      "Ignoring results",
+      "Avoiding projects",
+    ],
+    answer: "Assessment and practical work",
+  },
+  {
+    question: "Which habit helps developers improve?",
+    options: [
+      "Continuous learning",
+      "Stopping learning",
+      "Avoiding new concepts",
+      "Ignoring feedback",
+    ],
+    answer: "Continuous learning",
+  },
+  {
+    question: "Which activity is useful for finding coding errors?",
+    options: [
+      "Debugging",
+      "Deleting the project",
+      "Ignoring the error",
+      "Restarting only",
+    ],
+    answer: "Debugging",
+  },
+  {
+    question: "Which is useful for building a strong portfolio?",
+    options: [
+      "Practical projects",
+      "No projects",
+      "Only certificates",
+      "Only theory",
+    ],
+    answer: "Practical projects",
+  },
+  {
+    question: "What does a skill assessment measure?",
+    options: [
+      "Knowledge and understanding",
+      "Computer speed only",
+      "Internet speed",
+      "Screen size",
+    ],
+    answer: "Knowledge and understanding",
   },
 ];
 
-function SkillTest({ skill = "Python", user, onBack }) {
-  const normalizedSkill =
-    skill && typeof skill === "string" ? skill.trim() : "Python";
+function SkillTest({ skill, onBack }) {
+  /*
+    App.jsx sends the selected skill here.
+    Example:
+    Python
+    JavaScript
+    React
+    Java
+  */
+
+  const selectedSkillName = skill || "Python";
 
   const questions =
-    questionBank[normalizedSkill] || defaultQuestions;
+    questionBank[selectedSkillName] || fallbackQuestions;
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState("");
@@ -292,53 +373,6 @@ function SkillTest({ skill = "Python", user, onBack }) {
     if (value >= 80) return "Advanced";
     if (value >= 60) return "Intermediate";
     return "Beginner";
-  };
-
-  const getResult = (value) => {
-    if (value >= 80) {
-      return {
-        title: "Excellent Performance",
-        description:
-          "You demonstrated strong knowledge of this skill.",
-      };
-    }
-
-    if (value >= 60) {
-      return {
-        title: "Good Performance",
-        description:
-          "You have a good foundation, with some areas to improve.",
-      };
-    }
-
-    return {
-      title: "Keep Learning",
-      description:
-        "Continue practicing this skill and retake the assessment later.",
-    };
-  };
-
-  const saveResult = (finalScore) => {
-    const result = {
-      skill: normalizedSkill,
-      score: finalScore,
-      level: getLevel(finalScore),
-      verified: true,
-      completedAt: new Date().toISOString(),
-      userId: user?.id || null,
-      userName: user?.name || "",
-      userEmail: user?.email || "",
-    };
-
-    localStorage.setItem(
-      `skillTestResult_${normalizedSkill}`,
-      JSON.stringify(result)
-    );
-
-    localStorage.setItem(
-      "skillTestResult",
-      JSON.stringify(result)
-    );
   };
 
   const handleNext = () => {
@@ -359,24 +393,48 @@ function SkillTest({ skill = "Python", user, onBack }) {
       setSelectedAnswer(
         updatedAnswers[nextQuestion] || ""
       );
-    } else {
-      let correct = 0;
 
-      questions.forEach((item, index) => {
-        if (updatedAnswers[index] === item.answer) {
-          correct++;
-        }
-      });
-
-      const finalScore = Math.round(
-        (correct / questions.length) * 100
-      );
-
-      setScore(finalScore);
-      setCompleted(true);
-
-      saveResult(finalScore);
+      return;
     }
+
+    let correct = 0;
+
+    questions.forEach((item, index) => {
+      if (updatedAnswers[index] === item.answer) {
+        correct++;
+      }
+    });
+
+    const finalScore = Math.round(
+      (correct / questions.length) * 100
+    );
+
+    setScore(finalScore);
+    setCompleted(true);
+
+    const result = {
+      skill: selectedSkillName,
+      score: finalScore,
+      level: getLevel(finalScore),
+      verified: true,
+      completedAt: new Date().toISOString(),
+    };
+
+    /*
+      Save current skill separately.
+      This allows different skill tests to have
+      different results.
+    */
+
+    localStorage.setItem(
+      `skillTestResult_${selectedSkillName}`,
+      JSON.stringify(result)
+    );
+
+    localStorage.setItem(
+      "latestSkillTestResult",
+      JSON.stringify(result)
+    );
   };
 
   const handleRetake = () => {
@@ -387,30 +445,26 @@ function SkillTest({ skill = "Python", user, onBack }) {
     setScore(0);
   };
 
+  /*
+    Download Certificate
+    --------------------
+    Creates a real downloadable HTML certificate.
+    The downloaded file can be opened in Chrome.
+  */
+
   const downloadCertificate = () => {
     const level = getLevel(score);
-    const result = getResult(score);
-
-    const studentName =
-      user?.name ||
-      user?.email ||
-      "Candidate";
-
-    const completedDate =
-      new Date().toLocaleDateString();
 
     const certificateHTML = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
-/>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>${normalizedSkill} Skill Certificate</title>
+<title>${selectedSkillName} Skill Certificate</title>
 
 <style>
 
@@ -420,66 +474,56 @@ function SkillTest({ skill = "Python", user, onBack }) {
 
 body {
   margin: 0;
-  padding: 30px;
-  background: #eef2f7;
+  padding: 40px;
+  background: #f1f5f9;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .certificate {
-  width: 100%;
-  max-width: 1000px;
-  min-height: 700px;
+  max-width: 950px;
+  min-height: 650px;
   margin: 0 auto;
   background: #ffffff;
   border: 12px solid #2563eb;
-  padding: 18px;
+  padding: 25px;
 }
 
 .inner {
-  min-height: 620px;
-  border: 2px solid #bfdbfe;
-  padding: 55px;
+  min-height: 570px;
+  border: 2px solid #dbeafe;
+  padding: 50px;
   text-align: center;
   position: relative;
 }
 
-.logo {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 3px;
+.brand {
   color: #2563eb;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 3px;
 }
 
 .title {
-  margin-top: 35px;
-  font-size: 46px;
+  margin-top: 45px;
+  font-size: 44px;
   font-weight: 900;
   color: #111827;
-  letter-spacing: 1px;
 }
 
 .subtitle {
-  margin-top: 20px;
-  font-size: 18px;
+  margin-top: 15px;
   color: #64748b;
-}
-
-.name {
-  margin-top: 25px;
-  font-size: 30px;
-  font-weight: 800;
-  color: #111827;
+  font-size: 18px;
 }
 
 .skill {
-  margin-top: 25px;
-  font-size: 36px;
+  margin: 30px 0;
+  font-size: 38px;
   font-weight: 900;
   color: #2563eb;
 }
 
 .score {
-  margin-top: 25px;
   font-size: 24px;
   font-weight: 800;
   color: #111827;
@@ -488,69 +532,49 @@ body {
 .level {
   display: inline-block;
   margin-top: 18px;
-  padding: 11px 28px;
-  border-radius: 50px;
+  padding: 12px 28px;
+  border-radius: 30px;
   background: #dbeafe;
   color: #1d4ed8;
+  font-weight: 900;
   font-size: 18px;
-  font-weight: 800;
 }
 
 .verified {
-  margin-top: 25px;
+  margin-top: 28px;
   color: #15803d;
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 19px;
+  font-weight: 900;
 }
 
-.description {
-  max-width: 650px;
-  margin: 20px auto 0;
+.date {
+  margin-top: 35px;
   color: #64748b;
-  line-height: 1.6;
+  font-size: 14px;
 }
 
 .footer {
-  margin-top: 45px;
+  margin-top: 15px;
+  color: #94a3b8;
   font-size: 13px;
-  color: #64748b;
-  line-height: 1.8;
-}
-
-.badge {
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  padding: 8px 14px;
-  border-radius: 20px;
-  background: #f0fdf4;
-  color: #15803d;
-  font-size: 11px;
-  font-weight: 800;
 }
 
 @media print {
 
-  @page {
-    size: A4 landscape;
-    margin: 0;
-  }
-
   body {
-    padding: 0;
     background: white;
+    padding: 0;
   }
 
   .certificate {
-    width: 100%;
+    margin: 0;
     max-width: none;
-    min-height: 100vh;
-    border-width: 10px;
   }
 
 }
 
 </style>
+
 </head>
 
 <body>
@@ -559,11 +583,7 @@ body {
 
   <div class="inner">
 
-    <div class="badge">
-      VERIFIED SKILL
-    </div>
-
-    <div class="logo">
+    <div class="brand">
       AI RESUME ANALYZER
     </div>
 
@@ -572,19 +592,11 @@ body {
     </div>
 
     <div class="subtitle">
-      This certificate verifies that
-    </div>
-
-    <div class="name">
-      ${studentName}
-    </div>
-
-    <div class="subtitle">
-      has successfully completed the
+      This certificate verifies successful completion of the
     </div>
 
     <div class="skill">
-      ${normalizedSkill} Skill Assessment
+      ${selectedSkillName} Skill Assessment
     </div>
 
     <div class="score">
@@ -596,18 +608,15 @@ body {
     </div>
 
     <div class="verified">
-      ✓ SKILL ASSESSMENT VERIFIED
+      ✓ VERIFIED SKILL
     </div>
 
-    <div class="description">
-      ${result.description}
-      This verified assessment can be used as
-      skill proof in a career profile.
+    <div class="date">
+      Assessment completed on
+      ${new Date().toLocaleDateString()}
     </div>
 
     <div class="footer">
-      Assessment completed on ${completedDate}
-      <br />
       AI Resume Analyzer • Skill Proof Certificate
     </div>
 
@@ -619,260 +628,51 @@ body {
 </html>
 `;
 
-    const blob = new Blob(
-      [certificateHTML],
-      {
-        type: "text/html;charset=utf-8",
-      }
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-
-    link.href = url;
-
-    link.download =
-      `${normalizedSkill.replace(
-        /[^a-zA-Z0-9]/g,
-        "-"
-      )}-Skill-Certificate-${score}.html`;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
-  };
-
-  const printCertificate = () => {
-    const level = getLevel(score);
-
-    const studentName =
-      user?.name ||
-      user?.email ||
-      "Candidate";
-
-    const completedDate =
-      new Date().toLocaleDateString();
-
-    const printWindow = window.open(
-      "",
-      "_blank",
-      "width=1200,height=900"
-    );
-
-    if (!printWindow) {
-      alert(
-        "Popup blocked. Please allow popups for this website and try again."
+    try {
+      const blob = new Blob(
+        [certificateHTML],
+        {
+          type: "text/html;charset=utf-8",
+        }
       );
 
-      return;
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+
+      link.href = url;
+
+      link.download =
+        `${selectedSkillName}-Skill-Certificate-${score}.html`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
+
+    } catch (error) {
+      console.error(
+        "Certificate download error:",
+        error
+      );
+
+      alert(
+        "Certificate download failed. Please try again."
+      );
     }
-
-    printWindow.document.write(`
-<!DOCTYPE html>
-<html>
-<head>
-
-<title>${normalizedSkill} Skill Certificate</title>
-
-<style>
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 30px;
-  background: #eef2f7;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.certificate {
-  width: 100%;
-  max-width: 1000px;
-  min-height: 700px;
-  margin: 0 auto;
-  background: white;
-  border: 12px solid #2563eb;
-  padding: 18px;
-}
-
-.inner {
-  min-height: 620px;
-  border: 2px solid #bfdbfe;
-  padding: 55px;
-  text-align: center;
-}
-
-.logo {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  color: #2563eb;
-}
-
-.title {
-  margin-top: 35px;
-  font-size: 46px;
-  font-weight: 900;
-  color: #111827;
-}
-
-.subtitle {
-  margin-top: 20px;
-  font-size: 18px;
-  color: #64748b;
-}
-
-.name {
-  margin-top: 25px;
-  font-size: 30px;
-  font-weight: 800;
-  color: #111827;
-}
-
-.skill {
-  margin-top: 25px;
-  font-size: 36px;
-  font-weight: 900;
-  color: #2563eb;
-}
-
-.score {
-  margin-top: 25px;
-  font-size: 24px;
-  font-weight: 800;
-  color: #111827;
-}
-
-.level {
-  display: inline-block;
-  margin-top: 18px;
-  padding: 11px 28px;
-  border-radius: 50px;
-  background: #dbeafe;
-  color: #1d4ed8;
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.verified {
-  margin-top: 25px;
-  color: #15803d;
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.footer {
-  margin-top: 45px;
-  font-size: 13px;
-  color: #64748b;
-  line-height: 1.8;
-}
-
-@page {
-  size: A4 landscape;
-  margin: 0;
-}
-
-@media print {
-
-  body {
-    padding: 0;
-    background: white;
-  }
-
-  .certificate {
-    max-width: none;
-    width: 100%;
-    min-height: 100vh;
-  }
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="certificate">
-
-<div class="inner">
-
-<div class="logo">
-AI RESUME ANALYZER
-</div>
-
-<div class="title">
-CERTIFICATE OF SKILL
-</div>
-
-<div class="subtitle">
-This certificate verifies that
-</div>
-
-<div class="name">
-${studentName}
-</div>
-
-<div class="subtitle">
-has successfully completed the
-</div>
-
-<div class="skill">
-${normalizedSkill} Skill Assessment
-</div>
-
-<div class="score">
-Skill Score: ${score} / 100
-</div>
-
-<div class="level">
-${level}
-</div>
-
-<div class="verified">
-✓ SKILL ASSESSMENT VERIFIED
-</div>
-
-<div class="footer">
-Assessment completed on ${completedDate}
-<br />
-AI Resume Analyzer • Skill Proof Certificate
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-window.onload = function() {
-  setTimeout(function() {
-    window.print();
-  }, 500);
-};
-
-</script>
-
-</body>
-</html>
-`);
-
-    printWindow.document.close();
   };
+
+  /*
+    Completed screen
+  */
 
   if (completed) {
     const level = getLevel(score);
-    const result = getResult(score);
 
     return (
       <div
@@ -884,9 +684,10 @@ window.onload = function() {
           fontFamily: "Arial, sans-serif",
         }}
       >
+
         <div
           style={{
-            maxWidth: "700px",
+            maxWidth: "650px",
             margin: "0 auto",
             background: "#ffffff",
             padding: "45px",
@@ -896,6 +697,7 @@ window.onload = function() {
               "0 20px 60px rgba(15,23,42,0.12)",
           }}
         >
+
           <div
             style={{
               width: "75px",
@@ -914,17 +716,6 @@ window.onload = function() {
             ✓
           </div>
 
-          <span
-            style={{
-              color: "#2563eb",
-              fontSize: "12px",
-              fontWeight: "800",
-              letterSpacing: "1px",
-            }}
-          >
-            SKILL PROOF
-          </span>
-
           <h1
             style={{
               color: "#111827",
@@ -940,7 +731,7 @@ window.onload = function() {
               marginBottom: "30px",
             }}
           >
-            Your {normalizedSkill} assessment result
+            Your {selectedSkillName} assessment result
           </p>
 
           <div
@@ -951,6 +742,7 @@ window.onload = function() {
               marginBottom: "25px",
             }}
           >
+
             <div
               style={{
                 fontSize: "52px",
@@ -969,16 +761,8 @@ window.onload = function() {
             >
               Skill Score
             </div>
-          </div>
 
-          <h2
-            style={{
-              margin: "0 0 12px",
-              color: "#111827",
-            }}
-          >
-            {result.title}
-          </h2>
+          </div>
 
           <div
             style={{
@@ -1015,7 +799,7 @@ window.onload = function() {
               marginBottom: "25px",
             }}
           >
-            ✓ {normalizedSkill} Skill Assessment Verified
+            ✓ {selectedSkillName} Skill Assessment Verified
           </div>
 
           <p
@@ -1023,22 +807,13 @@ window.onload = function() {
               color: "#64748b",
               fontSize: "14px",
               lineHeight: "1.6",
-              marginBottom: "10px",
             }}
           >
-            {result.description}
+            Your verified {selectedSkillName} skill result
+            can be used as skill proof in your career profile.
           </p>
 
-          <p
-            style={{
-              color: "#64748b",
-              fontSize: "14px",
-              lineHeight: "1.6",
-            }}
-          >
-            Your verified skill result can be used as
-            skill proof in your career profile.
-          </p>
+          {/* BUTTONS */}
 
           <div
             style={{
@@ -1046,10 +821,12 @@ window.onload = function() {
               gap: "12px",
               justifyContent: "center",
               flexWrap: "wrap",
-              marginTop: "28px",
+              marginTop: "25px",
             }}
           >
+
             <button
+              type="button"
               onClick={downloadCertificate}
               style={{
                 padding: "14px 22px",
@@ -1063,26 +840,11 @@ window.onload = function() {
                 fontSize: "15px",
               }}
             >
-              📥 Download Certificate
+              📜 Download Certificate
             </button>
 
             <button
-              onClick={printCertificate}
-              style={{
-                padding: "14px 22px",
-                border: "none",
-                borderRadius: "12px",
-                background: "#111827",
-                color: "#ffffff",
-                fontWeight: "800",
-                cursor: "pointer",
-                fontSize: "15px",
-              }}
-            >
-              🖨️ Save as PDF
-            </button>
-
-            <button
+              type="button"
               onClick={handleRetake}
               style={{
                 padding: "14px 22px",
@@ -1097,13 +859,15 @@ window.onload = function() {
             >
               Retake Test
             </button>
+
           </div>
 
           {onBack && (
             <button
+              type="button"
               onClick={onBack}
               style={{
-                marginTop: "22px",
+                marginTop: "20px",
                 border: "none",
                 background: "transparent",
                 color: "#2563eb",
@@ -1111,13 +875,19 @@ window.onload = function() {
                 cursor: "pointer",
               }}
             >
-              ← Back to Resume Analysis
+              ← Back to Resume
             </button>
           )}
+
         </div>
+
       </div>
     );
   }
+
+  /*
+    Test screen
+  */
 
   return (
     <div
@@ -1129,6 +899,7 @@ window.onload = function() {
         fontFamily: "Arial, sans-serif",
       }}
     >
+
       <div
         style={{
           maxWidth: "700px",
@@ -1140,16 +911,21 @@ window.onload = function() {
             "0 20px 60px rgba(15,23,42,0.12)",
         }}
       >
+
+        {/* HEADER */}
+
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            gap: "20px",
             marginBottom: "30px",
+            gap: "15px",
           }}
         >
+
           <div>
+
             <span
               style={{
                 color: "#2563eb",
@@ -1167,7 +943,7 @@ window.onload = function() {
                 color: "#111827",
               }}
             >
-              {normalizedSkill} Skill Test
+              {selectedSkillName} Skill Test
             </h1>
 
             <p
@@ -1176,8 +952,9 @@ window.onload = function() {
                 color: "#64748b",
               }}
             >
-              Prove your {normalizedSkill} knowledge
+              Prove your {selectedSkillName} knowledge
             </p>
+
           </div>
 
           <div
@@ -1192,7 +969,10 @@ window.onload = function() {
           >
             {currentQuestion + 1}/{questions.length}
           </div>
+
         </div>
+
+        {/* PROGRESS */}
 
         <div
           style={{
@@ -1203,34 +983,25 @@ window.onload = function() {
             overflow: "hidden",
           }}
         >
+
           <div
             style={{
-              width: `${
-                ((currentQuestion + 1) /
-                  questions.length) *
-                100
-              }%`,
+              width:
+                `${
+                  ((currentQuestion + 1) /
+                    questions.length) *
+                  100
+                }%`,
               height: "100%",
               background:
                 "linear-gradient(90deg, #2563eb, #4f46e5)",
               transition: "width 0.3s ease",
             }}
           />
+
         </div>
 
-        <div
-          style={{
-            padding: "12px 15px",
-            borderRadius: "12px",
-            background: "#f8fafc",
-            color: "#64748b",
-            fontSize: "13px",
-            marginBottom: "22px",
-          }}
-        >
-          Question {currentQuestion + 1} of{" "}
-          {questions.length}
-        </div>
+        {/* QUESTION */}
 
         <h2
           style={{
@@ -1242,6 +1013,8 @@ window.onload = function() {
           {question.question}
         </h2>
 
+        {/* OPTIONS */}
+
         <div
           style={{
             display: "grid",
@@ -1249,38 +1022,43 @@ window.onload = function() {
             marginTop: "25px",
           }}
         >
-          {question.options.map((option) => (
-            <button
-              key={option}
-              type="button"
-              onClick={() =>
-                setSelectedAnswer(option)
-              }
-              style={{
-                textAlign: "left",
-                padding: "16px",
-                borderRadius: "12px",
-                border:
-                  selectedAnswer === option
-                    ? "2px solid #2563eb"
-                    : "1px solid #dbe1ea",
-                background:
-                  selectedAnswer === option
-                    ? "#eff6ff"
-                    : "#ffffff",
-                color: "#111827",
-                fontWeight:
-                  selectedAnswer === option
-                    ? "700"
-                    : "500",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-            >
-              {option}
-            </button>
-          ))}
+
+          {question.options.map(
+            (option) => (
+              <button
+                type="button"
+                key={option}
+                onClick={() =>
+                  setSelectedAnswer(option)
+                }
+                style={{
+                  textAlign: "left",
+                  padding: "16px",
+                  borderRadius: "12px",
+                  border:
+                    selectedAnswer === option
+                      ? "2px solid #2563eb"
+                      : "1px solid #dbe1ea",
+                  background:
+                    selectedAnswer === option
+                      ? "#eff6ff"
+                      : "#ffffff",
+                  color: "#111827",
+                  fontWeight:
+                    selectedAnswer === option
+                      ? "700"
+                      : "500",
+                  cursor: "pointer",
+                }}
+              >
+                {option}
+              </button>
+            )
+          )}
+
         </div>
+
+        {/* NEXT */}
 
         <button
           type="button"
@@ -1304,18 +1082,19 @@ window.onload = function() {
           }}
         >
           {currentQuestion === questions.length - 1
-            ? "Finish Test ✓"
+            ? "Finish Test"
             : "Next Question →"}
         </button>
+
+        {/* BACK */}
 
         {onBack && (
           <button
             type="button"
             onClick={onBack}
             style={{
-              width: "100%",
-              marginTop: "15px",
-              padding: "12px",
+              display: "block",
+              margin: "20px auto 0",
               border: "none",
               background: "transparent",
               color: "#64748b",
@@ -1323,10 +1102,12 @@ window.onload = function() {
               cursor: "pointer",
             }}
           >
-            ← Back to Resume Analysis
+            ← Back to Resume
           </button>
         )}
+
       </div>
+
     </div>
   );
 }
